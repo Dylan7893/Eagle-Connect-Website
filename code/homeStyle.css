@@ -2,8 +2,9 @@ body {
     font-family: sans-serif;
     background-color: #193be2d8;
     display: flex;
-    justify-content: left;
-    align-items: top;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
     margin: 0;
 }
@@ -12,7 +13,8 @@ a.button{
     padding: 1px 6px;
     border: 1px outset buttonborder;
     border-radius: 3px;
-    color: #727272d8;
-    background-color: #727272d8;
+    color: #2600ffd8;
+    background-color: #eeff00;
     max-width: 400px;
+    max-height: 100px;
 }
