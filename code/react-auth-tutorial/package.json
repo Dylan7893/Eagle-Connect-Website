@@ -1,5 +1,12 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "firebase": "^11.2.0"
   }
 }
+=======
+    "react-scripts": "^5.0.1"
+  }
+}
+
+>>>>>>> 85cf443073a5613a65f41257a436cbc7cf51587c

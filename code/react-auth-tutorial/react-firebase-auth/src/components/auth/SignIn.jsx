@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../../firebase";
-
+import './main.css';
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,24 +24,38 @@ const SignIn = () => {
   };
 
   return (
-    <div className="sign-in-container">
-      <form onSubmit={signIn}>
-        <h1>Log In to your Account</h1>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <input
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
-        <button type="submit">Log In</button>
-      </form>
+    <div class= "sign-in-container">
+
+        <h2>Welcome!</h2>
+
+        
+        <form id= "sign-in-form">
+        
+            <div class = "sign-in-elements-group">
+                <label for= "username"> Username: </label>
+                <input 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type = "email" id= "email" name = "email" placeholder = "Enter email" required></input>
+                
+            </div>
+
+       
+            <div class = "sign-in-elements-group">
+                <label for = "password"> Password: </label>
+                <input type = "password" id= "password" name = "password" placeholder = "Enter password" required></input>
+                
+            </div>
+
+            <button onclick="location.href='dashboard.html'" type= "submit" id= "signInButton"> Sign In </button>
+            <div class = "sign-in-elements-group">
+            <a href="https://www.moreheadstate.edu/">Forgot Password</a>
+            </div>
+
+        </form>
+
     </div>
+
   );
 };
 
