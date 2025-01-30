@@ -19,10 +19,11 @@ function App() {
       */ }
       <BrowserRouter>
       <Routes>
-        <Route index element = {<GetStarted/>}/>
+        <Route index element = {<GetStarted/>}/> 
         <Route path="/get-started" element = {<GetStarted/>}/>
         <Route path="/login" element = {<Login/>}/>
         <Route path="/sign-up" element = {<Register/>}/>
+        <Route path="/reset" element = {<ForgotPassword/>}/>
       </Routes>
       </BrowserRouter>
       

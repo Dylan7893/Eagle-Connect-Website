@@ -48,7 +48,7 @@ const SignIn = () => {
                 
             </div>
             <div class = "sign-in-elements-group">
-            <a href="https://www.moreheadstate.edu/">Forgot Password</a>
+            <a href="/reset">Forgot Password</a>
             <a href="/sign-up">Create an Account</a>
             </div>
             <button type="submit">Log In</button>

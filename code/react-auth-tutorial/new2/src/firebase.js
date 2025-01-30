@@ -6,6 +6,8 @@ import {getAuth} from "firebase/auth";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+//https://react-auth-tutorial-5ea50.firebaseapp.com/__/auth/handler
+
 
 // Your web app's Firebase configuration
 
