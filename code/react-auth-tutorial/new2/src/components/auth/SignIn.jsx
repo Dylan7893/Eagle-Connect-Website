@@ -9,7 +9,7 @@ const SignIn = () => {
 
   const signIn = (e) => {
     e.preventDefault();
-
+    console.log("Form was submitted. ~Chase");
     if(!email.endsWith("@moreheadstate.edu")){
       console.log("Must be an MSU EMAIL!!!!!");
       alert("Must be an MSU Email to Sign In.");
@@ -35,7 +35,6 @@ const SignIn = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type = "email" id= "email" name = "email" placeholder = "Enter email" required></input>
-                
             </div>
 
        
@@ -50,7 +49,7 @@ const SignIn = () => {
             </div>
             <div class = "sign-in-elements-group">
             <a href="https://www.moreheadstate.edu/">Forgot Password</a>
-            <a href="https://www.google.com/">Create an Account</a>
+            <a href="/sign-up">Create an Account</a>
             </div>
             <button type="submit">Log In</button>
         </form>
