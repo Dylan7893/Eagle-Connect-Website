@@ -1,10 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../../firebase";
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const signUp = (e) => {
     e.preventDefault();
@@ -16,14 +19,13 @@ const SignUp = () => {
       createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
+        navigate("/login");
       })
       .catch((error) => {
         console.log(error);
       });
     }
-
-    
-  };
+};
 
   return (
     <div className="sign-in-container">
