@@ -23,7 +23,6 @@ function App() {
         <Route path="/get-started" element = {<GetStarted/>}/>
         <Route path="/login" element = {<Login/>}/>
         <Route path="/sign-up" element = {<Register/>}/>
-        <Route path="/reset" element = {<ForgotPassword/>}/>
       </Routes>
       </BrowserRouter>
       
