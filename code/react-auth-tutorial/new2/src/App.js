@@ -2,10 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
+import ForgotPassword from './components/auth/ForgotPassword';
 import AuthDetails from './components/AuthDetails';
 import GetStarted from './pages/GetStarted';
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ResetPass from './pages/ResetPass'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 
@@ -23,6 +25,7 @@ function App() {
         <Route path="/get-started" element = {<GetStarted/>}/>
         <Route path="/login" element = {<Login/>}/>
         <Route path="/sign-up" element = {<Register/>}/>
+        <Route path="/forgot-password" element = {<ResetPass/>}/>
       </Routes>
       </BrowserRouter>
       

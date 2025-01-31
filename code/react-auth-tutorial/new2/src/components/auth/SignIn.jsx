@@ -48,8 +48,8 @@ const SignIn = () => {
                 
             </div>
             <div class = "sign-in-elements-group">
-            <a href="/reset">Forgot Password</a>
-            <a href="/sign-up">Create an Account</a>
+              <a href="/forgot-password">Forgot Password?</a>
+              <a href="/sign-up">Create an Account</a>
             </div>
             <button type="submit">Log In</button>
         </form>
