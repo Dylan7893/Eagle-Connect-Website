@@ -1,8 +1,9 @@
 
 ##store all of our code into a different file
 echo ********REACT APP INSTALL SCRIPT*******
-mkdir /temporary/
-cp -r code/ temporary/
+mkdir temporary/
+cp -r code/react-auth-tutorial/new2/public temporary/
+cp -r code/react-auth-tutorial/new2/src temporary/
 rm -r code/
 mkdir code/
 cd code/
@@ -16,10 +17,13 @@ echo *******FIREBASE INSTALL*******:
 npm install firebase
 echo ********ROUTER DOM INSTALL********:
 npm install react-router-dom
+echo ********OTHERS INSTALL********
+npm install --save-dev ajv@^7 
 ####Put OUR Code back
-cp -r node_modules/ ../../../temporary/react-auth-tutorial/new2/
-cp  package.json ../../../temporary/react-auth-tutorial/new2/
-cp  package-lock.json ../../../temporary/react-auth-tutorial/new2/
-cd ../../../
-rm -r code/
-mv temporary code
+rm -r public/
+rm -r src/
+cd ..
+cd ..
+cd ..
+mv temporary/public code/react-auth-tutorial/new2/public
+mv temporary/src code/react-auth-tutorial/new2/src
