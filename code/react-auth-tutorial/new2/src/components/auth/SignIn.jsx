@@ -19,6 +19,7 @@ const SignIn = () => {
         console.log(userCredential);
       })
       .catch((error) => {
+        alert("Invalid username/password. Try Again.");
         console.log(error);
       });
     }
