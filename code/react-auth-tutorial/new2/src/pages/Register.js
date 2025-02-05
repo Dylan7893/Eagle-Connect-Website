@@ -1,6 +1,6 @@
 import SignUp from "../components/auth/SignUp";
 
-export default function Login(){
+export default function Register(){
     return(
         <>
         <SignUp/>
