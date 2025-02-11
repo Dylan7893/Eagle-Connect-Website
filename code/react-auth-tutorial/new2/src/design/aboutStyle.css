@@ -9,7 +9,7 @@
   display: flex; /* aligns navbar horizontally */
   justify-content: space-between; /* space between the logo and the navigation links */
   padding: 15px 20px; /* padding of navigation bar */
-  background: #0729af; /* color of navigation bar */
+  background: #0033a0; /* color of navigation bar */
   position: fixed; /* locks position to top */
   width: 100%; /* makes width of screen */
   top: 0; /* moves to the top */
@@ -65,7 +65,7 @@
 /* GET STARTED BUTTON STYLING: */
 .get-started {
   padding: 8px 15px; /* Add some padding for button size */
-  background-color: #7289da; /* light blue color */
+  background-color: #788dd8; /* light blue color */
   color: white; /* text color */
   font-size: 16px; /* text font */
   border: none; /* no border */
@@ -108,19 +108,4 @@ p {
   font-size: 20px;
   text-indent: 30px;
   padding: 50px;
-}
-
-.home {
-  text-decoration: none; /*remove underline*/
-  color: #fff; /*test color*/
-  background-color: #0d6efd; /*button color*/
-  padding: 10px 20px; /*padding*/
-  font-size: 15px; /*font size*/
-  border-radius: 20px; /*button corner radius*/
-  transition: background-color 0.3s; /*transistion for changing the background color*/
-}
-
-.home:hover {
-  background-color: #0056b3; /*when hovering the settings button color darkens*/
-  transform: scale(1.05); /* when hovering settings button enlarge*/
 }
