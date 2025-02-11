@@ -1,0 +1,49 @@
+/* general styling */
+* {
+  margin: 0; /*removes default margins for all elements*/
+  font-family: "Arial", sans-serif; /*uses same font for page*/
+}
+
+/*body*/
+body {
+  background-color: #f3f3f3; /*background color*/
+  display: flex; /*using flex layout*/
+  justify-content: space-evenly; /*distribute space evenly*/
+  align-items: center; /*centers the box*/
+  height: 100vh; /*make body fill all of the view*/
+}
+
+/* Error Message */
+.error-box {
+  background-color: #ffffff; /*white background*/
+  padding: 105px; /*large padding to make box bigger*/
+  border-radius: 15px; /*slighly rounded corners*/
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /*add a shadow to the error box*/
+  text-align: center; /*center align the text in this case the button*/
+}
+
+h1 {
+  font-size: 120px; /*large font for header*/
+  color: #ffcf00; /*morehead yellow*/
+}
+
+p {
+  font-size: 20px; /*changes the font size of paragraph text*/
+  color: #7f8c8d; /*changes the color of paragraph text*/
+  margin-bottom: 30px; /*adds space to bottom of paragraph*/
+}
+
+.home {
+  text-decoration: none; /*remove underline*/
+  color: #fff; /*test color*/
+  background-color: #0d6efd; /*button color*/
+  padding: 10px 20px; /*padding*/
+  font-size: 15px; /*font size*/
+  border-radius: 20px; /*button corner radius*/
+  transition: background-color 0.3s; /*transistion for changing the background color*/
+}
+
+.home:hover {
+  background-color: #0056b3; /*when hovering the settings button color darkens*/
+  transform: scale(1.05); /* when hovering settings button enlarge*/
+}
