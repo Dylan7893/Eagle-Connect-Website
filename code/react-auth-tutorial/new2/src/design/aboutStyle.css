@@ -1,0 +1,126 @@
+/* general styling */
+* {
+  margin: 0;
+  font-family: "Arial", sans-serif; /*uses same font for page*/
+}
+
+/* NAVIGATION BAR STYLING: */
+.navigationHeader {
+  display: flex; /* aligns navbar horizontally */
+  justify-content: space-between; /* space between the logo and the navigation links */
+  padding: 15px 20px; /* padding of navigation bar */
+  background: #0729af; /* color of navigation bar */
+  position: fixed; /* locks position to top */
+  width: 100%; /* makes width of screen */
+  top: 0; /* moves to the top */
+  left: 0; /* move to the left */
+}
+
+/* LOGO STYLING: */
+.logo {
+  display: flex; /* align image and text horizontally */
+  align-items: center; /* vertically aligns text and image */
+  font-size: 36px; /* font size of the logo text */
+  font-family: "Arial", sans-serif; /* font style of the logo text */
+  color: #ffcf00; /* color of logo text */
+  font-weight: bold; /* bold logo text */
+  letter-spacing: 2px; /* spacing between characters in logo */
+}
+
+/* EAGLE IMAGE: */
+.logo-image {
+  width: 80px; /* image frame width */
+  height: 80px; /* image frame height */
+  margin-right: 25px; /* space between text and image */
+}
+
+/* NAVIGATION LINK CONTAINER: */
+.navigation-links {
+  list-style: none; /* removes the bullers */
+  display: flex; /* alligns horizontally instead of vertically */
+  align-items: center; /* aligns links vertically */
+  margin-right: 50px; /* space from the right edge */
+  font-family: "Arial", sans-serif; /* font style of the logo text */
+}
+
+/* NAVIGATION LINK LIST: */
+.navigation-links li {
+  margin: 0 15px; /* space between the links */
+}
+
+/* NAVIGATION LINK STLYING: */
+.navigation-links a {
+  text-decoration: none; /* removes the underline to link */
+  color: white; /* text color white */
+  font-size: 16px; /* text font size */
+  font-weight: 600; /* bold links */
+  transition: 0.3s; /* transition specifications */
+}
+
+/* WHEN HOVERING NAVIGATION LINKS: */
+.navigation-links a:hover {
+  color: #ffcf00; /* link turns yellow */
+}
+
+/* GET STARTED BUTTON STYLING: */
+.get-started {
+  padding: 8px 15px; /* Add some padding for button size */
+  background-color: #7289da; /* light blue color */
+  color: white; /* text color */
+  font-size: 16px; /* text font */
+  border: none; /* no border */
+  border-radius: 5px; /* rounded edges */
+  cursor: pointer; /* cursor change */
+  transition: background-color 0.3s, transform 0.3s; /* transition specification */
+}
+
+/* WHEN HOVERING GET STARTED BUTTON: */
+.get-started:hover {
+  background-color: #ffcf00; /* button turns yellow  */
+  transform: translateY(-2px); /* raises the button */
+}
+
+/*body*/
+body {
+  margin-top: 50px; /*move down 50 for header*/
+  background-color: #f3f3f3; /*background color*/
+  display: flex; /*using flex layout*/
+  justify-content: center; /*distribute space evenly*/
+}
+
+/* Error Message */
+.error-box {
+  margin-top: 60px;
+  background-color: #ffffff; /*white background*/
+  width: 1100px;
+  height: 100vh;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /*add a shadow to the error box*/
+}
+
+h1 {
+  font-size: 120px; /*large font for header*/
+  color: #ffcf00; /*morehead yellow*/
+  text-align: center;
+}
+
+/* Style for the paragraph */
+p {
+  font-size: 20px;
+  text-indent: 30px;
+  padding: 50px;
+}
+
+.home {
+  text-decoration: none; /*remove underline*/
+  color: #fff; /*test color*/
+  background-color: #0d6efd; /*button color*/
+  padding: 10px 20px; /*padding*/
+  font-size: 15px; /*font size*/
+  border-radius: 20px; /*button corner radius*/
+  transition: background-color 0.3s; /*transistion for changing the background color*/
+}
+
+.home:hover {
+  background-color: #0056b3; /*when hovering the settings button color darkens*/
+  transform: scale(1.05); /* when hovering settings button enlarge*/
+}
