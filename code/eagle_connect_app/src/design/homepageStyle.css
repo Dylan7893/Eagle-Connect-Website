@@ -1,0 +1,121 @@
+/* NAVIGATION BAR STYLING: */
+.navigationHeader {
+    display: flex;                  /* aligns navbar horizontally */
+    justify-content: space-between; /* space between the logo and the navigation links */
+    padding: 15px 20px;             /* padding of navigation bar */
+    background: #0729af;          /* color of navigation bar */
+    position: fixed;                /* locks position to top */
+    width: 100%;                    /* makes width of screen */
+    top: 0;                         /* moves to the top */
+    left: 0;                        /* move to the left */
+}
+
+/* LOGO STYLING: */
+.logo {
+    display: flex;                          /* align image and text horizontally */
+    align-items: center;                    /* vertically aligns text and image */
+    font-size: 36px;                        /* font size of the logo text */
+    font-family: 'Arial', sans-serif;       /* font style of the logo text */
+    color: #f1c40f;                       /* color of logo text */
+    font-weight: bold;                      /* bold logo text */
+    letter-spacing: 2px;                    /* spacing between characters in logo */
+}
+
+/* EAGLE IMAGE: */
+.logo-image {
+    width: 80px;                            /* image frame width */
+    height: 80px;                           /* image frame height */
+    margin-right: 25px;                     /* space between text and image */
+}
+
+/* NAVIGATION LINK CONTAINER: */
+.navigation-links {
+    list-style: none;            /* removes the bullers */
+    display: flex;               /* alligns horizontally instead of vertically */
+    align-items: center;         /* aligns links vertically */
+    margin-right: 50px;          /* space from the right edge */
+    font-family: 'Arial', sans-serif;       /* font style of the logo text */
+}
+
+/* NAVIGATION LINK LIST: */
+.navigation-links li {
+    margin: 0 15px; /* space between the links */
+}
+
+/* NAVIGATION LINK STLYING: */
+.navigation-links a {
+    text-decoration: none;     /* removes the underline to link */
+    color: white;            /* text color white */
+    font-size: 16px;           /* text font size */
+    font-weight: 600;          /* bold links */
+    transition: 0.3s;          /* transition specifications */
+}
+
+/* WHEN HOVERING NAVIGATION LINKS: */
+.navigation-links a:hover {
+    color: #f1c40f;  /* link turns yellow */
+}
+
+/* GET STARTED BUTTON STYLING: */
+.get-started {
+    padding: 8px 15px;                                 /* Add some padding for button size */
+    background-color: #7289da;                       /* light blue color */
+    color: white;                                    /* text color */
+    font-size: 16px;                                   /* text font */
+    border: none;                                      /* no border */
+    border-radius: 5px;                                /* rounded edges */
+    cursor: pointer;                                   /* cursor change */
+    transition: background-color 0.3s, transform 0.3s; /* transition specification */
+}
+
+/* WHEN HOVERING GET STARTED BUTTON: */
+.get-started:hover {
+    background-color: #f1c40f;    /* button turns yellow  */
+    transform: translateY(-2px);    /* raises the button */
+}
+
+
+
+
+
+
+/* MAIN BODY: */
+html, body {
+    margin: 0;     /* remove default margin */
+    padding: 0;    /* remove default padding */
+    height: 100%;  /* set body height to 100% */
+    width: 100%;   /* set body width to 100% */
+}
+
+/* MAIN BODY: */
+main {  
+    /* background image */
+    background-image: url('eagle.jpg'); /* image url */                     
+    background-position: center center;                          /* center the image */
+    background-color: rgba(0, 0, 0, 0.8);                      /* dark overlay */
+    min-height: 100vh;                                           /* full height */
+    width: 100%;                                                 /* full width */
+}
+
+/* MAIN DISPLAY: */
+.main-display {
+    text-align: center;               /* align text to center */
+    padding-top: 150px;               /* padding to move the text down */
+    font-family: 'Arial', sans-serif; /* text font */  
+}
+
+/* MAIN DISPLAY HEADING */
+.main-display h1 {
+    font-size: 4rem;     /* large font size*/
+    color: white;      /* white text */
+    font-weight: bold;   /* bold text */
+    margin-bottom: 10px; /* space below heading */
+    letter-spacing: 2px; /* spacing between characters */
+}
+
+/* MAIN DISPLAY PARAGRAPH */
+.main-display p {
+    font-size: 1.5rem;  /* smaller font size */
+    color: white;     /* white text color */
+}
+

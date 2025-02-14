@@ -1,3 +1,5 @@
 *.DS_Store
 code/react-auth-tutorial/new2/node_modules/
 code/react-auth-tutorial/node_modules/
+**/node-modules/
+code/eagle_connect_app/node_modules/
