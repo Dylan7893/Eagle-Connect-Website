@@ -1,0 +1,127 @@
+/* general styling */
+* {
+  margin: 0; /* line the side bar with main*/
+  box-sizing: border-box; /* keeps sidebar from overlapping*/
+  font-family: Arial, sans-serif; /* default font */
+}
+
+/* ------- navigation bar ------- */
+.navigation-bar {
+  display: flex; /* navigation bar elements are horizontal*/
+  padding: 15px 20px; /* navigation bar padding*/
+  background: #f4f4f4; /*navigation bar background light gray */
+  position: fixed; /*navigation bar does not overlap with sidebar*/
+  top: 0; /*navigation bar is positioned to the top*/
+  left: 250px; /* offset to not overlap sidebar*/
+  width: calc(100% - 250px); /*setting the width to match the offset*/
+  align-items: center; /*align horizontally*/
+}
+
+/* right navigation bar buttons*/
+.navigation-bar-right {
+  display: flex; /* buttons are horizontal */
+  margin-left: auto; /* pushed buttons to the right */
+}
+
+/*class name*/
+.navigation-bar h1 {
+  color: #0729af; /*class name morehead blue*/
+  margin-right: 5px; /*space between name and number*/
+}
+
+/*class number*/
+.navigation-bar p {
+  color: #f1c40f; /*clas number morehead yellow*/
+  margin-top: 10px; /*moving number down*/
+}
+
+/* navigation bar settings button */
+.settings {
+  padding: 8px 12px; /* setting button padding*/
+  background: #007bff; /*background color of settings button*/
+  border: none; /*remove default button border*/
+  border-radius: 5px; /* rounded edges */
+  cursor: pointer; /* change pointer when hovering */
+  font-size: 19px; /* text size */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* hover animation specificaitons */
+}
+
+/* navigation bar settings button hover*/
+.settings:hover {
+  background-color: #0056b3; /*when hovering the settings button color darkens*/
+  transform: scale(1.05); /* when hovering settings button enlarge*/
+}
+
+/* navigation bar profile picture */
+.profile-picture {
+  width: 35px; /*dimension of profile picture*/
+  height: 35px; /*dimension of profile picture*/
+  border-radius: 50%; /*makes a circle*/
+  margin-left: 10px; /*space between settings and profile*/
+}
+
+/* navigation bar profile button */
+.profile-button {
+  background: none; /* removes background */
+  border: none; /* removes button border */
+  padding: 0; /* removes default padding */
+  cursor: pointer; /* changes cursor */
+  border-radius: 50%; /*makes a circle*/
+}
+
+/* navigation bar profile button */
+.profile-button:hover .profile-picture {
+  transform: scale(1.1); /* slightly scale the image when hovering */
+}
+
+/* ------- side bar ------- */
+.sidebar {
+  display: flex; /*create flexbox*/
+  flex-direction: column; /*align vertically in flexbox*/
+  gap: 15px; /* vertical space between elements*/
+  width: 250px; /*sets width of sidebar*/
+  background: #f4f4f4; /*sets color of sidebar*/
+  padding: 20px; /* extra padding*/
+  position: fixed; /* keeps elements in place */
+  top: 0; /* locks side bar to top*/
+  height: 100vh; /*makes side bar length of*/
+}
+
+/* side bar list of all classes*/
+.list-of-tools {
+  padding: 0; /*padding to remove bullets*/
+  margin-top: 0px; /*distance from search field*/
+  max-height: 100vh; /*height of list*/
+  overflow-y: auto; /* allows vertical scrolling*/
+}
+
+/* side bar individual list of tool items */
+.tool-list-item {
+  padding: 10px; /*padding on individual tool list items*/
+  background: white; /*color of individual tool list items*/
+  margin-bottom: 15px; /*space below individual tool list items*/
+  text-align: center; /*center text alignment for individual tool list items*/
+  border-radius: 5px; /*rounded edges*/
+  display: flex; /*using flexbox*/
+  flex-direction: column; /*align in columns*/
+  align-items: center; /*align vertically*/
+  justify-content: center; /*align horizontally*/
+  height: 125px; /*height of the card*/
+}
+
+/*size of SVG in tool list*/
+.tool-list-item svg {
+  width: 30px; /*width of svg*/
+  height: 30px; /*height of svg*/
+}
+
+/* side bar individual list of tools hover */
+.tool-list-item:hover {
+  transform: scale(1.1); /*  enlarge individual list of tool items hover */
+}
+
+/* ------- main (REACT) ------- */
+.main-section {
+  margin-left: 250px; /*shifts the main the distance of sidebar*/
+  margin-top: 70px; /*shifts the main the distance of the navigation bar*/
+}
