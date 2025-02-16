@@ -4,7 +4,7 @@ import { auth } from "../../firebase";
 import { useNavigate } from 'react-router-dom';
 import "../../design/loginStyle.css";
 import {db} from "../../firebase";
-import {collection, addDoc} from "firebase/firestore";
+import {doc, setDoc} from "firebase/firestore";
 
 
 const Register = () => {
@@ -16,10 +16,14 @@ const Register = () => {
   const navigate = useNavigate();
 
   {/* Upon successful registration, add that user's credential to the database*/}
-  function databaseAddUser(){
+  function databaseAddUser(userCredential){
     alert("database add user called");
-    const usersCollectRef = collection(db, "users");
-    addDoc(usersCollectRef, {firstName, lastName, email}).then(response =>{
+    // following three lines will make the firebase auth uid and firestore user uid the same
+    // so that collections and documents won't have any issues
+    const user = userCredential.user;  // firebase auth user object
+    const userId = user.uid;  // firebase authentication UID
+    const usersCollectRef = doc(db, "users", userId);
+    setDoc(usersCollectRef, {firstName, lastName, email, joinedClasses:[]}).then(response =>{
       console.log(response);
     })
   }
@@ -35,7 +39,7 @@ const Register = () => {
       .then((userCredential) => {
         console.log(userCredential);
         {/*Add users info the database*/}
-        databaseAddUser();
+        databaseAddUser(userCredential);
         navigate("/app");
       })
       .catch((error) => {
