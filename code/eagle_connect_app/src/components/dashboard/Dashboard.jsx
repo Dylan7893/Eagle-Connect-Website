@@ -7,7 +7,7 @@ import "../../design/dashboard2Style.css";
 import {collection, getDocs, query,where} from "firebase/firestore";
 import Classes from "./Classes";
 import {db} from "../../firebase";
-
+import JoinedClasses from "./JoinedClasses";
 {/*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */}
 function Dashboard(props){
 
@@ -81,37 +81,9 @@ function Dashboard(props){
     <section className="joined-classes">
       <h2>Joined Classes</h2>
       <div className="joined-classes-layout">
-        <div className="joined-class-card">
-          {/* example class */}
-          <h3>CS-380</h3>⭐ ⭐ ⭐ ⭐ ⭐
-          <div className="joined-class-actions">
-            <button className="action-button">⭐</button>
-            <button className="action-button">⚙️</button>
-            <button className="action-button">...</button>
-            {/* end joined class actions */}
-          </div>
-          {/* end joined class card */}
-        </div>
-        <div className="joined-class-card">
-          <h3>CS-360</h3>⭐ ⭐ ⭐
-          <div className="joined-class-actions">
-            <button className="action-button">⭐</button>
-            <button className="action-button">⚙️</button>
-            <button className="action-button">...</button>
-            {/* end joined class actions */}
-          </div>
-          {/* end joined class card */}
-        </div>
-        <div className="joined-class-card">
-          <h3>EEC-355</h3>⭐ ⭐ ⭐ ⭐
-          <div className="joined-class-actions">
-            <button className="action-button">⭐</button>
-            <button className="action-button">⚙️</button>
-            <button className="action-button">...</button>
-            {/* end joined class actions */}
-          </div>
-          {/* end joined class card */}
-        </div>
+      <JoinedClasses email={props.email}/>
+
+        
         {/* end main layout */}
       </div>
       {/* end main section */}
