@@ -63,6 +63,8 @@
 
 /* navigation bar profile button */
 .profile-button {
+  width: 35px; /*dimension of profile picture*/
+  height: 35px; /*dimension of profile picture*/
   background: none; /* removes background */
   border: none; /* removes button border */
   padding: 0; /* removes default padding */
@@ -194,4 +196,18 @@
 .action-button:hover {
   background-color: #e0e0e0; /*background color when hovering*/
   border-radius: 5px; /*border of box when hovering*/
+}
+
+/*popup view text fields additonal padding*/
+.input-with-padding {
+  margin-bottom: 15px; /*padding on bottom*/
+}
+
+/*popup content style*/
+.popup-content {
+  width: 450px; /*width*/
+  padding: 25px; /*padding*/
+  border-radius: 15px; /*curved borders*/
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /*shadow of popup*/
+  background: #fff; /*white background*/
 }
