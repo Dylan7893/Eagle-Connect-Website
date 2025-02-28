@@ -8,7 +8,7 @@ import {db} from "../../firebase";
 import {useEffect, useState} from "react";
 
 
-function JoinedClasses(props){
+function JoinedClasses({toDashboardCallBack, email}){
 
     const [joinedClasses, setJoinedClasses] = useState([]);
     
@@ -17,13 +17,16 @@ function JoinedClasses(props){
             getJoinedClasses();
         }, [])
 
-       
+       function initCallBack(x){
+        toDashboardCallBack(x);
+       }
+
     {/*Function that returns all of the joined clases the user has joined*/}
       async function getJoinedClasses(){
         {/*Create query to get the user object from their email*/}
         const userQuery = query(
           collection(db, "users"),
-          where('email', '==', props.email)
+          where('email', '==', email)
         );
     
         {/*Use query to get user object (contains first name, last name, etc.) */}
@@ -46,19 +49,22 @@ function JoinedClasses(props){
     return(
         <>
         {/*Return every joined class and convert it using the template*/}
-        {joinedClasses.map(each_class =><JoinedClass number={each_class.className}/>)}
+        {joinedClasses.map(each_class =><JoinedClass toParentCallBack = {initCallBack} number={each_class.className}/>)}
         </>
     );
 }
 
 {/*Template For each joined class*/}
-function JoinedClass(props){
-    const number = props.number;
+function JoinedClass({ toParentCallBack, number}){
+  {/*When a user clicks on a joined class, we want to set the component to that class.*/}
+  function initCallBack(){
+    toParentCallBack(number);
+  }
     return(
         <>
-        <div className="joined-class-card">
+        <div className="joined-class-card" onClick={initCallBack}>
           {/* example class */}
-          <h3>{props.number}</h3>⭐ ⭐ ⭐
+          <h3>{number}</h3>⭐ ⭐ ⭐
           <div className="joined-class-actions">
             <button className="action-button">⭐</button>
             <button className="action-button">⚙️</button>
