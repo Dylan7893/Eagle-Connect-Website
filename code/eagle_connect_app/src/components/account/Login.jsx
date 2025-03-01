@@ -45,7 +45,10 @@ function Login() {
           <h2>Welcome!</h2>
           <form onSubmit={signIn}>
             <div class="sign-in-elements-group">
-              <label for="username"> Email: </label>
+              <label for="username" class="label">
+                {" "}
+                Email:{" "}
+              </label>
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -58,7 +61,10 @@ function Login() {
               ></input>
             </div>
             <div class="sign-in-elements-group">
-              <label for="password"> Password: </label>
+              <label for="password" class="label">
+                {" "}
+                Password:{" "}
+              </label>
               <input
                 type="password"
                 value={password}
@@ -70,15 +76,15 @@ function Login() {
                 class="input-spacing"
               ></input>
             </div>
-            <div class="sign-in-elements-group">
+            <button type="submit" className="login-button">
+              Log In
+            </button>
+            <div class="nav-link-group">
               <a onClick={() => setState("forgot-password")}>
                 Forgot Password?
               </a>
               <a onClick={() => setState("register")}>Create an Account</a>
             </div>
-            <button type="submit" className="login-button">
-              Log In
-            </button>
           </form>
         </div>
       </div>
