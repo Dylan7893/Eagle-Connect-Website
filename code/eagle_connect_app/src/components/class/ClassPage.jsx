@@ -21,7 +21,7 @@ function ClassPage({ className }) {
                 <>
                     <ClassTemplate toClassPage={handleCallBack} className={className} />
                     <main className="main-section">
-                        <Chat/>
+                        <Chat className ={className}/>
                         {/* end main */}
                     </main>
                 </>
@@ -32,7 +32,7 @@ function ClassPage({ className }) {
                 <>
                     <ClassTemplate toClassPage={handleCallBack} className={className} />
                     <main className="main-section">
-                    <Notes/>
+                    <Notes className ={className}/>
                         {/* end main */}
                     </main>
                 </>
@@ -43,7 +43,7 @@ function ClassPage({ className }) {
                 <>
                     <ClassTemplate toClassPage={handleCallBack} className={className} />
                     <main className="main-section">
-                    <ClassInfo/>
+                    <ClassInfo className ={className}/>
                         {/* end main */}
                     </main>
                 </>
@@ -54,7 +54,7 @@ function ClassPage({ className }) {
                 <>
                     <ClassTemplate toClassPage={handleCallBack} className={className} />
                     <main className="main-section">
-                    <Reminders/>
+                    <Reminders className ={className}/>
                         {/* end main */}
                     </main>
                 </>
@@ -65,7 +65,7 @@ function ClassPage({ className }) {
                 <>
                     <ClassTemplate toClassPage={handleCallBack} className={className} />
                     <main className="main-section">
-                    <Resources/>
+                    <Resources className ={className}/>
                         {/* end main */}
                     </main>
                 </>
@@ -75,7 +75,7 @@ function ClassPage({ className }) {
                 <>
                     <ClassTemplate toClassPage={handleCallBack} className={className} />
                     <main className="main-section">
-                        <RateClass/>
+                        <RateClass className ={className}/>
                         {/* end main */}
                     </main>
                 </>

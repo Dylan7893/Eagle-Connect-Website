@@ -56,9 +56,9 @@ function Dashboard({email}) {
       })
       .catch((error) => console.log(error));
   }
-  {
+  
     /*function called when user attempts to sign out */
-  }
+  
   const userSignOut = () => {
     signOut(auth)
       .then(() => {

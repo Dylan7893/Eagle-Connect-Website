@@ -17,6 +17,8 @@ echo ********ROUTER DOM INSTALL********:
 npm install react-router-dom
 echo ********OTHERS INSTALL********
 npm install --save-dev ajv@^7 
+npm install reactjs-popup
+npm install react-firebase-hooks
 ####Put OUR Code back
 rm -r public/
 rm -r src/
@@ -24,3 +26,4 @@ cd ..
 cd ..
 mv temporary/public code/eagle_connect_app/public
 mv temporary/src code/eagle_connect_app/src
+rm -r temporary/
