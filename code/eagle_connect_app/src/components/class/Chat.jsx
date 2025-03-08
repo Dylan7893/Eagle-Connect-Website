@@ -1,105 +1,127 @@
 import React from "react";
-import {auth, db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { useEffect, useState } from "react";
-import { collection, getDocs, arrayUnion, updateDoc, query, where, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  arrayUnion,
+  updateDoc,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 
 /*Component where you can send chat messages */
 function Chat({ className }) {
+  //form handling stuff
+  const [message_to_send, setMessageToSend] = useState("");
 
-    //form handling stuff
-    const [message_to_send, setMessageToSend] = useState("");
+  const [messages, setMessages] = useState([]);
 
-    const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    getAllMessages();
+  }, []);
 
-
-    useEffect(() => {
-        getAllMessages();
-    }, [])
-
-    async function getAllMessages() {
-        {/*Create query to get the user object from their email*/ }
-        const classQuery = query(
-            collection(db, "availableClasses"),
-            where('name', '==', className)
-        );
-
-        {/*Use query to get user object (contains first name, last name, etc.) */ }
-        getDocs(classQuery).then(response => {
-            const class_from_responses = response.docs.map(doc => ({
-                data: doc.data(),
-                id: doc.id,
-            }))
-            setMessages(class_from_responses.at(0).data.messages);
-        }).catch(error => console.log(error));
-
+  async function getAllMessages() {
+    {
+      /*Create query to get the user object from their email*/
     }
+    const classQuery = query(
+      collection(db, "availableClasses"),
+      where("name", "==", className)
+    );
 
-    async function uploadNewMessage() {
-        var class_id;
-        const classQuery = query(
-            collection(db, "availableClasses"),
-            where("name", "==", className)
-        );
-
-        {
-            /*Use query to get user object (contains first name, last name, etc.) */
-        }
-        getDocs(classQuery)
-            .then((response) => {
-                const class_from_response = response.docs.map((doc) => ({
-                    data: doc.data(),
-                    id: doc.id,
-                }));
-                {
-                    /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-                }
-                class_id = class_from_response.at(0).id;
-                const classDocRef = doc(db, "availableClasses", class_id);
-                updateDoc(classDocRef, {
-                    messages: arrayUnion({
-                        name: "Test",
-                        message: message_to_send,
-                    }),
-                });
-            })
+    {
+      /*Use query to get user object (contains first name, last name, etc.) */
     }
+    getDocs(classQuery)
+      .then((response) => {
+        const class_from_responses = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setMessages(class_from_responses.at(0).data.messages);
+      })
+      .catch((error) => console.log(error));
+  }
 
-    //validate message
-    function handleMessageSubmit() {
-            uploadNewMessage();
+  async function uploadNewMessage() {
+    var class_id;
+    const classQuery = query(
+      collection(db, "availableClasses"),
+      where("name", "==", className)
+    );
+
+    {
+      /*Use query to get user object (contains first name, last name, etc.) */
     }
+    getDocs(classQuery).then((response) => {
+      const class_from_response = response.docs.map((doc) => ({
+        data: doc.data(),
+        id: doc.id,
+      }));
+      {
+        /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+      }
+      class_id = class_from_response.at(0).id;
+      const classDocRef = doc(db, "availableClasses", class_id);
+      updateDoc(classDocRef, {
+        messages: arrayUnion({
+          name: "Test",
+          message: message_to_send,
+        }),
+      });
+    });
+  }
 
-    const handleNewMessageChange = (e) => {
-        setMessageToSend(e.target.value);
-    };
+  //validate message
+  function handleMessageSubmit() {
+    uploadNewMessage();
+  }
 
-    return (
-        <>
-         {messages.map(each_class => <Message name={each_class.name} message={each_class.message}
-            />)}
-            <form>
-               
-                <input
-                    type="text"
-                    id="message"
-                    value={message_to_send}
-                    onChange={handleNewMessageChange}
-                    placeholder="Enter Message"
-                    required
-                />
+  const handleNewMessageChange = (e) => {
+    setMessageToSend(e.target.value);
+  };
 
-            </form>
-            <button onClick={handleMessageSubmit}>Submit</button>
-        </>
-    )
+  return (
+    <>
+      {messages.map((each_class) => (
+        <Message name={each_class.name} message={each_class.message} />
+      ))}
+
+      <div class="message-field">
+        <form>
+          <input
+            type="text"
+            id="message"
+            value={message_to_send}
+            onChange={handleNewMessageChange}
+            placeholder="Enter Message"
+            required
+          />
+        </form>
+        <button onClick={handleMessageSubmit}>Send</button>
+      </div>
+    </>
+  );
 }
 
-function Message({ name, message}) {
-    return (
-        <>
-            <p>Name: {name}</p>
-            <p>Message: {message}</p>
-        </>
-    );
+function Message({ name, message }) {
+  return (
+    <>
+      <div class="resource-box-no-line">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+          alt="Profile Image"
+          class="profile-image"
+        />
+
+        <div class="resource">
+          <div class="name">{name}</div>
+          <div class="message">{message}</div>
+        </div>
+      </div>
+    </>
+  );
 }
 export default Chat;
