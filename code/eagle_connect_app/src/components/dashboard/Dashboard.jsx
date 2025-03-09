@@ -7,6 +7,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import Classes from "./Classes";
 import { db } from "../../firebase";
 import JoinedClasses from "./JoinedClasses";
+import CreateClass from "./CreateClass";
 import defaultImage from "../../design/default_pfp.jpg";
 import ClassPage from "../class/ClassPage";
 
@@ -120,7 +121,7 @@ function Dashboard({email}) {
           {/* end main */}
         </main>
         {/*add class popup */}
-        <MyPopup isOpen={open} closePopup={closeModal} />
+        <MyPopup isOpen={open} closePopup={closeModal} /> 
         {/* Log out button */}
   
         {/* end body */}

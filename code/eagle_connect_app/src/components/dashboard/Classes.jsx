@@ -48,7 +48,18 @@ function Classes() {
                     classProfessor: classToJoin.data.professor,
                     classRating: classToJoin.data.rating,
                     joinedAt: new Date(),
-                }),
+
+                    // below is what was used in the CreateClass.jsx, the box for the class shows on left side bar
+                    // doesn't show any info, need to have it like above - Landon
+              /*      classId: newClassRef.id,
+                classInitials: classInitials,
+                classNumber: classNumber,
+                classExtension: classExtension,
+                classSection: classSection,
+                classLevelUp: classLevelUp,
+                className: className,
+                joinedAt: new Date(), */
+                }), 
             });
 
             console.log("Class successfully joined!");
