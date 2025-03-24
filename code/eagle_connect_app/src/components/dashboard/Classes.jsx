@@ -29,7 +29,7 @@ function Classes() {
     }
 
     // Function to handle adding the class to the joinedClasses collection
-    function joinClass(classToJoin) {
+     function joinClass(classToJoin) {
         const user = auth.currentUser; // Gets the current user from firebase authentication
 
         const userId = user.uid; // Gets firebase authentication uid
@@ -38,34 +38,24 @@ function Classes() {
         const userDocRef = doc(db, "users", userId);
 
         // adds the class to the joinedClasses array
+        // users can now successfully join a class from avaiable class sidebar
         try {
             updateDoc(userDocRef, {
                 joinedClasses: arrayUnion({
-                    classId: classToJoin.id,
-                    className: classToJoin.data.name,
-                    classNumber: classToJoin.data.number,
-                    classNumOfMembers: classToJoin.data.numberOfMembers,
-                    classProfessor: classToJoin.data.professor,
-                    classRating: classToJoin.data.rating,
+                    classInitials: classToJoin.classInitials,
+                    classNumber: classToJoin.classNumber,
+                    classExtension: classToJoin.classExtension,
+                    classSection: classToJoin.classSection,
+                    classLevelUp: classToJoin.classLevelUp,
+                    className: classToJoin.className,
                     joinedAt: new Date(),
-
-                    // below is what was used in the CreateClass.jsx, the box for the class shows on left side bar
-                    // doesn't show any info, need to have it like above - Landon
-              /*      classId: newClassRef.id,
-                classInitials: classInitials,
-                classNumber: classNumber,
-                classExtension: classExtension,
-                classSection: classSection,
-                classLevelUp: classLevelUp,
-                className: className,
-                joinedAt: new Date(), */
-                }), 
+                }),
             });
 
             console.log("Class successfully joined!");
-            alert(`You have joined the class: ${classToJoin.data.name}`);
+            alert(`You have joined the class: ${classToJoin.className}`);
         } catch (error) {
-            console.error("Error joining class:", error);
+            console.log("Error joining class:", error);
             alert("Failed to join the class. Please try again.");
         }
     };
@@ -76,10 +66,11 @@ function Classes() {
                 {classes.map((each_class) => (
                     <li className="class-list-item" >
                         <div>
-                            <h3>{each_class.data.name}</h3>
-                            <p>{each_class.data.description}</p>
-                            <p>Instructor: {each_class.data.instructor}</p>
-                            <button onClick={() => joinClass(each_class)}>
+                            <h3>{each_class.data.className}</h3>
+                            <p>{each_class.data.classInitials}</p>
+                            <p>{each_class.data.classNumber}</p>
+                            <p>{each_class.data.classSection}</p>
+                            <button onClick={() => joinClass(each_class.data)}>
                                 Join
                             </button>
                         </div>

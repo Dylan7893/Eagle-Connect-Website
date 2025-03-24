@@ -25,7 +25,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
 
       // try this
       try {
-        // this will add the create class that user creates into the avaiableClasses collection
+        // this will add the created class that user creates into the avaiableClasses collection
         const createClassRef = await addDoc(collection(db, "availableClasses"), {
                 classInitials: classInitials, // created class abbrev. CS, MATH, EEC
                 classNumber: classNumber, // created class number 170, 308, 355
