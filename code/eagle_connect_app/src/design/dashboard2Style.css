@@ -164,6 +164,7 @@
 /* joined classes card layout */
 .joined-classes-layout {
   display: flex; /*display horizonalty*/
+  flex-wrap: wrap; /* allows the cards to wrap once row fills up */
   gap: 15px; /*space horizontally cards*/
 }
 
