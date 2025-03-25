@@ -9,6 +9,7 @@ import { doc, setDoc } from "firebase/firestore";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
@@ -40,18 +41,23 @@ const Register = () => {
     if (!email.endsWith("@moreheadstate.edu")) {
       alert("Must be an MSU Email to Sign Up.");
     } else {
-      createUserWithEmailAndPassword(auth, email, password, firstName, lastName)
-        .then((userCredential) => {
-          console.log(userCredential);
-          {
-            /*Add users info the database*/
-          }
-          databaseAddUser(userCredential);
-          navigate("/app");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (password == confirmPassword) {
+        createUserWithEmailAndPassword(auth, email, password, firstName, lastName)
+          .then((userCredential) => {
+            console.log(userCredential);
+            {
+              /*Add users info the database*/
+            }
+            databaseAddUser(userCredential);
+            navigate("/app");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      else {
+        alert("Password doesn't match!")
+      }
     }
   };
 
@@ -72,6 +78,13 @@ const Register = () => {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            class="input-spacing"
+          ></input>
+           <input
+            type="password"
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             class="input-spacing"
           ></input>
           <input
