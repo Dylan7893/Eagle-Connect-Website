@@ -1,0 +1,34 @@
+body {
+  font-family: Arial, sans-serif; /*font arial*/
+  font-size: 20px; /*font size of class information*/
+}
+
+.class-info {
+  max-width: 1000px; /*width of box for informaiton*/
+  margin: 0 auto; /*removes margins and center */
+  padding: 20px; /*space from top*/
+  border-radius: 10px; /*rounded edges*/
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /*box shadow*/
+}
+
+.class-info h1 {
+  text-align: center; /*center the title*/
+  margin-bottom: 40px; /*add space under title*/
+  color: #0729af; /*makes the header morehead blue*/
+}
+
+.class-info-grid {
+  display: grid; /*use a grid to display class information*/
+  grid-template-columns: 1fr 1fr; /*split grid equally*/
+  gap: 50px; /*space between rows and columsn*/
+}
+
+.title {
+  font-weight: bold; /*makes title bold*/
+  color: #0729af; /*makes the title morehead blue*/
+}
+
+/*gray also looks nice if we do not like the yellow...*/
+.info {
+  color: #ffcf00; /*makes class information morehead yellow to stand out*/
+}
