@@ -1,5 +1,5 @@
 import "../../design/ClassPageStyle.css";
-import { useState } from 'react';
+import { useState } from "react";
 import ClassTemplate from "./ClassTemplate";
 import ClassInfo from "./ClassInfo";
 import Notes from "./Notes";
@@ -9,84 +9,84 @@ import Reminders from "./Reminders";
 import Chat from "./Chat";
 
 function ClassPage({ className }) {
-
-    const [sectionClicked, setSectionClicked] = useState("chat");
-    function handleCallBack(x) {
-        setSectionClicked(x);
-    }
-    {/*There has GOT to be a better way to do this. ~Chase*/}
-    switch (sectionClicked) {
-        case ("chat"):
-            return (
-                <>
-                    <ClassTemplate toClassPage={handleCallBack} className={className} />
-                    <main className="main-section">
-                        <Chat className ={className}/>
-                        {/* end main */}
-                    </main>
-                </>
-            );
-
-        case ("notes"):
-            return (
-                <>
-                    <ClassTemplate toClassPage={handleCallBack} className={className} />
-                    <main className="main-section">
-                    <Notes className ={className}/>
-                        {/* end main */}
-                    </main>
-                </>
-            );
-
-        case ("info"):
-            return (
-                <>
-                    <ClassTemplate toClassPage={handleCallBack} className={className} />
-                    <main className="main-section">
-                    <ClassInfo className ={className}/>
-                        {/* end main */}
-                    </main>
-                </>
-            );
-
-        case ("reminders"):
-            return (
-                <>
-                    <ClassTemplate toClassPage={handleCallBack} className={className} />
-                    <main className="main-section">
-                    <Reminders className ={className}/>
-                        {/* end main */}
-                    </main>
-                </>
-            );
-
-        case ("resources"):
-            return (
-                <>
-                    <ClassTemplate toClassPage={handleCallBack} className={className} />
-                    <main className="main-section">
-                    <Resources className ={className}/>
-                        {/* end main */}
-                    </main>
-                </>
-            );
-        case ("rate"):
-            return (
-                <>
-                    <ClassTemplate toClassPage={handleCallBack} className={className} />
-                    <main className="main-section">
-                        <RateClass className ={className}/>
-                        {/* end main */}
-                    </main>
-                </>
-            )
-
-    }
-    return (
+  const [sectionClicked, setSectionClicked] = useState("chat");
+  function handleCallBack(x) {
+    setSectionClicked(x);
+  }
+  {
+    /*There has GOT to be a better way to do this. ~Chase*/
+  }
+  switch (sectionClicked) {
+    case "chat":
+      return (
         <>
-
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <Chat className={className} />
+            {/* end main */}
+          </main>
         </>
-    );
+      );
+
+    case "notes":
+      return (
+        <>
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <Notes className={className} />
+            {/* end main */}
+          </main>
+        </>
+      );
+
+    case "info":
+      return (
+        <>
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <ClassInfo className={className} />
+            {/* end main */}
+          </main>
+        </>
+      );
+
+    case "reminders":
+      return (
+        <>
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <Reminders className={className} />
+            {/* end main */}
+          </main>
+        </>
+      );
+
+    case "resources":
+      return (
+        <>
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <Resources className={className} />
+            {/* end main */}
+          </main>
+        </>
+      );
+    case "rate":
+      return (
+        <>
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <RateClass className={className} />
+            {/* end main */}
+          </main>
+        </>
+      );
+  }
+  <button className="add-new-class" onClick={closeModal}>
+    Create Class
+  </button>;
+
+  return <></>;
 }
 
 export default ClassPage;

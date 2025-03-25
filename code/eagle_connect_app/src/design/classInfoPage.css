@@ -9,10 +9,15 @@ body {
   padding: 20px; /*space from top*/
   border-radius: 10px; /*rounded edges*/
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /*box shadow*/
+
+  /*for centering leave button and header*/
+  display: flex; /*use a flex box*/
+  flex-direction: column; /*stack vertically*/
+  justify-content: center; /*center vertically*/
+  align-items: center; /*center horizontally*/
 }
 
 .class-info h1 {
-  text-align: center; /*center the title*/
   margin-bottom: 40px; /*add space under title*/
   color: #0729af; /*makes the header morehead blue*/
 }
@@ -31,4 +36,21 @@ body {
 /*gray also looks nice if we do not like the yellow...*/
 .info {
   color: #ffcf00; /*makes class information morehead yellow to stand out*/
+}
+
+.leave-class {
+  width: 50%; /*leave button width match sidebar*/
+  padding: 10px; /*leave button padding*/
+  background: #0729af; /*leave button colorr*/
+  color: white; /*leave button text color*/
+  border: none; /*leavebutton no border*/
+  border-radius: 5px; /*leave button rounded corner*/
+  cursor: pointer; /*changes cursor*/
+  font-size: 18px; /*changes the font size on the button*/
+  transition: background-color 0.3s ease, transform 0.2s ease; /*hover animation specification*/
+}
+
+.leave-class:hover {
+  background-color: red; /*leave button changes color when hovering */
+  transform: scale(1.05); /*leave button enlarges when hovering */
 }
