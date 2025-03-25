@@ -14,18 +14,19 @@ import ClassPage from "../class/ClassPage";
 {
   /*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */
 }
-function Dashboard({email}) {
+function Dashboard({ email }) {
   //control visibility
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(!open);
 
-  {/*Used for changing the componenet to the class template page*/}
+  {
+    /*Used for changing the componenet to the class template page*/
+  }
   const [classClicked, setClassClicked] = useState("none");
 
-  function handleClassChange(x){
+  function handleClassChange(x) {
     setClassClicked(x);
   }
-
 
   {
     /*test function that shows that we can get all of a users data just from their email!*/
@@ -57,9 +58,9 @@ function Dashboard({email}) {
       })
       .catch((error) => console.log(error));
   }
-  
-    /*function called when user attempts to sign out */
-  
+
+  /*function called when user attempts to sign out */
+
   const userSignOut = () => {
     signOut(auth)
       .then(() => {
@@ -68,12 +69,16 @@ function Dashboard({email}) {
       .catch((error) => console.log(error));
   };
 
-  if(classClicked == "none"){
+  if (classClicked == "none") {
     return (
       <>
         {/* navigation header */}
         <header className="navigation-bar">
-          <input type="text" className="search-bar" placeholder="Search Joined" />
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search Joined"
+          />
           {/* right navigation buttons */}
           <div className="navigation-bar-right">
             <button className="settings">⚙️</button>
@@ -92,12 +97,12 @@ function Dashboard({email}) {
         <aside className="sidebar">
           {/* sidebar join class with code */}
           <h2>Join Class</h2>
-          <input type="text" placeholder="Class Code" />
+
           {/* when click add new class button a popup appears */}
           <button className="add-new-class" onClick={closeModal}>
             +
           </button>
-  
+
           {/* sidebar discover all classes */}
           <h3>Discover</h3>
           <form action="">
@@ -112,8 +117,11 @@ function Dashboard({email}) {
           <section className="joined-classes">
             <h2>Joined Classes</h2>
             <div className="joined-classes-layout">
-            <JoinedClasses toDashboardCallBack = {handleClassChange} email={email}/>
-  
+              <JoinedClasses
+                toDashboardCallBack={handleClassChange}
+                email={email}
+              />
+
               {/* end main layout */}
             </div>
             {/* end main section */}
@@ -121,22 +129,21 @@ function Dashboard({email}) {
           {/* end main */}
         </main>
         {/*add class popup */}
-        <MyPopup isOpen={open} closePopup={closeModal} /> 
+        <MyPopup isOpen={open} closePopup={closeModal} />
         {/* Log out button */}
-  
+
         {/* end body */}
         <button onClick={userSignOut}>Log out</button>
         <button onClick={testDB}>test</button>
       </>
     );
-  }else{
-    return(
+  } else {
+    return (
       <>
-      <ClassPage className={classClicked}/>
+        <ClassPage className={classClicked} />
       </>
     );
   }
-  
 }
 
 export default Dashboard;
