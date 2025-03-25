@@ -32,25 +32,8 @@
 
 /* navigation search bar hover */
 .search-bar:hover {
-  border-color: #007bff; /* when hovering border color */
+  border-color: #0729af; /* when hovering border color */
   box-shadow: 0 0 10px rgba(0, 122, 254, 0.3); /* when hovering shadow */
-}
-
-/* navigation bar settings button */
-.settings {
-  padding: 8px 12px; /* setting button padding*/
-  background: #007bff; /*background color of settings button*/
-  border: none; /*remove default button border*/
-  border-radius: 5px; /* rounded edges */
-  cursor: pointer; /* change pointer when hovering */
-  font-size: 19px; /* text size */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* hover animation specificaitons */
-}
-
-/* navigation bar settings button hover*/
-.settings:hover {
-  background-color: #0056b3; /*when hovering the settings button color darkens*/
-  transform: scale(1.05); /* when hovering settings button enlarge*/
 }
 
 /* navigation bar profile picture */
@@ -106,7 +89,7 @@
 
 /* side bar text fields hover */
 .sidebar input:hover {
-  border-color: #007bff; /*change color when hovering*/
+  border-color: #0729af; /*change color when hovering*/
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /*shdow when hovering */
 }
 
@@ -114,7 +97,7 @@
 .add-new-class {
   width: 100%; /*side bar plus button width match sidebar*/
   padding: 10px; /*side bar plus button padding*/
-  background: #007bff; /*side bar plus button colorr*/
+  background: #0729af; /*side bar plus button colorr*/
   color: white; /*side bar plus button text color*/
   border: none; /*side bar plus button no border*/
   border-radius: 5px; /*side bar plus button rounded corner*/

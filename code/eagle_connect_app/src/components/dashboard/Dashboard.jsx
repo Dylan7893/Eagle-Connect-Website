@@ -81,7 +81,6 @@ function Dashboard({ email }) {
           />
           {/* right navigation buttons */}
           <div className="navigation-bar-right">
-            <button className="settings">⚙️</button>
             {/* profile image serving as a button for profile */}
             <button className="profile-button">
               {/* default image asset */}
@@ -100,7 +99,7 @@ function Dashboard({ email }) {
 
           {/* when click add new class button a popup appears */}
           <button className="add-new-class" onClick={closeModal}>
-            +
+            Create Class
           </button>
 
           {/* sidebar discover all classes */}
