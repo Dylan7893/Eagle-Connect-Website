@@ -22,11 +22,9 @@
   letter-spacing: 2px; /* spacing between characters in logo */
 }
 
-/* EAGLE IMAGE: */
-.logo-image {
-  width: 80px; /* image frame width */
-  height: 80px; /* image frame height */
-  margin-right: 25px; /* space between text and image */
+.logo img {
+  width: 90px;
+  height: 90px;
 }
 
 /* NAVIGATION LINK CONTAINER: */
