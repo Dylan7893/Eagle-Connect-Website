@@ -82,9 +82,6 @@ function ClassPage({ className }) {
         </>
       );
   }
-  <button className="add-new-class" onClick={closeModal}>
-    Create Class
-  </button>;
 
   return <></>;
 }
