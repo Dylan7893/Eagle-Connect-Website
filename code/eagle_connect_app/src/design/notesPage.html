@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>Notes</title>
+    <link rel="stylesheet" href="notesPageStyle.css" />
+  </head>
+
+
+  <div class="add-resource-elements">
+    <form>
+      <div class="resource-field">
+        <label for="Title">Title:</label>
+        <input
+          type="text"
+          id="title"
+          value=""
+          onChange="{handleTitleChange}"
+          placeholder="Enter Title"
+          required
+        />
+      </div>
+
+      <div class="resource-field">
+        <label for="url">File:</label>
+        <input
+          type="file"
+          id="url"
+          value="{url}"
+          onChange="{handleURLChange}"
+          required
+        />
+      </div>
+    </form>
+    <button onClick="{handleLinkSubmit}">Upload</button>
+</body>
+
+</html>

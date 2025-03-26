@@ -1,0 +1,69 @@
+.add-resource-elements {
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.resource-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.resource-field label {
+  font-family: "Arial", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+
+  width: 80px;
+  margin-right: 10px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.resource-field input:hover {
+  border-color: #007bff; /* when hovering border color */
+  box-shadow: 0 0 10px rgba(0, 122, 254, 0.3); /* when hovering shadow */
+}
+
+button {
+  padding: 10px 20px;
+  width: 100%;
+  background-color: #0729af;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s; /*transistion for changing the background color*/
+}
+
+button:hover {
+  background-color: #0056b3; /*when hovering the settings button color darkens*/
+  transform: scale(1.01); /* when hovering settings button enlarge*/
+}
+
+label {
+  display: block;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 9px;
+}
+
+/*text field outline colors*/
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+/*text field focus outline*/
+input:focus {
+  border-color: #0729af;
+  outline: none;
+}
