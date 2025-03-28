@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, doc, arrayUnion, updateDoc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, arrayUnion, updateDoc, getDoc, increment, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import "../../design/dashboard2Style.css";
 
@@ -9,7 +9,6 @@ function Classes() {
     useEffect(() => {
         getClasses();
     }, []);
-
 
     // Function to handle getting the availableClasses collection 
     function getClasses() {
@@ -27,9 +26,11 @@ function Classes() {
             setClasses(classes_from_response);
         }).catch(error => console.log(error));
     }
+    
 
     // Function to handle adding the class to the joinedClasses collection
-     function joinClass(classToJoin) {
+    async function joinClass(classToJoin) {
+        
         const user = auth.currentUser; // Gets the current user from firebase authentication
 
         const userId = user.uid; // Gets firebase authentication uid
@@ -37,24 +38,31 @@ function Classes() {
         // Gets the user document reference from firestore with auth uid
         const userDocRef = doc(db, "users", userId);
 
+        // Gets the class document reference from firestore with class id
+        const classDocRef = doc(db, "availableClasses", classToJoin.id)
+
         // adds the class to the joinedClasses array
         // users can now successfully join a class from avaiable class sidebar
         try {
-            updateDoc(userDocRef, {
+            await updateDoc(userDocRef, {
                 joinedClasses: arrayUnion({
-                    classInitials: classToJoin.classInitials.toUpperCase(),
-                    classNumber: classToJoin.classNumber,
-                    classExtension: classToJoin.classExtension,
-                    classSection: classToJoin.classSection,
-                    classLevelUp: classToJoin.classLevelUp,
-                    className: classToJoin.className.toUpperCase(),
-                //    studentJoined: classToJoin.studentJoined,
+                    classInitials: classToJoin.data.classInitials.toUpperCase(),
+                    classNumber: classToJoin.data.classNumber,
+                    classExtension: classToJoin.data.classExtension,
+                    classSection: classToJoin.data.classSection,
+                    classLevelUp: classToJoin.data.classLevelUp,
+                    className: classToJoin.data.className.toUpperCase(),
                     joinedAt: new Date(),
                 }),
             });
 
+            // each time a class is joined, the number of students will increment by one each time
+            await updateDoc(classDocRef, {
+                numberOfStudents: increment(1),
+            });
+
             console.log("Class successfully joined!");
-            alert(`You have joined the class: ${classToJoin.className}`);
+            alert(`You have joined the class: ${classToJoin.data.className}`);
         } catch (error) {
             console.log("Error joining class:", error);
             alert("Failed to join the class. Please try again.");
@@ -66,12 +74,13 @@ function Classes() {
             <ul className="list-of-classes">
                 {classes.map((each_class) => (
                     <li className="class-list-item" >
-                        <div>                          
+                        <div>
                             <h3>{each_class.data.className}</h3>
                             <p> {each_class.data.classInitials}-{each_class.data.classNumber}
                                 {each_class.data.classExtension}-{each_class.data.classSection}
                                 {each_class.data.classLevelUp} </p>⭐ ⭐ ⭐
-                            <button onClick={() => joinClass(each_class.data)}>
+                            <p> Students: {each_class.data.numberOfStudents} </p>
+                            <button onClick={() => joinClass(each_class)}>
                                 Join
                             </button>
                         </div>
