@@ -13,6 +13,8 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   const [classSection, setClassSection] = useState(""); // this is for class section like 001, 002, 700
   const [classLevelUp, setClassLevelUp] = useState(""); // this is for class level up like UR
   const [className, setClassName] = useState(""); // this is for the class name like Intro to Computer Science
+  const [studentJoined, setStudentJoined] = useState(""); // this is for the number of students within a class
+
 
   // Function to handle adding the class to the avaiableClasses collection
   async function handleCreate() {
@@ -34,6 +36,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 classLevelUp: classLevelUp, // created class levelUp UR
                 className: className.toUpperCase(), // created class name Intro to Computer Science
                 createdBy: userId, // created by current user
+                studentJoined: studentJoined,
                 createdAt: new Date(), // created at certain date and time
           });
 
@@ -47,6 +50,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 classSection: classSection, // joined created class section 001, 002, 700
                 classLevelUp: classLevelUp, // joined created class levelUp UR
                 className: className.toUpperCase(), // joined created class name Intro to Computer Science
+                studentJoined: studentJoined,
                 joinedAt: new Date(), // timestamp for joined the created class
             }),
         });

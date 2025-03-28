@@ -42,12 +42,13 @@ function Classes() {
         try {
             updateDoc(userDocRef, {
                 joinedClasses: arrayUnion({
-                    classInitials: classToJoin.classInitials,
+                    classInitials: classToJoin.classInitials.toUpperCase(),
                     classNumber: classToJoin.classNumber,
                     classExtension: classToJoin.classExtension,
                     classSection: classToJoin.classSection,
                     classLevelUp: classToJoin.classLevelUp,
-                    className: classToJoin.className,
+                    className: classToJoin.className.toUpperCase(),
+                    studentJoined: classToJoin.studentJoined,
                     joinedAt: new Date(),
                 }),
             });
@@ -65,11 +66,11 @@ function Classes() {
             <ul className="list-of-classes">
                 {classes.map((each_class) => (
                     <li className="class-list-item" >
-                        <div>
+                        <div>                          
                             <h3>{each_class.data.className}</h3>
-                            <p>{each_class.data.classInitials}</p>
-                            <p>{each_class.data.classNumber}</p>
-                            <p>{each_class.data.classSection}</p>
+                            <p> {each_class.data.classInitials}-{each_class.data.classNumber}
+                                {each_class.data.classExtension}-{each_class.data.classSection}
+                                {each_class.data.classLevelUp} </p>⭐ ⭐ ⭐
                             <button onClick={() => joinClass(each_class.data)}>
                                 Join
                             </button>
