@@ -48,7 +48,7 @@ function Classes() {
                     classSection: classToJoin.classSection,
                     classLevelUp: classToJoin.classLevelUp,
                     className: classToJoin.className.toUpperCase(),
-                    studentJoined: classToJoin.studentJoined,
+                //    studentJoined: classToJoin.studentJoined,
                     joinedAt: new Date(),
                 }),
             });

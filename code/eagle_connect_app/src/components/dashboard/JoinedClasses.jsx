@@ -63,9 +63,9 @@ function JoinedClasses({ toDashboardCallBack, email }) {
       {joinedClasses.map((each_class) => (
         <JoinedClass
           toParentCallBack={initCallBack}
-          name={each_class.className.toUpperCase()}
+          name={each_class.className}
           number={each_class.classNumber}
-          initials={each_class.classInitials.toUpperCase()}
+          initials={each_class.classInitials}
           section={each_class.classSection}
           extension={each_class.classExtension}
           levelUp={each_class.classLevelUp}
