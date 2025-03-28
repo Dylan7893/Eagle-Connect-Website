@@ -89,8 +89,8 @@ function JoinedClass({ toParentCallBack, name, number, initials, section, extens
     <>
       <div className="joined-class-card" onClick={initCallBack}>
         {/* example class */}
-        <h3>{name.toUpperCase()}</h3>
-        <p> {initials.toUpperCase()}-{number}{extension}-{section}{levelUp} </p>⭐ ⭐ ⭐
+        <h3>{name}</h3>
+        <p> {initials}-{number}{extension}-{section}{levelUp} </p>⭐ ⭐ ⭐
         {/*  <div className="joined-class-actions">
           <button className="action-button">⭐</button>
           <button className="action-button">⚙️</button>
