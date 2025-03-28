@@ -27,12 +27,12 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
       try {
         // this will add the created class that user creates into the avaiableClasses collection
         const createClassRef = await addDoc(collection(db, "availableClasses"), {
-                classInitials: classInitials, // created class abbrev. CS, MATH, EEC
+                classInitials: classInitials.toUpperCase(), // created class abbrev. CS, MATH, EEC
                 classNumber: classNumber, // created class number 170, 308, 355
                 classExtension: classExtension, // created class extension L, C, D
                 classSection: classSection, // created class section 001, 002, 700
                 classLevelUp: classLevelUp, // created class levelUp UR
-                className: className, // created class name Intro to Computer Science
+                className: className.toUpperCase(), // created class name Intro to Computer Science
                 createdBy: userId, // created by current user
                 createdAt: new Date(), // created at certain date and time
           });
@@ -41,12 +41,12 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
           await updateDoc(userDocRef, {
             joinedClasses: arrayUnion({
                 classId: createClassRef.id, // joined created class id
-                classInitials: classInitials, // joined created class abbrev. CS, MATH, EEC
+                classInitials: classInitials.toUpperCase(), // joined created class abbrev. CS, MATH, EEC
                 classNumber: classNumber, // joined created class number 170, 308, 355
                 classExtension: classExtension, // joined created class extension L, C, D
                 classSection: classSection, // joined created class section 001, 002, 700
                 classLevelUp: classLevelUp, // joined created class levelUp UR
-                className: className, // joined created class name Intro to Computer Science
+                className: className.toUpperCase(), // joined created class name Intro to Computer Science
                 joinedAt: new Date(), // timestamp for joined the created class
             }),
         });

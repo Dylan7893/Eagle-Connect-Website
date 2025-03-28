@@ -63,7 +63,12 @@ function JoinedClasses({ toDashboardCallBack, email }) {
       {joinedClasses.map((each_class) => (
         <JoinedClass
           toParentCallBack={initCallBack}
-          number={each_class.className}
+          name={each_class.className.toUpperCase()}
+          number={each_class.classNumber}
+          initials={each_class.classInitials.toUpperCase()}
+          section={each_class.classSection}
+          extension={each_class.classExtension}
+          levelUp={each_class.classLevelUp}
         />
       ))}
     </>
@@ -73,19 +78,19 @@ function JoinedClasses({ toDashboardCallBack, email }) {
 {
   /*Template For each joined class*/
 }
-function JoinedClass({ toParentCallBack, number }) {
+function JoinedClass({ toParentCallBack, name, number, initials, section, extension, levelUp }) {
   {
     /*When a user clicks on a joined class, we want to set the component to that class.*/
   }
   function initCallBack() {
-    toParentCallBack(number);
+    toParentCallBack(name, number, initials, section, extension, levelUp);
   }
   return (
     <>
       <div className="joined-class-card" onClick={initCallBack}>
         {/* example class */}
-        <h3>{number}</h3>
-        <p>Class number</p>⭐ ⭐ ⭐
+        <h3>{name.toUpperCase()}</h3>
+        <p> {initials.toUpperCase()}-{number}{extension}-{section}{levelUp} </p>⭐ ⭐ ⭐
         {/*  <div className="joined-class-actions">
           <button className="action-button">⭐</button>
           <button className="action-button">⚙️</button>
