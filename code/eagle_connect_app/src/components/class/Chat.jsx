@@ -15,12 +15,19 @@ import {
 function Chat({ className }) {
   //form handling stuff
   const [message_to_send, setMessageToSend] = useState("");
-
   const [messages, setMessages] = useState([]);
 
+  //refresh the messages every 100ms
   useEffect(() => {
-    getAllMessages();
+    const intervalId = setInterval(() => {
+      getAllMessages();
+    }, 100);
+    return () => clearInterval(intervalId);
   }, []);
+
+  const handleClearMessage = () => {
+    setMessageToSend('');
+  };
 
   async function getAllMessages() {
     {
@@ -28,7 +35,7 @@ function Chat({ className }) {
     }
     const classQuery = query(
       collection(db, "availableClasses"),
-      where("name", "==", className)
+      where("className", "==", className)
     );
 
     {
@@ -49,7 +56,7 @@ function Chat({ className }) {
     var class_id;
     const classQuery = query(
       collection(db, "availableClasses"),
-      where("name", "==", className)
+      where("className", "==", className)
     );
 
     {
@@ -72,10 +79,12 @@ function Chat({ className }) {
         }),
       });
     });
+    setMessages(messages);
   }
 
   //validate message
   function handleMessageSubmit() {
+    handleClearMessage();
     uploadNewMessage();
   }
 

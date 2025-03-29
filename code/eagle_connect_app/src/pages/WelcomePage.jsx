@@ -27,7 +27,7 @@ const WelcomePage = () => {
 
           <ul class="navigation-links">
             <li>
-              <a href="#">About</a>
+              <a href="/about">About</a>
             </li>
             <li>
               <button class="get-started" onClick={navigateClick}>

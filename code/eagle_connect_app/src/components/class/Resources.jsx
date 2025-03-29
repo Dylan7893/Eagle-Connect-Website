@@ -19,9 +19,18 @@ function Resources({ className }) {
 
   const [resources, setResources] = useState([]);
 
+  /*
   useEffect(() => {
     getAllResources();
-  }, []);
+  }, []);*/
+
+  //refresh the resources every 100ms
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        getAllResources();
+      }, 100);
+      return () => clearInterval(intervalId);
+    }, []);
 
   async function getAllResources() {
     {
@@ -29,7 +38,7 @@ function Resources({ className }) {
     }
     const classQuery = query(
       collection(db, "availableClasses"),
-      where("name", "==", className)
+      where("className", "==", className)
     );
 
     {
@@ -50,7 +59,7 @@ function Resources({ className }) {
     var class_id;
     const classQuery = query(
       collection(db, "availableClasses"),
-      where("name", "==", className)
+      where("className", "==", className)
     );
 
     {
@@ -101,8 +110,9 @@ function Resources({ className }) {
   //validate title and url and push to the database.
   function handleLinkSubmit() {
     if (isValidURL(url)) {
-      alert("Title: " + title + " URL: " + url + " className : " + className);
       uploadNewLink();
+      setTitle("");
+      setURL("");
     } else {
       alert("Bad url.");
     }
