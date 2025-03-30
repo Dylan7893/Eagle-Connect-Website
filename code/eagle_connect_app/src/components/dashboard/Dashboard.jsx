@@ -139,7 +139,7 @@ function Dashboard({ email }) {
   } else {
     return (
       <>
-        <ClassPage className={classClicked} />
+        <ClassPage className={classClicked} email = {email} />
       </>
     );
   }

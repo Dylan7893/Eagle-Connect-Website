@@ -12,10 +12,11 @@ import {
 } from "firebase/firestore";
 
 /*Component where you can send chat messages */
-function Chat({ className }) {
+function Chat({ className, email }) {
   //form handling stuff
   const [message_to_send, setMessageToSend] = useState("");
   const [messages, setMessages] = useState([]);
+  const [name, setName] = useState("Test");
 
   //refresh the messages every 100ms
   useEffect(() => {
@@ -28,6 +29,35 @@ function Chat({ className }) {
   const handleClearMessage = () => {
     setMessageToSend('');
   };
+
+  async function getName() {
+    const userQuery = query(
+          collection(db, "users"),
+          where("email", "==", email)
+        );
+    
+        {
+          /*Use query to get user object (contains first name, last name, etc.) */
+        }
+        getDocs(userQuery)
+          .then((response) => {
+            const users_from_response = response.docs.map((doc) => ({
+              data: doc.data(),
+              id: doc.id,
+            }));
+            {
+              /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+            }
+            var toSend;
+            toSend = users_from_response.at(0).data.firstName;
+            toSend += " ";
+            toSend += users_from_response.at(0).data.lastName;
+            setName(toSend);
+
+          })
+          .catch((error) => console.log(error));
+      
+  }
 
   async function getAllMessages() {
     {
@@ -54,6 +84,10 @@ function Chat({ className }) {
 
   async function uploadNewMessage() {
     var class_id;
+    
+    getName();
+   
+
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -74,7 +108,7 @@ function Chat({ className }) {
       const classDocRef = doc(db, "availableClasses", class_id);
       updateDoc(classDocRef, {
         messages: arrayUnion({
-          name: "Test",
+          name: name,
           message: message_to_send,
         }),
       });
