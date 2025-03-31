@@ -34,7 +34,6 @@ function Resources({ className, email }) {
       where("email", "==", email)
     );
 
-
     /*Use query to get user object (contains first name, last name, etc.) */
 
     getDocs(userQuery)
@@ -51,20 +50,15 @@ function Resources({ className, email }) {
         toSend += " ";
         toSend += users_from_response.at(0).data.lastName;
         setName(toSend);
-
       })
       .catch((error) => console.log(error));
-
   }
 
   async function getAllResources() {
-
-
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
-
 
     /*Use query to get user object (contains first name, last name, etc.) */
 
@@ -206,7 +200,9 @@ function Resource({ name, title, url }) {
 
           <strong>Title: {title}</strong>
 
-          <a href={url}>{url}</a>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {url}
+          </a>
         </div>
       </div>
     </>
