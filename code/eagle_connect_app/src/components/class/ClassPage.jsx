@@ -8,7 +8,7 @@ import Resources from "./Resources";
 import Reminders from "./Reminders";
 import Chat from "./Chat";
 
-function ClassPage({ className, email}) {
+function ClassPage({ className, email }) {
   const [sectionClicked, setSectionClicked] = useState("chat");
   function handleCallBack(x) {
     setSectionClicked(x);
@@ -22,7 +22,7 @@ function ClassPage({ className, email}) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <Chat className={className} email={email}/>
+            <Chat className={className} email={email} />
             {/* end main */}
           </main>
         </>
@@ -33,7 +33,7 @@ function ClassPage({ className, email}) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <Notes className={className} />
+            <Notes className={className} email={email} />
             {/* end main */}
           </main>
         </>
@@ -66,7 +66,7 @@ function ClassPage({ className, email}) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <Resources className={className} email = {email}/>
+            <Resources className={className} email={email} />
             {/* end main */}
           </main>
         </>
@@ -76,7 +76,7 @@ function ClassPage({ className, email}) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <RateClass className={className} />
+            <RateClass className={className} email={email} />
             {/* end main */}
           </main>
         </>

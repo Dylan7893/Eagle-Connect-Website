@@ -1,5 +1,5 @@
 import React from "react";
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -11,94 +11,79 @@ import {
   doc,
 } from "firebase/firestore";
 
-/*Component where you can send notes */
+/*Component where you can post links for certain study resources */
 function Notes({ className, email }) {
   //form handling stuff
-  const [note_to_send, setNoteToSend] = useState("");
-  const [title_to_send, setTitleToSend] = useState("");
-  const [notes, setNotes] = useState([]);
-  const [title, setTitle] = useState([]);
+  const [title, setTitle] = useState("");
+  const [url, setURL] = useState("");
   const [name, setName] = useState("Test");
+  const [resources, setResources] = useState([]);
 
-  //refresh the messages every 100ms
+  //refresh the resources every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getAllNotes();
+      getAllResources();
       getName();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
-  const handleClearNote = () => {
-    setNoteToSend('');
-    setTitleToSend('');
-  };
-
   async function getName() {
     const userQuery = query(
-          collection(db, "users"),
-          where("email", "==", email)
-        );
-    
-        
-          /*Use query to get user object (contains first name, last name, etc.) */
-        
-        getDocs(userQuery)
-          .then((response) => {
-            const users_from_response = response.docs.map((doc) => ({
-              data: doc.data(),
-              id: doc.id,
-            }));
-            {
-              /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-            }
-            var toSend;
-            toSend = users_from_response.at(0).data.firstName;
-            toSend += " ";
-            toSend += users_from_response.at(0).data.lastName;
-            setName(toSend);
+      collection(db, "users"),
+      where("email", "==", email)
+    );
 
-          })
-          .catch((error) => console.log(error));
-      
+    /*Use query to get user object (contains first name, last name, etc.) */
+
+    getDocs(userQuery)
+      .then((response) => {
+        const users_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        var toSend;
+        toSend = users_from_response.at(0).data.firstName;
+        toSend += " ";
+        toSend += users_from_response.at(0).data.lastName;
+        setName(toSend);
+      })
+      .catch((error) => console.log(error));
   }
 
-  async function getAllNotes() {
-    
-      /*Create query to get the user object from their email*/
-    
+  async function getAllResources() {
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    
-      /*Use query to get user object (contains first name, last name, etc.) */
-    
+    /*Use query to get user object (contains first name, last name, etc.) */
+
     getDocs(classQuery)
       .then((response) => {
         const class_from_responses = response.docs.map((doc) => ({
           data: doc.data(),
           id: doc.id,
         }));
-        setNotes(class_from_responses.at(0).data.notes);
+        setResources(class_from_responses.at(0).data.resources);
       })
       .catch((error) => console.log(error));
   }
 
-  async function uploadNewNote() {
+  async function uploadNewLink() {
     var class_id;
-    
     getName();
-
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    
+    {
       /*Use query to get user object (contains first name, last name, etc.) */
-    
+    }
     getDocs(classQuery).then((response) => {
       const class_from_response = response.docs.map((doc) => ({
         data: doc.data(),
@@ -110,73 +95,100 @@ function Notes({ className, email }) {
       class_id = class_from_response.at(0).id;
       const classDocRef = doc(db, "availableClasses", class_id);
       updateDoc(classDocRef, {
-        notes: arrayUnion({
+        resources: arrayUnion({
           name: name,
-          title: title_to_send,
-          note: note_to_send,
+          title: title,
+          url: url,
         }),
       });
     });
-    setNotes(notes);
   }
 
-  //validate note
-  function handleNoteSubmit() {
-    handleClearNote();
-    uploadNewNote();
+  //assert that the URL is not malicious
+  function isValidURL(link) {
+    var goodURL = false;
+    const validURLs = [
+      "https://quizlet.com/",
+      "https://www.chegg.com/",
+      "https://www.symbolab.com/",
+      "https://www.wolframalpha.com/",
+      "https://www.khanacademy.org//",
+      "https://www.youtube.com",
+      "https://www.youtu.be",
+      "https://scholar.google.com/",
+      "https://my.moreheadstate.edu",
+    ];
+
+    for (let link_in_list of validURLs) {
+      if (link.startsWith(link_in_list)) {
+        goodURL = true;
+      }
+    }
+    return goodURL;
+  }
+  //validate title and url and push to the database.
+  function handleLinkSubmit() {
+    if (isValidURL(url)) {
+      uploadNewLink();
+      setTitle("");
+      setURL("");
+    } else {
+      alert("Bad url.");
+    }
   }
 
-  const handleNewNoteChange = (e) => {
-    setNoteToSend(e.target.value);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleURLChange = (e) => {
+    setURL(e.target.value);
   };
 
-  const handleNewTitleChange = (e) => {
-    setTitleToSend(e.target.value);
-  };
-
-return (
+  return (
     <>
-      <title>Notes</title>
-      <link rel="stylesheet" href="notesPageStyle.css" />
-
-      {notes.map((each_class) => (
-        <Note name={each_class.name} note={each_class.note} />
+      {resources.map((each_class) => (
+        <Resource
+          name={each_class.name}
+          title={each_class.title}
+          url={each_class.url}
+        />
       ))}
-  
+
       <div class="add-resource-elements">
         <form>
           <div class="resource-field">
-            <label for="title">Title:</label>
+            <label for="Title">Title:</label>
             <input
               type="text"
               id="title"
-              value={note_to_send}
-              onChange={handleNewTitleChange}
+              value={title}
+              onChange={handleTitleChange}
               placeholder="Enter Title"
               required
             />
           </div>
-  
           <div class="resource-field">
-            <label for="url">File:</label>
+            <label for="url">URL:</label>
             <input
-              type="file"
+              type="text"
               id="url"
-              onChange={handleNewNoteChange}
+              value={url}
+              onChange={handleURLChange}
+              placeholder="Enter URL"
               required
             />
           </div>
         </form>
-        <button onClick={handleNoteSubmit}>Upload</button>
+        <button onClick={handleLinkSubmit}>Submit</button>
       </div>
     </>
   );
 }
 
-function Note({ name, note }) {
+function Resource({ name, title, url }) {
   return (
     <>
-      <div class="resource-box-no-line">
+      <div class="resource-box">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
           alt="Profile Image"
@@ -185,7 +197,12 @@ function Note({ name, note }) {
 
         <div class="resource">
           <div class="name">{name}</div>
-          <div class="note">{note}</div>
+
+          <strong>Title: {title}</strong>
+
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {url}
+          </a>
         </div>
       </div>
     </>

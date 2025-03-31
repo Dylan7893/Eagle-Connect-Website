@@ -17,7 +17,6 @@ const WelcomePage = () => {
           <div class="logo">
             <img
               src={eagleLogo}
-              style={homeStyle}
               alt="Eagle Logo"
               class="logo-image"
               EAGLE

@@ -81,7 +81,7 @@
 }
 
 /*body*/
-body {
+.about-body {
   margin-top: 50px; /*move down 50 for header*/
   background-color: #f3f3f3; /*background color*/
   display: flex; /*using flex layout*/
@@ -97,15 +97,22 @@ body {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /*add a shadow to the error box*/
 }
 
-h1 {
+.about-h1 {
   font-size: 120px; /*large font for header*/
   color: #0015ff; /*morehead yellow*/
   text-align: center;
 }
 
 /* Style for the paragraph */
-p {
+.about-p {
   font-size: 20px;
   text-indent: 30px;
   padding: 50px;
+  text-align: left;
+}
+
+.about-ul {
+  list-style-type: none;
+  font-size: 25px;
+  font-weight: bold; /* bold logo text */
 }
