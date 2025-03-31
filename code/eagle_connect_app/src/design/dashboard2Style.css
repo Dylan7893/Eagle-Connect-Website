@@ -57,7 +57,7 @@
 
 /* navigation bar profile button */
 .profile-button:hover .profile-picture {
-  transform: scale(1.1); /* slightly scale the image when hovering */
+  transform: scale(1.05); /* slightly scale the image when hovering */
 }
 
 /* ------- side bar ------- */
@@ -127,11 +127,6 @@
   margin-bottom: 5px; /*space below individual class list items*/
   text-align: center; /*center text alignment for individual class list items*/
   border-radius: 5px; /*rounded edges*/
-}
-
-/* side bar individual list of class items hover */
-.class-list-item:hover {
-  transform: scale(1.1); /*  enlarge individual list of class items hover */
 }
 
 /* ------- main ------- */

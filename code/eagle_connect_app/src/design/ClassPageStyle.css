@@ -53,7 +53,7 @@
 
 /* navigation bar profile button */
 .profile-button:hover .profile-picture {
-  transform: scale(1.1); /* slightly scale the image when hovering */
+  transform: scale(1.05); /* slightly scale the image when hovering */
 }
 
 /* ------- side bar ------- */

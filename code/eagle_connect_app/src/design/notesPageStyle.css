@@ -42,7 +42,7 @@ button {
 
 button:hover {
   background-color: #0056b3; /*when hovering the settings button color darkens*/
-  transform: scale(1.01); /* when hovering settings button enlarge*/
+  transform: scale(1.05); /* when hovering settings button enlarge*/
 }
 
 label {
