@@ -28,50 +28,45 @@ function Chat({ className, email }) {
   }, []);
 
   const handleClearMessage = () => {
-    setMessageToSend('');
+    setMessageToSend("");
   };
 
   async function getName() {
     const userQuery = query(
-          collection(db, "users"),
-          where("email", "==", email)
-        );
-    
-        
-          /*Use query to get user object (contains first name, last name, etc.) */
-        
-        getDocs(userQuery)
-          .then((response) => {
-            const users_from_response = response.docs.map((doc) => ({
-              data: doc.data(),
-              id: doc.id,
-            }));
-            {
-              /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-            }
-            var toSend;
-            toSend = users_from_response.at(0).data.firstName;
-            toSend += " ";
-            toSend += users_from_response.at(0).data.lastName;
-            setName(toSend);
+      collection(db, "users"),
+      where("email", "==", email)
+    );
 
-          })
-          .catch((error) => console.log(error));
-      
+    /*Use query to get user object (contains first name, last name, etc.) */
+
+    getDocs(userQuery)
+      .then((response) => {
+        const users_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        var toSend;
+        toSend = users_from_response.at(0).data.firstName;
+        toSend += " ";
+        toSend += users_from_response.at(0).data.lastName;
+        setName(toSend);
+      })
+      .catch((error) => console.log(error));
   }
 
   async function getAllMessages() {
-    
-      /*Create query to get the user object from their email*/
-    
+    /*Create query to get the user object from their email*/
+
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    
-      /*Use query to get user object (contains first name, last name, etc.) */
-    
+    /*Use query to get user object (contains first name, last name, etc.) */
+
     getDocs(classQuery)
       .then((response) => {
         const class_from_responses = response.docs.map((doc) => ({
@@ -85,7 +80,7 @@ function Chat({ className, email }) {
 
   async function uploadNewMessage() {
     var class_id;
-    
+
     getName();
 
     const classQuery = query(
@@ -93,9 +88,8 @@ function Chat({ className, email }) {
       where("className", "==", className)
     );
 
-    
-      /*Use query to get user object (contains first name, last name, etc.) */
-    
+    /*Use query to get user object (contains first name, last name, etc.) */
+
     getDocs(classQuery).then((response) => {
       const class_from_response = response.docs.map((doc) => ({
         data: doc.data(),
@@ -128,22 +122,30 @@ function Chat({ className, email }) {
 
   return (
     <>
-      {messages.map((each_class) => (
-        <Message name={each_class.name} message={each_class.message} />
-      ))}
-
-      <div class="message-field">
-        <form>
-          <input
-            type="text"
-            id="message"
-            value={message_to_send}
-            onChange={handleNewMessageChange}
-            placeholder="Enter Message"
-            required
+      <div className="messages-container">
+        {messages.map((each_class) => (
+          <Message
+            key={each_class.name}
+            name={each_class.name}
+            message={each_class.message}
           />
-        </form>
-        <button onClick={handleMessageSubmit}>Send</button>
+        ))}
+      </div>
+
+      <div class="bar">
+        <div class="message-field">
+          <form>
+            <input
+              type="text"
+              id="message"
+              value={message_to_send}
+              onChange={handleNewMessageChange}
+              placeholder="Enter Message"
+              required
+            />
+          </form>
+          <button onClick={handleMessageSubmit}>Send</button>
+        </div>
       </div>
     </>
   );
@@ -152,16 +154,16 @@ function Chat({ className, email }) {
 function Message({ name, message }) {
   return (
     <>
-      <div class="resource-box-no-line">
+      <div className="resource-box-no-line">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
           alt="Profile Image"
-          class="profile-image"
+          className="profile-image"
         />
 
-        <div class="resource">
-          <div class="name">{name}</div>
-          <div class="message">{message}</div>
+        <div className="resource">
+          <div className="name">{name}</div>
+          <div className="message">{message}</div>
         </div>
       </div>
     </>

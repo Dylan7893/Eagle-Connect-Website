@@ -22,7 +22,7 @@ function ClassPage({ className, email }) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <Chat className={className} email={email} />
+            <Chat className={className} email={email} useRef="null" />
             {/* end main */}
           </main>
         </>

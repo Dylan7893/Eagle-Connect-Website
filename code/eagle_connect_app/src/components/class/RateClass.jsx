@@ -1,5 +1,5 @@
 import React from "react";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -11,22 +11,25 @@ import {
   doc,
 } from "firebase/firestore";
 
-/*Component where you can post links for certain study resources */
+/*Component where you can send chat messages */
 function RateClass({ className, email }) {
   //form handling stuff
-  const [title, setTitle] = useState("");
-  const [url, setURL] = useState("");
+  const [message_to_send, setMessageToSend] = useState("");
+  const [messages, setMessages] = useState([]);
   const [name, setName] = useState("Test");
-  const [resources, setResources] = useState([]);
 
-  //refresh the resources every 100ms
+  //refresh the messages every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getAllResources();
+      getAllMessages();
       getName();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
+
+  const handleClearMessage = () => {
+    setMessageToSend("");
+  };
 
   async function getName() {
     const userQuery = query(
@@ -54,7 +57,9 @@ function RateClass({ className, email }) {
       .catch((error) => console.log(error));
   }
 
-  async function getAllResources() {
+  async function getAllMessages() {
+    /*Create query to get the user object from their email*/
+
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -68,22 +73,23 @@ function RateClass({ className, email }) {
           data: doc.data(),
           id: doc.id,
         }));
-        setResources(class_from_responses.at(0).data.resources);
+        setMessages(class_from_responses.at(0).data.messages);
       })
       .catch((error) => console.log(error));
   }
 
-  async function uploadNewLink() {
+  async function uploadNewMessage() {
     var class_id;
+
     getName();
+
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    {
-      /*Use query to get user object (contains first name, last name, etc.) */
-    }
+    /*Use query to get user object (contains first name, last name, etc.) */
+
     getDocs(classQuery).then((response) => {
       const class_from_response = response.docs.map((doc) => ({
         data: doc.data(),
@@ -95,100 +101,61 @@ function RateClass({ className, email }) {
       class_id = class_from_response.at(0).id;
       const classDocRef = doc(db, "availableClasses", class_id);
       updateDoc(classDocRef, {
-        resources: arrayUnion({
+        messages: arrayUnion({
           name: name,
-          title: title,
-          url: url,
+          message: message_to_send,
         }),
       });
     });
+    setMessages(messages);
   }
 
-  //assert that the URL is not malicious
-  function isValidURL(link) {
-    var goodURL = false;
-    const validURLs = [
-      "https://quizlet.com/",
-      "https://www.chegg.com/",
-      "https://www.symbolab.com/",
-      "https://www.wolframalpha.com/",
-      "https://www.khanacademy.org//",
-      "https://www.youtube.com",
-      "https://www.youtu.be",
-      "https://scholar.google.com/",
-      "https://my.moreheadstate.edu",
-    ];
-
-    for (let link_in_list of validURLs) {
-      if (link.startsWith(link_in_list)) {
-        goodURL = true;
-      }
-    }
-    return goodURL;
-  }
-  //validate title and url and push to the database.
-  function handleLinkSubmit() {
-    if (isValidURL(url)) {
-      uploadNewLink();
-      setTitle("");
-      setURL("");
-    } else {
-      alert("Bad url.");
-    }
+  //validate message
+  function handleMessageSubmit() {
+    handleClearMessage();
+    uploadNewMessage();
   }
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleURLChange = (e) => {
-    setURL(e.target.value);
+  const handleNewMessageChange = (e) => {
+    setMessageToSend(e.target.value);
   };
 
   return (
     <>
-      {resources.map((each_class) => (
-        <Resource
-          name={each_class.name}
-          title={each_class.title}
-          url={each_class.url}
-        />
-      ))}
+      <div className="messages-container">
+        {messages.map((each_class) => (
+          <Message
+            key={each_class.name}
+            name={each_class.name}
+            message={each_class.message}
+          />
+        ))}
+      </div>
 
       <div class="add-resource-elements">
         <form>
           <div class="resource-field">
-            <label for="Title">Title:</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="Enter Title"
-              required
-            />
-          </div>
-          <div class="resource-field">
-            <label for="url">URL:</label>
+            <label for="url">Feedback:</label>
             <input
               type="text"
               id="url"
-              value={url}
-              onChange={handleURLChange}
+              value="NULL"
+              onChange="NULL"
               placeholder="Enter URL"
               required
             />
           </div>
         </form>
-        <button onClick={handleLinkSubmit}>Submit</button>
+        <button onClick="NULL">Submit</button>
       </div>
     </>
   );
 }
 
-function Resource({ name, title, url }) {
+function Message({ name, message }) {
   return (
     <>
-      <div class="resource-box">
+      <div class="resource-box-no-line">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
           alt="Profile Image"
@@ -197,12 +164,7 @@ function Resource({ name, title, url }) {
 
         <div class="resource">
           <div class="name">{name}</div>
-
-          <strong>Title: {title}</strong>
-
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            {url}
-          </a>
+          <div class="message">{message}</div>
         </div>
       </div>
     </>

@@ -196,11 +196,15 @@ select {
 }
 
 .add-resource-elements {
-  padding: 20px;
+  padding: 25px;
   background-color: white;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 1150px;
   box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  width: calc(100% - 250px); /*setting the width to match the offset*/
 }
 
 .resource-field {
@@ -250,7 +254,8 @@ button:hover {
 .message-field {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  position: fixed;
+  bottom: 25px;
 }
 
 .message-field input {
@@ -259,4 +264,19 @@ button:hover {
 
 .message-field button {
   width: 200px;
+}
+
+.messages-container {
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
+
+.bar {
+  display: flex; /* navigation bar elements are horizontal*/
+  padding: 33px 20px; /* navigation bar padding*/
+  background: white; /*navigation bar background light gray */
+  position: fixed; /*navigation bar does not overlap with sidebar*/
+  bottom: 0; /*navigation bar is positioned to the top*/
+  left: 250px; /* offset to not overlap sidebar*/
+  width: calc(100% - 250px); /*setting the width to match the offset*/
 }
