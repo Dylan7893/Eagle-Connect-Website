@@ -12,51 +12,76 @@ import {
 } from "firebase/firestore";
 
 /*Component where you can post links for certain study resources */
-function Resources({ className }) {
+function Resources({ className, email }) {
   //form handling stuff
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
-
+  const [name, setName] = useState("Test");
   const [resources, setResources] = useState([]);
 
-  /*
-  useEffect(() => {
-    getAllResources();
-  }, []);*/
-
   //refresh the resources every 100ms
-    useEffect(() => {
-      const intervalId = setInterval(() => {
-        getAllResources();
-      }, 100);
-      return () => clearInterval(intervalId);
-    }, []);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getAllResources();
+      getName();
+    }, 100);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  async function getName() {
+    const userQuery = query(
+      collection(db, "users"),
+      where("email", "==", email)
+    );
+
+
+    /*Use query to get user object (contains first name, last name, etc.) */
+
+    getDocs(userQuery)
+      .then((response) => {
+        const users_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        var toSend;
+        toSend = users_from_response.at(0).data.firstName;
+        toSend += " ";
+        toSend += users_from_response.at(0).data.lastName;
+        setName(toSend);
+
+      })
+      .catch((error) => console.log(error));
+
+  }
 
   async function getAllResources() {
-    {
-      /*Create query to get the user object from their email*/
-    }
+
+
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    {
-      /*Use query to get user object (contains first name, last name, etc.) */
-    }
+
+    /*Use query to get user object (contains first name, last name, etc.) */
+
     getDocs(classQuery)
       .then((response) => {
         const class_from_responses = response.docs.map((doc) => ({
           data: doc.data(),
           id: doc.id,
         }));
-        setResources(class_from_responses.at(0).data.uploadedLinks);
+        setResources(class_from_responses.at(0).data.resources);
       })
       .catch((error) => console.log(error));
   }
 
   async function uploadNewLink() {
     var class_id;
+    getName();
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -76,8 +101,8 @@ function Resources({ className }) {
       class_id = class_from_response.at(0).id;
       const classDocRef = doc(db, "availableClasses", class_id);
       updateDoc(classDocRef, {
-        uploadedLinks: arrayUnion({
-          name: "Test",
+        resources: arrayUnion({
+          name: name,
           title: title,
           url: url,
         }),

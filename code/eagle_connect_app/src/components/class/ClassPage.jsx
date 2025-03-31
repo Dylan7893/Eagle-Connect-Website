@@ -66,7 +66,7 @@ function ClassPage({ className, email}) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <Resources className={className} />
+            <Resources className={className} email = {email}/>
             {/* end main */}
           </main>
         </>

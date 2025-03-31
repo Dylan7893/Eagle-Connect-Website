@@ -22,6 +22,7 @@ function Chat({ className, email }) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllMessages();
+      getName();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
@@ -36,9 +37,9 @@ function Chat({ className, email }) {
           where("email", "==", email)
         );
     
-        {
+        
           /*Use query to get user object (contains first name, last name, etc.) */
-        }
+        
         getDocs(userQuery)
           .then((response) => {
             const users_from_response = response.docs.map((doc) => ({
@@ -60,17 +61,17 @@ function Chat({ className, email }) {
   }
 
   async function getAllMessages() {
-    {
+    
       /*Create query to get the user object from their email*/
-    }
+    
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    {
+    
       /*Use query to get user object (contains first name, last name, etc.) */
-    }
+    
     getDocs(classQuery)
       .then((response) => {
         const class_from_responses = response.docs.map((doc) => ({
@@ -86,16 +87,15 @@ function Chat({ className, email }) {
     var class_id;
     
     getName();
-   
 
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    {
+    
       /*Use query to get user object (contains first name, last name, etc.) */
-    }
+    
     getDocs(classQuery).then((response) => {
       const class_from_response = response.docs.map((doc) => ({
         data: doc.data(),
