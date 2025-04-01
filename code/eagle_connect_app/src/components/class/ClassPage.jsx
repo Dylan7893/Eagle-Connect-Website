@@ -55,7 +55,7 @@ function ClassPage({ className, email }) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <Reminders className={className} />
+            <Reminders className={className} email={email} />
             {/* end main */}
           </main>
         </>

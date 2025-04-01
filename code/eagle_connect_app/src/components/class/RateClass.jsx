@@ -122,6 +122,31 @@ function RateClass({ className, email }) {
 
   return (
     <>
+      <div className="rate-info">
+        <div className="rate">
+          <label for="url">Rating:</label>
+          <span className="star-no-hover" star-rating="1">
+            &#9733;
+          </span>
+          <span className="star-no-hover" star-rating="2">
+            &#9733;
+          </span>
+          <span className="star-no-hover" star-rating="3">
+            &#9733;
+          </span>
+          <span className="star-no-hover" star-rating="4">
+            &#9733;
+          </span>
+          <span className="star-no-hover" star-rating="5">
+            &#9733;
+          </span>
+        </div>
+        <div className="resource-field">
+          <label for="url"> Reviews:</label>
+          <p>15</p>
+        </div>
+      </div>
+
       <div className="messages-container">
         {messages.map((each_class) => (
           <Message
@@ -133,9 +158,29 @@ function RateClass({ className, email }) {
       </div>
 
       <div class="add-resource-elements">
+        <div class="rate">
+          <label for="rate">Rate:</label>
+          <span className="star" star-rating="1">
+            &#9733;
+          </span>
+          <span className="star" star-rating="2">
+            &#9733;
+          </span>
+          <span className="star" star-rating="3">
+            &#9733;
+          </span>
+          <span className="star" star-rating="4">
+            &#9733;
+          </span>
+          <span className="star" star-rating="5">
+            &#9733;
+          </span>
+        </div>
         <form>
-          <div class="resource-field">
-            <label for="url">Feedback:</label>
+          <div className="resource-field">
+            <label for="feedback" className="resource-field-label">
+              Feedback:
+            </label>
             <input
               type="text"
               id="url"

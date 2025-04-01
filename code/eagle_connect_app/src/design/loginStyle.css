@@ -198,7 +198,7 @@ select {
 .add-resource-elements {
   padding: 25px;
   background-color: white;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+
   width: 1150px;
   box-sizing: border-box;
   position: fixed;
@@ -213,12 +213,24 @@ select {
   margin-bottom: 15px;
 }
 
-.resource-field label {
+.resource-field p {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.resource-field-label {
   width: 80px;
   margin-right: 10px;
+
   font-weight: bold;
 }
 
+.resource-field label {
+  width: 80px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: bold;
+}
 .resource-field input:hover {
   border-color: #007bff; /* when hovering border color */
   box-shadow: 0 0 10px rgba(0, 122, 254, 0.3); /* when hovering shadow */
@@ -278,5 +290,41 @@ button:hover {
   position: fixed; /*navigation bar does not overlap with sidebar*/
   bottom: 0; /*navigation bar is positioned to the top*/
   left: 250px; /* offset to not overlap sidebar*/
+  width: calc(100% - 250px); /*setting the width to match the offset*/
+}
+
+.rate {
+  display: flex;
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+.rate label {
+  width: 80px;
+  margin-top: 15px;
+  margin-left: 17px;
+  font-weight: bold;
+}
+
+.star {
+  color: gray;
+  cursor: pointer;
+}
+
+.star:hover {
+  color: gold;
+}
+
+.star-no-hover {
+  color: gray;
+}
+
+.rate-info {
+  padding-left: 25px;
+  background-color: white;
+  box-sizing: border-box;
+  position: fixed;
+  top: 75px;
+  left: 250px;
   width: calc(100% - 250px); /*setting the width to match the offset*/
 }
