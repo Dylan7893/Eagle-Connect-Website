@@ -188,6 +188,7 @@ function Resources({ className, email }) {
 function Resource({ name, title, url }) {
   return (
     <>
+    
       <div class="resource-box">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
