@@ -1,0 +1,80 @@
+.save-button {
+  width: 250px;
+  padding: 15px;
+  font-size: 1.1rem;
+  background-color: #0729af;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 175px;
+}
+
+.save-button:hover {
+  transform: scale(1.05);
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%; /*rounded*/
+  margin-left: 250px;
+  margin-bottom: 5px;
+}
+
+.profile-sections [type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+.edit-profile {
+  max-width: 90px;
+  color: #0729af;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 286px;
+}
+
+.edit-profile:hover {
+  transform: scale(1.05);
+}
+
+.profile-sections input:hover {
+  border-color: #0729af; /* when hovering border color */
+  box-shadow: 0 0 10px rgba(0, 122, 254, 0.3); /* when hovering shadow */
+}
+
+.profile-body {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-h1 {
+  text-align: center;
+  color: #ffcf00;
+}
+
+.profile-sections label {
+  font-size: 20px;
+  color: #ffcf00;
+}
+
+.return-button {
+  background: none;
+  border: none;
+  font-size: 50px;
+  cursor: pointer;
+}
+
+.return-button:hover {
+  transform: scale(1.05);
+  color: #0729af;
+}

@@ -5,9 +5,14 @@
     <link rel="stylesheet" href="profilePageStyles.css" />
   </head>
 
-  <body>
-    <h1>
-      Profile
+  <div>
+    <button type="submit" class="return-button">&#8592;</button>
+    <!--back arrow unicode symbol-->
+  </div>
+
+  <div class="profile-body">
+    <h1 class="profile-h1">
+      Edit Profile
       <h1>
         <img
           class="profile-picture"
@@ -15,37 +20,44 @@
           alt="profile picture"
         />
 
-        <div>
-          <input type="file" id="" name="" accepts="image/jpeg" />
+        <div class="edit-profile">
+          <input
+            type="file"
+            id="file-upload"
+            name="file"
+            accept="image/jpeg"
+            style="display: none"
+          />
+          <label for="file-upload">Edit Image</label>
         </div>
 
-        <div>
+        <div class="profile-sections">
           <label> First Name:</label>
           <input type="text" placeholder="First Name" />
         </div>
 
-        <div>
+        <div class="profile-sections">
           <label> Last Name:</label>
           <input type="text" placeholder="Last Name" />
         </div>
 
-        <div>
+        <div class="profile-sections">
           <label> Current Password:</label>
           <input type="password" placeholder="Current Password" />
         </div>
 
-        <div>
+        <div class="profile-sections">
           <label> New Password:</label>
           <input type="password" placeholder="New Password" />
         </div>
 
-        <div>
+        <div class="profile-sections">
           <label> Confirm Password:</label>
           <input type="password" placeholder="Confirm Password" />
         </div>
 
-        <button type="submit">Update Profile</button>
+        <button class="save-button" type="submit">Update Profile</button>
       </h1>
     </h1>
-  </body>
+  </div>
 </html>
