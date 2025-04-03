@@ -28,37 +28,7 @@ function Dashboard({ email }) {
     setClassClicked(x);
   }
 
-  {
-    /*test function that shows that we can get all of a users data just from their email!*/
-  }
-  async function testDB() {
-    console.log(email);
-
-    {
-      /*Create query to get the user object from their email*/
-    }
-    const userQuery = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    {
-      /*Use query to get user object (contains first name, last name, etc.) */
-    }
-    getDocs(userQuery)
-      .then((response) => {
-        const users_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
-        alert("First Name: " + users_from_response.at(0).data.firstName);
-      })
-      .catch((error) => console.log(error));
-  }
-
+ 
   /*function called when user attempts to sign out */
 
   const userSignOut = () => {
@@ -133,7 +103,6 @@ function Dashboard({ email }) {
 
         {/* end body */}
         <button onClick={userSignOut}>Log out</button>
-        <button onClick={testDB}>test</button>
       </>
     );
   } else {

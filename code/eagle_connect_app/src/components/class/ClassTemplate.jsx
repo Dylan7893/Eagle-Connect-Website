@@ -22,6 +22,9 @@ function ClassTemplate({ toClassPage, className }) {
   function info() {
     toClassPage("info");
   }
+  function toDashboard(){
+    toClassPage("none");
+  }
   return (
     <>
       {/* Note: I have been getting the svgs from this website: https://iconduck.com/icons  */}
@@ -48,7 +51,7 @@ function ClassTemplate({ toClassPage, className }) {
       </header>
       {/* sidebar start */}
       <aside className="sidebar">
-        <button className="add-new-class">Dashboard</button>
+        <button className="add-new-class" onClick = {toDashboard}>Dashboard</button>
         <ul className="list-of-tools">
           {/* default list of all classes*/}
           <li className="tool-list-item" onClick={chat}>

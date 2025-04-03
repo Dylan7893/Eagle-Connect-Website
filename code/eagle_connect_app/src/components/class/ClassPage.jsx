@@ -7,8 +7,14 @@ import RateClass from "./RateClass";
 import Resources from "./Resources";
 import Reminders from "./Reminders";
 import Chat from "./Chat";
+import Dashboard from "../dashboard/Dashboard";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from "../../firebase";
 
 function ClassPage({ className, email }) {
+
+  const [user] = useAuthState(auth);
+
   const [sectionClicked, setSectionClicked] = useState("chat");
   function handleCallBack(x) {
     setSectionClicked(x);
@@ -79,6 +85,12 @@ function ClassPage({ className, email }) {
             <RateClass className={className} email={email} />
             {/* end main */}
           </main>
+        </>
+      );
+      case "none":
+      return (
+        <>
+          <Dashboard email = {user.email}/>
         </>
       );
   }

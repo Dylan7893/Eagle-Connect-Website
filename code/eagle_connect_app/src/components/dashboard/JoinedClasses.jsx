@@ -11,7 +11,10 @@ function JoinedClasses({ toDashboardCallBack, email }) {
   const [joinedClasses, setJoinedClasses] = useState([]);
 
   useEffect(() => {
-    getJoinedClasses();
+    const intervalId = setInterval(() => {
+      getJoinedClasses();
+    }, 100);
+    return () => clearInterval(intervalId);
   }, []);
 
   function initCallBack(x) {
