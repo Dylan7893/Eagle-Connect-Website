@@ -1,14 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import { collection, getDocs, query, where, doc, updateDoc, addDoc } from "firebase/firestore";
 import { auth } from '../../firebase';
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut } from 'firebase/auth';
-function ProfilePage({ email }) {
+import { storage, db } from '../../firebase'; // Adjust the import path
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+
+function ProfilePage({ email, toDashFunction }) {
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState('');
+
+    // Save the image URL to Firestore (optional)
+  const saveImageUrlToFirestore = async (url) => {
+    try {
+      const docRef = await addDoc(collection(db, 'images'), {
+        url: url,
+        timestamp: new Date(),
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+    const handleImageUpload = () => {
+        if (!image) {
+          alert("You must select an image!");
+          return;
+        }
+    
+        const storageRef = ref(storage, `images/${email}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+    
+        // Monitor the upload progress
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImageUrl(downloadURL);
+            // Optionally, save the URL in Firestore
+            saveImageUrlToFirestore(downloadURL);
+          }
+        );
+      };
+
+    const handleImageChange = (e) => {
+        console.log("Handle image change called.");
+        const selectedImage = e.target.files[0];
+        console.log(selectedImage);
+        if (selectedImage) {
+          setImage(selectedImage);
+        }
+      };
+
+    function backToDashboard(){
+        toDashFunction(false);
+    }
 
     useEffect(() => {
         getUserInfo();
@@ -22,6 +72,7 @@ const userSignOut = () => {
       .catch((error) => console.log(error));
   };
 
+
     function handleformSubmit() {
         console.log("****Edit Profile Has been called*****");
         console.log(firstName);
@@ -31,7 +82,7 @@ const userSignOut = () => {
         console.log(confirmPassword);
 
         handleUpdateUser();
-
+        handleImageUpload();
         if (newPassword != "" || currentPassword != "" || confirmPassword != "") {
             handlePasswordChange();
         }
@@ -45,12 +96,10 @@ const userSignOut = () => {
         }
         const user = auth.currentUser;
         try {
-            // Reauthenticate user before updating password
             const credential = EmailAuthProvider.credential(user.email, currentPassword);
             await reauthenticateWithCredential(user, credential);
-      
-            // Now, update the password
             await updatePassword(user, newPassword);
+            userSignOut();
           } catch (err) {
             console.log(err.message);
             
@@ -59,7 +108,28 @@ const userSignOut = () => {
     }
 
     function handleUpdateUser() {
-
+        const userQuery = query(
+            collection(db, "users"),
+            where("email", "==", email)
+          );
+      
+          /*Use query to get user object (contains first name, last name, etc.) */
+      
+          getDocs(userQuery).then((response) => {
+            const user_from_response = response.docs.map((doc) => ({
+              data: doc.data(),
+              id: doc.id,
+            }));
+            {
+              /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+            }
+            const user_id = user_from_response.at(0).id;
+            const userDocRef = doc(db, "users", user_id);
+            updateDoc(userDocRef, {
+              firstName: firstName,
+              lastName: lastName,
+            });
+          });
     }
 
     async function getUserInfo() {
@@ -86,7 +156,7 @@ const userSignOut = () => {
         <>
             <title>Profile</title>
             <div>
-                <button type="submit" className="return-button">
+                <button type="submit" onClick={backToDashboard} className="return-button">
                     ←
                 </button>
                 {/*back arrow unicode symbol*/}
@@ -106,6 +176,7 @@ const userSignOut = () => {
                             name="file"
                             accept="image/jpeg"
                             style={{ display: "none" }}
+                            onChange={handleImageChange}
                         />
                         <label htmlFor="file-upload">Edit Image</label>
                     </div>

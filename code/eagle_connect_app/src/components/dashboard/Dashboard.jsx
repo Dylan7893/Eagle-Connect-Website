@@ -41,7 +41,7 @@ function Dashboard({ email }) {
   if(isProfilePage == true){
     return(
       <>
-      <ProfilePage email={email}/>
+      <ProfilePage email={email} toDashFunction = {setProfilePage}/>
       </>
     )
   }
