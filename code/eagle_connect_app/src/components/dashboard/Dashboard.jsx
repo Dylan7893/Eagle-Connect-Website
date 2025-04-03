@@ -10,6 +10,7 @@ import JoinedClasses from "./JoinedClasses";
 import CreateClass from "./CreateClass";
 import defaultImage from "../../design/default_pfp.jpg";
 import ClassPage from "../class/ClassPage";
+import ProfilePage from "../profile/ProfilePage";
 
 {
   /*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */
@@ -23,22 +24,27 @@ function Dashboard({ email }) {
     /*Used for changing the componenet to the class template page*/
   }
   const [classClicked, setClassClicked] = useState("none");
-
+  const [isProfilePage, setProfilePage] = useState(false);
   function handleClassChange(x) {
     setClassClicked(x);
+  }
+
+  function toProfilePage(){
+    setProfilePage(true);
   }
 
  
   /*function called when user attempts to sign out */
 
-  const userSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("sign out successful");
-      })
-      .catch((error) => console.log(error));
-  };
+  
 
+  if(isProfilePage == true){
+    return(
+      <>
+      <ProfilePage email={email}/>
+      </>
+    )
+  }
   if (classClicked == "none") {
     return (
       <>
@@ -52,7 +58,7 @@ function Dashboard({ email }) {
           {/* right navigation buttons */}
           <div className="navigation-bar-right">
             {/* profile image serving as a button for profile */}
-            <button className="profile-button">
+            <button className="profile-button" onClick = {toProfilePage}>
               {/* default image asset */}
               <img
                 className="profile-picture"
@@ -102,7 +108,6 @@ function Dashboard({ email }) {
         {/* Log out button */}
 
         {/* end body */}
-        <button onClick={userSignOut}>Log out</button>
       </>
     );
   } else {
