@@ -11,7 +11,7 @@ import CreateClass from "./CreateClass";
 import defaultImage from "../../design/default_pfp.jpg";
 import ClassPage from "../class/ClassPage";
 import ProfilePage from "../profile/ProfilePage";
-
+import { useEffect } from "react";
 {
   /*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */
 }
@@ -25,6 +25,35 @@ function Dashboard({ email }) {
   }
   const [classClicked, setClassClicked] = useState("none");
   const [isProfilePage, setProfilePage] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+      const intervalId = setInterval(() => {
+        getImageUrl();
+      }, 100);
+      return () => clearInterval(intervalId);
+    }, []);
+
+    function getImageUrl(){
+      const userQuery = query(
+                  collection(db, "users"),
+                  where("email", "==", email)
+              );
+              getDocs(userQuery)
+                  .then((response) => {
+                      const users_from_response = response.docs.map((doc) => ({
+                          data: doc.data(),
+                          id: doc.id,
+                      }));
+                      {
+                          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+                      }
+                      
+                      setImageUrl(users_from_response.at(0).data.pfpUrl);
+                  })
+                  .catch((error) => console.log(error));
+    }
+
   function handleClassChange(x) {
     setClassClicked(x);
   }
@@ -32,11 +61,6 @@ function Dashboard({ email }) {
   function toProfilePage(){
     setProfilePage(true);
   }
-
- 
-  /*function called when user attempts to sign out */
-
-  
 
   if(isProfilePage == true){
     return(
@@ -62,7 +86,7 @@ function Dashboard({ email }) {
               {/* default image asset */}
               <img
                 className="profile-picture"
-                src={defaultImage}
+                src={imageUrl}
                 alt="profile picture"
               />
             </button>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where, doc, updateDoc, addDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, updateDoc, addDoc, namedQuery } from "firebase/firestore";
 import { auth } from '../../firebase';
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut } from 'firebase/auth';
 import { storage, db } from '../../firebase'; // Adjust the import path
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { Await } from "react-router-dom";
 
 function ProfilePage({ email, toDashFunction }) {
 
@@ -12,39 +13,48 @@ function ProfilePage({ email, toDashFunction }) {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-
+    const [currentImageURL, setCurrentImageURL] = useState("");
     const [image, setImage] = useState(null);
-    const [imageUrl, setImageUrl] = useState('');
+    const [newImageUrl, setNewImgUrl] = useState("");
 
-    // Save the image URL to Firestore (optional)
-  const saveImageUrlToFirestore = async (url) => {
-    try {
-      const docRef = await addDoc(collection(db, 'images'), {
-        url: url,
-        timestamp: new Date(),
-      });
-      console.log('Document written with ID: ', docRef.id);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    useEffect(() => {
+      getUserInfo();
+  }, []);
 
-    const handleImageUpload = () => {
+  
+    async function handleImageUpload() {
         if (!image) {
           alert("You must select an image!");
           return;
         }
-    
         const storageRef = ref(storage, `images/${email}`);
         const uploadTask = uploadBytesResumable(storageRef, image);
-    
-        // Monitor the upload progress
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setImageUrl(downloadURL);
-            // Optionally, save the URL in Firestore
-            saveImageUrlToFirestore(downloadURL);
+        
+
+        uploadTask.on('state_changed', 
+          (snapshot) => {
+            // Observe upload progress
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          }, 
+          (error) => {
+            // Handle errors
+            console.error('Upload failed:', error);
+          }, 
+          () => {
+            // Get the download URL once the upload is complete
+            console.log("image upload is complete")
+             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+             console.log(downloadURL);
+             setNewImgUrl(downloadURL);
+            console.log("okay img url is now: ");
+            console.log(newImageUrl);
+            handleUpdateUser(downloadURL);
+            });
           }
         );
+
+
       };
 
     const handleImageChange = (e) => {
@@ -60,9 +70,7 @@ function ProfilePage({ email, toDashFunction }) {
         toDashFunction(false);
     }
 
-    useEffect(() => {
-        getUserInfo();
-    }, []);
+    
 
 const userSignOut = () => {
     signOut(auth)
@@ -73,16 +81,13 @@ const userSignOut = () => {
   };
 
 
-    function handleformSubmit() {
+    async function handleformSubmit() {
         console.log("****Edit Profile Has been called*****");
         console.log(firstName);
         console.log(lastName);
-        console.log(currentPassword);
-        console.log(newPassword);
-        console.log(confirmPassword);
 
-        handleUpdateUser();
         handleImageUpload();
+        
         if (newPassword != "" || currentPassword != "" || confirmPassword != "") {
             handlePasswordChange();
         }
@@ -107,7 +112,8 @@ const userSignOut = () => {
         
     }
 
-    function handleUpdateUser() {
+    function handleUpdateUser(x) {
+      console.log("handle update user called");
         const userQuery = query(
             collection(db, "users"),
             where("email", "==", email)
@@ -128,11 +134,12 @@ const userSignOut = () => {
             updateDoc(userDocRef, {
               firstName: firstName,
               lastName: lastName,
+              pfpUrl: x,
             });
           });
     }
 
-    async function getUserInfo() {
+    function getUserInfo() {
         const userQuery = query(
             collection(db, "users"),
             where("email", "==", email)
@@ -148,6 +155,7 @@ const userSignOut = () => {
                 }
                 setFirstName(users_from_response.at(0).data.firstName);
                 setLastName(users_from_response.at(0).data.lastName);
+                setCurrentImageURL(users_from_response.at(0).data.pfpUrl);
             })
             .catch((error) => console.log(error));
 
@@ -166,7 +174,7 @@ const userSignOut = () => {
                 <h1>
                     <img
                         className="profile-picture"
-                        src="default_pfp.jpg"
+                        src={currentImageURL}
                         alt="profile picture"
                     />
                     <div className="edit-profile">

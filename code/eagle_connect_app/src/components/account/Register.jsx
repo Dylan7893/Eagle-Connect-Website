@@ -12,7 +12,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
+  const pfpUrl = "https://firebasestorage.googleapis.com/v0/b/react-auth-tutorial-5ea50.firebasestorage.app/o/images%2Fdefault%40moreheadstate.edu?alt=media&token=6aa5688c-5b20-4eda-a905-b6a0343fcfad";
   const navigate = useNavigate();
 
   {
@@ -29,6 +29,7 @@ const Register = () => {
       firstName,
       lastName,
       email,
+      pfpUrl,
       joinedClasses: [],
     }).then((response) => {
       console.log(response);

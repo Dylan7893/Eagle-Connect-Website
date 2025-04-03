@@ -17,12 +17,13 @@ function Chat({ className, email }) {
   const [message_to_send, setMessageToSend] = useState("");
   const [messages, setMessages] = useState([]);
   const [name, setName] = useState("Test");
+  const [imgageUrl, setImageUrl] = useState("");
 
   //refresh the messages every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllMessages();
-      getName();
+      getNameAndPfp();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
@@ -31,7 +32,7 @@ function Chat({ className, email }) {
     setMessageToSend("");
   };
 
-  async function getName() {
+  async function getNameAndPfp() {
     const userQuery = query(
       collection(db, "users"),
       where("email", "==", email)
@@ -53,6 +54,7 @@ function Chat({ className, email }) {
         toSend += " ";
         toSend += users_from_response.at(0).data.lastName;
         setName(toSend);
+        setImageUrl(users_from_response.at(0).data.pfpUrl);
       })
       .catch((error) => console.log(error));
   }
@@ -81,7 +83,7 @@ function Chat({ className, email }) {
   async function uploadNewMessage() {
     var class_id;
 
-    getName();
+    getNameAndPfp();
 
     const classQuery = query(
       collection(db, "availableClasses"),
@@ -104,6 +106,7 @@ function Chat({ className, email }) {
         messages: arrayUnion({
           name: name,
           message: message_to_send,
+          pfpUrl: imgageUrl,
         }),
       });
     });
@@ -128,6 +131,7 @@ function Chat({ className, email }) {
             key={each_class.name}
             name={each_class.name}
             message={each_class.message}
+            pfpUrl ={each_class.pfpUrl}
           />
         ))}
       </div>
@@ -151,12 +155,12 @@ function Chat({ className, email }) {
   );
 }
 
-function Message({ name, message }) {
+function Message({ name, message, pfpUrl }) {
   return (
     <>
       <div className="resource-box-no-line">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+          src={pfpUrl}
           alt="Profile Image"
           className="profile-image"
         />
