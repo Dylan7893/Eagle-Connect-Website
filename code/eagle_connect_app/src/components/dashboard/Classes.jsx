@@ -8,17 +8,58 @@ import {
   getDoc,
   increment,
   setDoc,
+  where,
+  query,
+
 } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import "../../design/dashboard2Style.css";
 
-function Classes() {
+function Classes({email}) {
   const [classes, setClasses] = useState([]);
+  const [userJoinedClasses, setUserJoinedClasses] = useState([]);
+  const [notUserJoinedClasses, setNotUserJoinedClasses] = useState([]);
 
   useEffect(() => {
-    getClasses();
+    const intervalId = setInterval(() => {
+      getClasses();
+    }, 100);
+    return () => clearInterval(intervalId);
   }, []);
 
+
+  function getUserJoinedClasses() {
+    let userJoinedClassesArr = [];
+    console.log("get user classes called");
+    
+    const userQuery = query(
+      collection(db, "users"),
+      where("email", "==", email)
+    );
+
+    {
+      /*Use query to get user object (contains first name, last name, etc.) */
+    }
+    getDocs(userQuery)
+      .then((response) => {
+        const users_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        users_from_response.at(0).data.joinedClasses.forEach((item, index) => {
+          userJoinedClassesArr.push(item.className);
+        });
+      })
+      .catch((error) => console.log(error));
+      console.log("user joined classes array: ");
+      console.log(userJoinedClassesArr);
+      setUserJoinedClasses(userJoinedClassesArr);
+      console.log("User joined classes use state thing: ");
+      console.log(userJoinedClasses);
+  }
   // Function to handle getting the availableClasses collection
   function getClasses() {
     // db is from the firebase.js file, exported constant so it can be used in different components
@@ -31,6 +72,8 @@ function Classes() {
           data: doc.data(),
           id: doc.id,
         }));
+
+        //WORK HERE:::: FOR EACH CLASS IN CLASSES FROM RESPONSE IF NAME IS NOT IN USER JOINED CLASSES THEN ADD IT TO THE CLASSES
         setClasses(classes_from_response);
       })
       .catch((error) => console.log(error));
@@ -69,7 +112,6 @@ function Classes() {
       });
 
       console.log("Class successfully joined!");
-      alert(`You have joined the class: ${classToJoin.data.className}`);
     } catch (error) {
       console.log("Error joining class:", error);
       alert("Failed to join the class. Please try again.");
@@ -78,6 +120,7 @@ function Classes() {
 
   return (
     <>
+      <button onClick={getUserJoinedClasses}>Test</button>
       <ul className="list-of-classes">
         {classes.map((each_class) => (
           <li className="class-list-item">

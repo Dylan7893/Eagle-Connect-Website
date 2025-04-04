@@ -19,7 +19,6 @@ const Register = () => {
     /* Upon successful registration, add that user's credential to the database*/
   }
   function databaseAddUser(userCredential) {
-    alert("database add user called");
     // following three lines will make the firebase auth uid and firestore user uid the same
     // so that collections and documents won't have any issues
     const user = userCredential.user; // firebase auth user object

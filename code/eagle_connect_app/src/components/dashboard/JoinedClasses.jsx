@@ -45,17 +45,11 @@ function JoinedClasses({ toDashboardCallBack, email }) {
         {
           /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
         }
-        console.log(
-          "Testing Name of the first class the user has joined" +
-            users_from_response.at(0).data.joinedClasses.at(0).className
-        );
-
+       
         {
           /*Get the joined classes from the user*/
         }
         setJoinedClasses(users_from_response.at(0).data.joinedClasses);
-
-        console.log("Hook test : " + joinedClasses.at(0).className);
       })
       .catch((error) => console.log(error));
   }

@@ -15,9 +15,10 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   const [className, setClassName] = useState(""); // this is for the class name like Intro to Computer Science
   const [numberOfStudents] = useState(1); // this is for the number of students within a class
                           // initialized to 1 because when student creates a class, they will have joined the class
+  const [numberOfRatings] = useState(0);
   const[messages] = useState([]); //so we can send chat messages ~Chase
   const[resources] = useState([]);//so we can send resources ~ Chase
-
+  const[ratings] = useState([])
   // Function to handle adding the class to the avaiableClasses collection
   async function handleCreate() {
 
@@ -42,6 +43,8 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 createdAt: new Date(), // created at certain date and time
                 resources: resources,
                 messages: messages,
+                ratings: ratings,
+                numberOfRatings: numberOfRatings,
           });
 
           // this will update the joined classes for the user immediately after the user creates the class

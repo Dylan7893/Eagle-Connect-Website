@@ -18,41 +18,43 @@ function Resources({ className, email }) {
   const [url, setURL] = useState("");
   const [name, setName] = useState("Test");
   const [resources, setResources] = useState([]);
+  const [imgageUrl, setImageUrl] = useState("");
 
   //refresh the resources every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllResources();
-      getName();
+      getNameAndPfp();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
-  async function getName() {
-    const userQuery = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(userQuery)
-      .then((response) => {
-        const users_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
-        var toSend;
-        toSend = users_from_response.at(0).data.firstName;
-        toSend += " ";
-        toSend += users_from_response.at(0).data.lastName;
-        setName(toSend);
-      })
-      .catch((error) => console.log(error));
-  }
+  async function getNameAndPfp() {
+      const userQuery = query(
+        collection(db, "users"),
+        where("email", "==", email)
+      );
+  
+      /*Use query to get user object (contains first name, last name, etc.) */
+  
+      getDocs(userQuery)
+        .then((response) => {
+          const users_from_response = response.docs.map((doc) => ({
+            data: doc.data(),
+            id: doc.id,
+          }));
+          {
+            /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+          }
+          var toSend;
+          toSend = users_from_response.at(0).data.firstName;
+          toSend += " ";
+          toSend += users_from_response.at(0).data.lastName;
+          setName(toSend);
+          setImageUrl(users_from_response.at(0).data.pfpUrl);
+        })
+        .catch((error) => console.log(error));
+    }
 
   async function getAllResources() {
     const classQuery = query(
@@ -74,8 +76,13 @@ function Resources({ className, email }) {
   }
 
   async function uploadNewLink() {
+    console.log("Upload new Link called");
+    console.log("name: " + name);
+    console.log("title: " + title);
+    console.log("url: " + url);
+    console.log("pfpUrl: " + imgageUrl);
     var class_id;
-    getName();
+    getNameAndPfp();
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -99,6 +106,7 @@ function Resources({ className, email }) {
           name: name,
           title: title,
           url: url,
+          pfpUrl: imgageUrl,
         }),
       });
     });
@@ -128,6 +136,7 @@ function Resources({ className, email }) {
   }
   //validate title and url and push to the database.
   function handleLinkSubmit() {
+    console.log("handle link submit");
     if (isValidURL(url)) {
       uploadNewLink();
       setTitle("");
@@ -151,6 +160,7 @@ function Resources({ className, email }) {
           name={each_class.name}
           title={each_class.title}
           url={each_class.url}
+          pfpUrl={each_class.pfpUrl}
         />
       ))}
 
@@ -185,12 +195,12 @@ function Resources({ className, email }) {
   );
 }
 
-function Resource({ name, title, url }) {
+function Resource({ name, title, url, pfpUrl }) {
   return (
     <>
       <div class="resource-box">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+          src={pfpUrl}
           alt="Profile Image"
           class="profile-image"
         />

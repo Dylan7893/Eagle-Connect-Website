@@ -108,7 +108,7 @@ function Dashboard({ email }) {
             {/* action should be defined later for searching list of classes*/}
             <input type="search" placeholder="Search All" />
           </form>
-          <Classes />
+          <Classes email = {email}/>
           {/* end side bar*/}
         </aside>
         {/* main section */}
