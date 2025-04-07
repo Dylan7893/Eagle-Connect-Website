@@ -18,9 +18,9 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   const [numberOfRatings] = useState(0);
   const[messages] = useState([]); //so we can send chat messages ~Chase
   const[resources] = useState([]);//so we can send resources ~ Chase
-  const[ratings] = useState([])
+  const[ratings] = useState([])//so we can send ratings
   const[notes] = useState([]);//so we can send notes ~ Landon
-
+  const[reminders] = useState([])//so we can send reminders
 
   // Function to handle adding the class to the avaiableClasses collection
   async function handleCreate() {
@@ -49,6 +49,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 ratings: ratings,
                 numberOfRatings: numberOfRatings,
                 notes: notes,
+                reminders: reminders,
 
           });
 
