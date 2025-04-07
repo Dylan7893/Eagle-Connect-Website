@@ -68,23 +68,6 @@ function ClassTemplate({ toClassPage, className }) {
             Rate Class
           </li>
           {/* default list of all classes*/}
-          <li className="tool-list-item" onClick={info}>
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="m0 0h24v24h-24z"
-                fill="#fff"
-                opacity={0}
-                transform="matrix(-1 0 0 -1 24 24)"
-              />
-              <g fill="#231f20">
-                <path d="m12 2a10 10 0 1 0 10 10 10 10 0 0 0 -10-10zm0 18a8 8 0 1 1 8-8 8 8 0 0 1 -8 8z" />
-                <circle cx={12} cy={8} r={1} />
-                <path d="m12 10a1 1 0 0 0 -1 1v5a1 1 0 0 0 2 0v-5a1 1 0 0 0 -1-1z" />
-              </g>
-            </svg>
-            Class Info
-          </li>
-          {/* default list of all classes*/}
           <li className="tool-list-item" onClick={notes}>
             <svg
               fill="none"
@@ -133,6 +116,23 @@ function ClassTemplate({ toClassPage, className }) {
               <path d="m23.8 33h.4a2.2 2.2 0 0 0 2.1-2l1.7-23.7a4 4 0 1 0 -8 0l1.7 23.7a2.2 2.2 0 0 0 2.1 2z" />
             </svg>
             Reminders
+          </li>
+           {/* default list of all classes*/}
+           <li className="tool-list-item" onClick={info}>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="m0 0h24v24h-24z"
+                fill="#fff"
+                opacity={0}
+                transform="matrix(-1 0 0 -1 24 24)"
+              />
+              <g fill="#231f20">
+                <path d="m12 2a10 10 0 1 0 10 10 10 10 0 0 0 -10-10zm0 18a8 8 0 1 1 8-8 8 8 0 0 1 -8 8z" />
+                <circle cx={12} cy={8} r={1} />
+                <path d="m12 10a1 1 0 0 0 -1 1v5a1 1 0 0 0 2 0v-5a1 1 0 0 0 -1-1z" />
+              </g>
+            </svg>
+            Class Info
           </li>
           {/* end list */}
         </ul>

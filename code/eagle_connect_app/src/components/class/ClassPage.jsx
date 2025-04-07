@@ -45,17 +45,6 @@ function ClassPage({ className, email }) {
         </>
       );
 
-    case "info":
-      return (
-        <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
-          <main className="main-section">
-            <ClassInfo className={className} />
-            {/* end main */}
-          </main>
-        </>
-      );
-
     case "reminders":
       return (
         <>
@@ -77,6 +66,7 @@ function ClassPage({ className, email }) {
           </main>
         </>
       );
+      
     case "rate":
       return (
         <>
@@ -87,6 +77,18 @@ function ClassPage({ className, email }) {
           </main>
         </>
       );
+
+      case "info":
+      return (
+        <>
+          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <main className="main-section">
+            <ClassInfo className={className} />
+            {/* end main */}
+          </main>
+        </>
+      );
+
       case "none":
       return (
         <>
