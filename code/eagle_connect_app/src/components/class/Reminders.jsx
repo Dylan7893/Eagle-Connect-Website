@@ -19,6 +19,9 @@ function Reminders({ className, email }) {
   const [name, setName] = useState("Test");
   const [date, setDate] = useState(new Date());
   const [imgageUrl, setImageUrl] = useState("");
+  const [formattedDate, setFormattedDate] = useState("");
+
+
 
   //refresh the messages every 100ms
   useEffect(() => {
@@ -86,6 +89,12 @@ function Reminders({ className, email }) {
   
       getNameAndPfp();
 
+      const formatted = new Date(date);
+
+      setFormattedDate(formatted.toDateString());
+
+      console.log(formattedDate);
+
       const classQuery = query(
         collection(db, "availableClasses"),
         where("className", "==", className)
@@ -109,7 +118,7 @@ function Reminders({ className, email }) {
               name: name,
               pfpurl: imgageUrl,
               text: reminder_to_send,
-              date: date,
+              date: formattedDate,
             }),
           });
           console.log("PFP URL: ");
@@ -131,6 +140,7 @@ function Reminders({ className, email }) {
   };
 
   const handleNewDateChange = (e) => {
+    
     setDate(e.target.value);
   };
   return (

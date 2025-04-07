@@ -173,4 +173,24 @@ function Message({ name, message, pfpUrl }) {
     </>
   );
 }
+
+function UserSentMessage({ name, message, pfpUrl }) {
+  return (
+    <>
+      <div className="resource-box-no-line">
+        <img
+          src={pfpUrl}
+          alt="Profile Image"
+          className="profile-image"
+        />
+
+        <div className="resource">
+          <div className="name">{name}</div>
+          <div className="message">{message}</div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default Chat;
