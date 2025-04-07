@@ -157,6 +157,7 @@ function Resources({ className, email }) {
     <>
       {resources.map((each_class) => (
         <Resource
+        key={each_class.id}
           name={each_class.name}
           title={each_class.title}
           url={each_class.url}

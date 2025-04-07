@@ -128,7 +128,7 @@ function Chat({ className, email }) {
       <div className="messages-container">
         {messages.map((each_class) => (
           <Message
-            key={each_class.name}
+            key={each_class.id}
             name={each_class.name}
             message={each_class.message}
             pfpUrl ={each_class.pfpUrl}
