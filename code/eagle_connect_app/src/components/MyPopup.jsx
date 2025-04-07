@@ -17,6 +17,8 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                           // initialized to 1 because when student creates a class, they will have joined the class
   const[messages] = useState([]); //so we can send chat messages ~Chase
   const[resources] = useState([]);//so we can send resources ~ Chase
+  const[notes] = useState([]);//so we can send notes ~ Landon
+
 
   // Function to handle adding the class to the avaiableClasses collection
   async function handleCreate() {
@@ -42,6 +44,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 createdAt: new Date(), // created at certain date and time
                 resources: resources,
                 messages: messages,
+                notes: notes,
           });
 
           // this will update the joined classes for the user immediately after the user creates the class

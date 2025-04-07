@@ -1,5 +1,5 @@
 import React from "react";
-import { db } from "../../firebase";
+import { db, storage } from "../../firebase";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -10,32 +10,71 @@ import {
   where,
   doc,
 } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-/*Component where you can post links for certain study resources */
-function Notes({ className, email }) {
+//Component where you can upload pdf documents for certain study resources or notes 
+function Notes({ className, email, }) {
   //form handling stuff
-  const [title, setTitle] = useState("");
-  const [url, setURL] = useState("");
-  const [name, setName] = useState("Test");
-  const [resources, setResources] = useState([]);
+  const [title, setTitle] = useState(""); // title for notes
+  const [notesUrl, setNotesURL] = useState(null); // for firebase storage purposes
+  const [name, setName] = useState("Test"); // user's name will display
+  const [notes, setNotes] = useState([]); // for firebase firestore purposes
+  const [imgageUrl, setImageUrl] = useState(""); // user's profile pic will display
 
-  //refresh the resources every 100ms
+  //this function will refresh the notes every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getAllResources();
-      getName();
+      getAllNotes(); 
+      getNameAndPfp();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
-  async function getName() {
+  //function for handling the uploaded note files
+  async function handleNotesFileUpload() {
+    // prevents user from uploading same file and title 
+    if (!notesUrl || !notesUrl.name) {
+      alert("You have already uploaded this document or the file is missing.");
+      return;
+    }
+
+    const uniqueFileUrl = `${Date.now()}-${notesUrl.name}`;  //timestamp will avoid overwritting file in storage
+                          //took a while to debug, only most recent would be shown, but this line solved the issue
+    const storageRef = ref(storage, `notes/${email}/${uniqueFileUrl}`); //storage reference location
+    const uploadTask = uploadBytesResumable(storageRef, notesUrl); //task to upload from that reference location
+
+    //uploading the file
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        //observe upload progress
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      },
+      (error) => {
+        //handle errors
+        console.error('Upload failed:', error);
+      },
+      () => {
+        //this will get the download URL once the upload is complete (this will be stored in storage)
+        console.log("notes upload is complete")
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log(downloadURL);
+          setNotesURL(downloadURL);
+          console.log("okay notes url is now: ");
+          console.log(notesUrl);
+          uploadNewNotesFile(downloadURL);
+        });
+      }
+    );
+  };
+  //function for getting the user's name and profile pic
+  async function getNameAndPfp() {
     const userQuery = query(
       collection(db, "users"),
       where("email", "==", email)
     );
 
-    /*Use query to get user object (contains first name, last name, etc.) */
-
+    //Use query to get user object (contains first name, last name, etc.) 
     getDocs(userQuery)
       .then((response) => {
         const users_from_response = response.docs.map((doc) => ({
@@ -50,32 +89,34 @@ function Notes({ className, email }) {
         toSend += " ";
         toSend += users_from_response.at(0).data.lastName;
         setName(toSend);
+        setImageUrl(users_from_response.at(0).data.pfpUrl);
       })
       .catch((error) => console.log(error));
   }
 
-  async function getAllResources() {
+  //function for getting the notes collection in firestore and all of its data
+  async function getAllNotes() {
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
     );
 
-    /*Use query to get user object (contains first name, last name, etc.) */
-
+    //use query to get user object (contains first name, last name, etc.) 
     getDocs(classQuery)
       .then((response) => {
         const class_from_responses = response.docs.map((doc) => ({
           data: doc.data(),
           id: doc.id,
         }));
-        setResources(class_from_responses.at(0).data.resources);
+        setNotes(class_from_responses.at(0).data.notes);
       })
       .catch((error) => console.log(error));
   }
 
-  async function uploadNewLink() {
+  // this function will allow for the new notes to be uploaded 
+  async function uploadNewNotesFile(x) {
     var class_id;
-    getName();
+    getNameAndPfp();
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -95,113 +136,97 @@ function Notes({ className, email }) {
       class_id = class_from_response.at(0).id;
       const classDocRef = doc(db, "availableClasses", class_id);
       updateDoc(classDocRef, {
-        resources: arrayUnion({
-          name: name,
-          title: title,
-          url: url,
+        notes: arrayUnion({
+          name: name, // name of user
+          title: title, // title of notes
+          notesUrl: x, // this is the full url from google api
+          notesUrlName: notesUrl.name, // this is the display file name (local)
+          pfpUrl: imgageUrl, // this is for the user's pfp
         }),
       });
     });
+    setNotes(notes); // this will set the notes collection
   }
 
-  //assert that the URL is not malicious
-  function isValidURL(link) {
-    var goodURL = false;
-    const validURLs = [
-      "https://quizlet.com/",
-      "https://www.chegg.com/",
-      "https://www.symbolab.com/",
-      "https://www.wolframalpha.com/",
-      "https://www.khanacademy.org//",
-      "https://www.youtube.com",
-      "https://www.youtu.be",
-      "https://scholar.google.com/",
-      "https://my.moreheadstate.edu",
-    ];
-
-    for (let link_in_list of validURLs) {
-      if (link.startsWith(link_in_list)) {
-        goodURL = true;
-      }
-    }
-    return goodURL;
-  }
-  //validate title and url and push to the database.
-  function handleLinkSubmit() {
-    if (isValidURL(url)) {
-      uploadNewLink();
-      setTitle("");
-      setURL("");
-    } else {
-      alert("Bad url.");
-    }
-  }
-
+  // function for handling a title change
   const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+    setTitle(e.target.value); // sets the title name to whatever user enters
   };
+  // function for handling a file upload change
   const handleURLChange = (e) => {
-    setURL(e.target.value);
+    console.log("Handle url change called."); // debugging statement (will take out later)
+    const selectedNotesFile = e.target.files[0]; // whatever file the user selects
+    console.log(selectedNotesFile); // debugging statement (will take out later)
+    if (selectedNotesFile) { // ensures that user selected a file
+      setNotesURL(selectedNotesFile); // set the url to the file that user selected
+    }
   };
 
-  return (
-    <>
-      {resources.map((each_class) => (
-        <Resource
-          name={each_class.name}
-          title={each_class.title}
-          url={each_class.url}
-        />
-      ))}
+return (
+  <>
+    {notes.map((each_class) => ( // mapping 
+      <Note // parent
+        key={each_class.id} // user id
+        name={each_class.name} // user name
+        title={each_class.title} // user uploaded file title
+        notesUrl={each_class.notesUrl} // user uploaded file full url
+        notesUrlName={each_class.notesUrlName} // user uploaded file display url
+        pfpUrl={each_class.pfpUrl} // user uploaded profile picture
+      />
+    ))}
 
-      <div class="add-resource-elements">
-        <form>
-          <div class="resource-field">
-            <label for="Title">Title:</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="Enter Title"
-              required
-            />
-          </div>
-          <div class="resource-field">
-            <label for="url">URL:</label>
-            <input
-              type="text"
-              id="url"
-              value={url}
-              onChange={handleURLChange}
-              placeholder="Enter URL"
-              required
-            />
-          </div>
-        </form>
-        <button onClick={handleLinkSubmit}>Submit</button>
-      </div>
-    </>
-  );
+    <div class="add-resource-elements">
+      <form>
+        <div class="resource-field">
+          <label for="Title">Title:</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="Enter Title"
+            required
+          />
+        </div>
+        <div class="resource-field">
+          <label for="url">Upload File:</label>
+          <input
+            type="file"
+            id="url"
+            accept="application/pdf"
+            onChange={handleURLChange}
+            placeholder="Choose File"
+            required
+          />
+        </div>
+      </form>
+      <button onClick={handleNotesFileUpload}>Submit</button>
+    </div>
+  </>
+);
 }
 
-function Resource({ name, title, url }) {
+function Note({ name, title, notesUrl, notesUrlName, pfpUrl}) {
   return (
     <>
-      <div class="resource-box">
+      <div class="resource-box"> 
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+          src={pfpUrl}
           alt="Profile Image"
-          class="profile-image"
+          className="profile-image"
         />
 
         <div class="resource">
           <div class="name">{name}</div>
 
           <strong>Title: {title}</strong>
+          <strong>File: {notesUrlName}</strong>
 
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            {url}
+          <a href={notesUrl} target="_blank" rel="noopener noreferrer">
+            View PDF
+          </a>
+          <a href={notesUrl} download target="_blank" rel="noopener noreferrer">
+            Download PDF
           </a>
         </div>
       </div>
