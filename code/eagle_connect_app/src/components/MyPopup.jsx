@@ -18,13 +18,10 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   const [numberOfRatings] = useState(0);
   const[messages] = useState([]); //so we can send chat messages ~Chase
   const[resources] = useState([]);//so we can send resources ~ Chase
-<<<<<<< HEAD
   const[ratings] = useState([])
-=======
   const[notes] = useState([]);//so we can send notes ~ Landon
 
 
->>>>>>> d5c97704b0012ada5ac6c77ff500b213adeb9fb3
   // Function to handle adding the class to the avaiableClasses collection
   async function handleCreate() {
 
@@ -49,12 +46,10 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 createdAt: new Date(), // created at certain date and time
                 resources: resources,
                 messages: messages,
-<<<<<<< HEAD
                 ratings: ratings,
                 numberOfRatings: numberOfRatings,
-=======
                 notes: notes,
->>>>>>> d5c97704b0012ada5ac6c77ff500b213adeb9fb3
+
           });
 
           // this will update the joined classes for the user immediately after the user creates the class

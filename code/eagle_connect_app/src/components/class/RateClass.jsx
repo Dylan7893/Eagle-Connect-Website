@@ -238,15 +238,9 @@ function test(){
       </div>
 
       <div className="messages-container">
-<<<<<<< HEAD
         {ratings.map((each_class) => (
           <Rating
-            key={each_class.name}
-=======
-        {messages.map((each_class) => (
-          <Message
             key={each_class.id}
->>>>>>> d5c97704b0012ada5ac6c77ff500b213adeb9fb3
             name={each_class.name}
             feedback={each_class.feedback}
             pfpurl={each_class.pfpurl}
