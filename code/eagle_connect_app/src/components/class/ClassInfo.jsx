@@ -1,12 +1,13 @@
 import classInfoPageStyle from "../../design/classInfoPage.css";
 import React from "react";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, arrayRemove, increment, doc, arrayUnion, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 // function for retrieving class information for the class info component
-function ClassInfo({ className }) {
-  const [classData, setClassData] = useState(""); // this will hold all of the class info that is pulled from firebase
+function ClassInfo({ className, toClassPage }) {
+  const [classData, setClassData] = useState(""); // this will hold all of the class data that is pulled from firebase
+  const [classToLeave, setClassToLeave] = useState(""); // this will hold all of the class info that user wants to leave that is pulled from firebase
   const [classLevel, setClassLevel] = useState(""); // this will hold what level the class is (fresh, soph, jun, sen.)
   const [classLevelUp, setClassLevelUp] = useState(""); // this will hold if class is a level up class 
   const [classLab, setClassLab] = useState(""); // this will hold if class has a lab or not
@@ -23,10 +24,11 @@ function ClassInfo({ className }) {
       data: doc.data(),
       id: doc.id,
     }));
-    setClassData(class_from_response.at(0).data) // this will store all the class info in the classData variable 
+    setClassData(class_from_response.at(0)) // this will store all the class info in the classData variable 
+    setClassToLeave(class_from_response.at(0).data) // this will store all the class info in the classData variable 
 
     // if the class number is between 100-199, then the classLevel variable will be a freshmen level course
-    if (class_from_response.at(0).data.classNumber >= 100 && class_from_response.at(0).data.classNumber < 200) {
+    if (class_from_response.at(0).data.classNumber < 200) {
       setClassLevel("Freshman");
     }
     // if the class number is between 200-299, then the classLevel variable will be a sophomore level course
@@ -51,39 +53,92 @@ function ClassInfo({ className }) {
     }
 
     // if the classLevelUp from firebase is UR then it is a level up course
-    if (class_from_response.at(0).data.classLevelUp == "UR") {
+    if (class_from_response.at(0).data.classLevelUp === "UR") {
       setClassLevelUp("Yes");
     }
     // if the classLevelUp from firebase is not UR then it is not a level up course
     else {
       setClassLevelUp("No");
     }
-    
+
     // if the classExtension from firebase is L then it has a lab
-    if (class_from_response.at(0).data.classExtension == "L") {
+    if (class_from_response.at(0).data.classExtension === "L") {
       setClassLab("Yes");
     }
     // if the classExtension from firebase is not L then it does not have a lab
     else {
-      setClassData("No");
+      setClassLab("No");
     }
-
   })
 
+  //validate message
+  async function handleLeaveClass() {
+
+    const user = auth.currentUser; // gets the current user from firebase authentication
+
+    const userId = user.uid; // gets firebase authentication uid
+
+    // gets the user document reference from firestore with auth uid
+    const userDocRef = doc(db, "users", userId);
+
+    // gets the user document that contains all of the various fields
+    const userDoc = await getDoc(userDocRef);
+
+    // this will hold all of the data/fields that is retreived from the user documents
+    const userDocData = userDoc.data();
+
+    // gets the class document reference from firestore with class id
+    const classDocRef = doc(db, "availableClasses", classData.id);
+
+    // this will search through the joinedClasses array and find the class that matches
+    // the class that the user wants to leave
+    const specificJoinedClass = userDocData.joinedClasses.find((classToFind) =>
+      classToFind.className === classToLeave.className &&
+      classToFind.classNumber === classToLeave.classNumber &&
+      classToFind.classSection === classToLeave.classSection
+    );
+
+    // removes the class from the joinedClasses array
+    // this will also update the joined classes that are shown on dashboard
+    try {
+      await updateDoc(userDocRef, {
+        joinedClasses: arrayRemove(specificJoinedClass),
+      });
+
+      // each time a user leaves a class, the number of students will decrement by one each time
+      // decrement is not apart of jsx so increment(-1) is same as decrement(1)
+      await updateDoc(classDocRef, {
+        numberOfStudents: increment(-1),
+      });
+
+      // debug stuff
+      console.log("Class successfully left!");
+    } catch (error) { // catch any errors if any
+      console.log("Error leaving class:", error);
+      // debug stuff
+      alert("Failed to leave the class. Please try again.");
+    }
+  }
+  // function for redirecting to dashboard 
+  function toDashboard() {
+    toClassPage("none");
+    handleLeaveClass();
+  }
   return (
     <>
       <title>Class Information</title>
       <link rel="stylesheet" href={classInfoPageStyle} />
       <div className="class-info">
+
         <h1>Class Information</h1>
         <div className="class-info-grid">
           <div>
             <span className="title">Class Name: </span>
-            <span className="info">{classData.className}</span> {/*Pulled directly from firebase*/}
+            <span className="info">{classToLeave.className}</span> {/*Pulled directly from firebase*/}
           </div>
           <div>
             <span className="title">Class Number: </span>
-            <span className="info">{classData.classInitials}-{classData.classNumber} </span> {/*Pulled directly from firebase*/}
+            <span className="info">{classToLeave.classInitials}-{classToLeave.classNumber}-{classToLeave.classSection} </span> {/*Pulled directly from firebase*/}
           </div>
           <div>
             <span className="title">Course Level: </span>
@@ -91,7 +146,7 @@ function ClassInfo({ className }) {
           </div>
           <div>
             <span className="title">Number of Students: </span>
-            <span className="info">{classData.numberOfStudents}</span> {/*Pulled directly from firebase*/}
+            <span className="info">{classToLeave.numberOfStudents}</span> {/*Pulled directly from firebase*/}
           </div>
           <div>
             <span className="title">Level UP?: </span>
@@ -111,10 +166,11 @@ function ClassInfo({ className }) {
             </span>
           </div>
         </div>
-        <button className="leave-class">Leave Class</button>
+        <button className="leave-class" onClick={toDashboard}>Leave Class</button>
       </div>
     </>
   );
 }
+
 
 export default ClassInfo;

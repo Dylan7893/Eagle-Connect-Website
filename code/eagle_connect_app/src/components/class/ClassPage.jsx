@@ -1,3 +1,4 @@
+
 import "../../design/ClassPageStyle.css";
 import { useState } from "react";
 import ClassTemplate from "./ClassTemplate";
@@ -8,10 +9,11 @@ import Resources from "./Resources";
 import Reminders from "./Reminders";
 import Chat from "./Chat";
 import Dashboard from "../dashboard/Dashboard";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from "../../firebase";
 
 function ClassPage({ className, email }) {
+
   const [user] = useAuthState(auth);
 
   const [sectionClicked, setSectionClicked] = useState("chat");
@@ -65,7 +67,7 @@ function ClassPage({ className, email }) {
           </main>
         </>
       );
-
+      
     case "rate":
       return (
         <>
@@ -77,21 +79,21 @@ function ClassPage({ className, email }) {
         </>
       );
 
-    case "info":
+      case "info":
       return (
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section">
-            <ClassInfo className={className} />
+            <ClassInfo className={className} toClassPage={handleCallBack}/>
             {/* end main */}
           </main>
         </>
       );
 
-    case "none":
+      case "none":
       return (
         <>
-          <Dashboard email={user.email} />
+          <Dashboard email = {user.email}/>
         </>
       );
   }
@@ -99,4 +101,4 @@ function ClassPage({ className, email }) {
   return <></>;
 }
 
-export default ClassPage;
+export default ClassPage
