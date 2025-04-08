@@ -10,12 +10,11 @@ import {
   setDoc,
   where,
   query,
-
 } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import "../../design/dashboard2Style.css";
 
-function Classes({email}) {
+function Classes({ email }) {
   const [classes, setClasses] = useState([]);
   const [userJoinedClasses, setUserJoinedClasses] = useState([]);
   const [notUserJoinedClasses, setNotUserJoinedClasses] = useState([]);
@@ -27,11 +26,10 @@ function Classes({email}) {
     return () => clearInterval(intervalId);
   }, []);
 
-
   function getUserJoinedClasses() {
     let userJoinedClassesArr = [];
     console.log("get user classes called");
-    
+
     const userQuery = query(
       collection(db, "users"),
       where("email", "==", email)
@@ -54,11 +52,11 @@ function Classes({email}) {
         });
       })
       .catch((error) => console.log(error));
-      console.log("user joined classes array: ");
-      console.log(userJoinedClassesArr);
-      setUserJoinedClasses(userJoinedClassesArr);
-      console.log("User joined classes use state thing: ");
-      console.log(userJoinedClasses);
+    console.log("user joined classes array: ");
+    console.log(userJoinedClassesArr);
+    setUserJoinedClasses(userJoinedClassesArr);
+    console.log("User joined classes use state thing: ");
+    console.log(userJoinedClasses);
   }
   // Function to handle getting the availableClasses collection
   function getClasses() {
@@ -120,24 +118,21 @@ function Classes({email}) {
 
   return (
     <>
-      <button onClick={getUserJoinedClasses}>Test</button>
-      <ul className="list-of-classes">
-        {classes.map((each_class) => (
-          <li className="class-list-item">
-            <div>
-              <h3>{each_class.data.className}</h3>
-              <p>
-                {" "}
-                {each_class.data.classInitials}-{each_class.data.classNumber}
-                {each_class.data.classExtension}-{each_class.data.classSection}
-                {each_class.data.classLevelUp}{" "}
-              </p>
-              ⭐ ⭐ ⭐<p> Students: {each_class.data.numberOfStudents} </p>
-              <button onClick={() => joinClass(each_class)}>Join</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {classes.map((each_class) => (
+        <li className="class-list-item">
+          <div>
+            <h3>{each_class.data.className}</h3>
+            <p>
+              {" "}
+              {each_class.data.classInitials}-{each_class.data.classNumber}
+              {each_class.data.classExtension}-{each_class.data.classSection}
+              {each_class.data.classLevelUp}{" "}
+            </p>
+            ⭐ ⭐ ⭐<p> Students: {each_class.data.numberOfStudents} </p>
+            <button onClick={() => joinClass(each_class)}>Join</button>
+          </div>
+        </li>
+      ))}
     </>
   );
 }
