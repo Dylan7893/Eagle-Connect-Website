@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../../design/loginStyle.css";
 import { db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import Login from "./Login";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,9 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const pfpUrl = "https://firebasestorage.googleapis.com/v0/b/react-auth-tutorial-5ea50.firebasestorage.app/o/images%2Fdefault%40moreheadstate.edu?alt=media&token=6aa5688c-5b20-4eda-a905-b6a0343fcfad";
   const navigate = useNavigate();
+  const [signUp_register, setState] = useState("register");
 
+  
   {
     /* Upon successful registration, add that user's credential to the database*/
   }
@@ -60,7 +63,7 @@ const Register = () => {
       }
     }
   };
-
+  if (signUp_register === "register") {
   return (
     <div class="outside">
       <div class="sign-in-container">
@@ -104,10 +107,18 @@ const Register = () => {
           <button type="submit" class="login-button">
             Sign Up
           </button>
+          <a onClick={() => setState("login")}>Back</a>
         </form>
       </div>
     </div>
   );
-};
+} else {
+  return (
+    <>
+      <Login />
+    </>
+  );
+}
+}
 
 export default Register;

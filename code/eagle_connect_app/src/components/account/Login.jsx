@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { auth } from "../../firebase";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
+import { useNavigate } from "react-router-dom";
+
 
 function Login() {
   {
@@ -12,7 +14,11 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login_register, setState] = useState("login");
+  const navigate = useNavigate();
 
+  const navigateClick = () => {
+    navigate("/");
+  };
   {
     /*Function called when a user attempts to sign in with email and password */
   }
@@ -84,6 +90,9 @@ function Login() {
                 Forgot Password?
               </a>
               <a onClick={() => setState("register")}>Create an Account</a>
+              <a onClick={navigateClick}>
+                Back
+              </a>
             </div>
           </form>
         </div>
