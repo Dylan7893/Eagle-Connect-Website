@@ -129,16 +129,6 @@
   border-radius: 5px; /*rounded edges*/
 }
 
-/* ------- main ------- */
-.main-section {
-  margin-left: 250px; /*shifts the main the distance of sidebar*/
-  margin-top: 70px; /*shifts the main the distance of the navigation bar*/
-  padding: 20px; /*main padding*/
-  background: #fafafa; /*main background color*/
-  overflow-y: auto; /*allow verticle scrolling*/
-  height: 100vh; /*makes the main section the height of the window*/
-}
-
 /* joined classes card layout */
 .joined-classes-layout {
   display: flex; /*display horizonalty*/
@@ -153,12 +143,25 @@
   border-radius: 5px; /*card rounded edges*/
   border: 1px solid #ddd; /*card border*/
   text-align: center; /*align text to center of card*/
-  width: 150px; /*dimenstion of card*/
+  width: 215px; /*dimenstion of card*/
+  height: 150px;
+  word-wrap: break-word; /* wraps text instead of overflowing */
+  overflow: hidden; /* incase there is any overflow somehow i read that this will just not show it*/
 }
 /* card with joined classes hover */
 .joined-class-card:hover {
   transform: scale(1.05); /*when hovering card enlarge*/
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*when hovering card use shadow*/
+}
+
+/* ------- main ------- */
+.main-section {
+  margin-left: 250px; /*shifts the main the distance of sidebar*/
+  margin-top: 70px; /*shifts the main the distance of the navigation bar*/
+  padding: 20px; /*main padding*/
+  background: #fafafa; /*main background color*/
+  overflow-y: auto; /*allow verticle scrolling*/
+  height: 100vh; /*makes the main section the height of the window*/
 }
 
 /* joined classes buttons*/

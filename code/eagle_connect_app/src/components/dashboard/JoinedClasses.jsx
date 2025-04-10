@@ -45,7 +45,7 @@ function JoinedClasses({ toDashboardCallBack, email }) {
         {
           /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
         }
-       
+
         {
           /*Get the joined classes from the user*/
         }
@@ -75,7 +75,15 @@ function JoinedClasses({ toDashboardCallBack, email }) {
 {
   /*Template For each joined class*/
 }
-function JoinedClass({ toParentCallBack, name, number, initials, section, extension, levelUp }) {
+function JoinedClass({
+  toParentCallBack,
+  name,
+  number,
+  initials,
+  section,
+  extension,
+  levelUp,
+}) {
   {
     /*When a user clicks on a joined class, we want to set the component to that class.*/
   }
@@ -87,7 +95,12 @@ function JoinedClass({ toParentCallBack, name, number, initials, section, extens
       <div className="joined-class-card" onClick={initCallBack}>
         {/* example class */}
         <h3>{name}</h3>
-        <p> {initials}-{number}{extension}-{section}{levelUp} </p>⭐ ⭐ ⭐
+        <p>
+          {" "}
+          {initials}-{number}
+          {extension}-{section}
+          {levelUp}{" "}
+        </p>
         {/*  <div className="joined-class-actions">
           <button className="action-button">⭐</button>
           <button className="action-button">⚙️</button>

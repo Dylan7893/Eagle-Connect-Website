@@ -178,7 +178,7 @@ function Dashboard({ email }) {
                       {classListItem.classSection}
                       {classListItem.classLevelUp}{" "}
                     </p>
-                    ⭐ ⭐ ⭐<p> Students: {classListItem.numberOfStudents} </p>
+                    <p> Students: {classListItem.numberOfStudents} </p>
                     <button onClick={() => {}}>Join</button>
                   </li>
                 )
