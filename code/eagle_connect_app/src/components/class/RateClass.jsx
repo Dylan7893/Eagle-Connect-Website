@@ -36,9 +36,8 @@ function RateClass({ className, email }) {
     return () => clearInterval(intervalId);
   }, []);
 
-
-  function getAverageRating(){
-    let ratings = []
+  function getAverageRating() {
+    let ratings = [];
     let average = 0.0;
     const classQuery = query(
       collection(db, "availableClasses"),
@@ -59,14 +58,13 @@ function RateClass({ className, email }) {
         ratings.forEach((item, index) => {
           average += parseFloat(item);
         });
-        average = (average / ratings.length);
+        average = average / ratings.length;
         setAverageRating(average);
         console.log(average);
-
       })
       .catch((error) => console.log(error));
   }
-  function getNumberOfRatings(){
+  function getNumberOfRatings() {
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -88,7 +86,7 @@ function RateClass({ className, email }) {
     setFeedbackToSend("");
   };
 
-  function canUserRate(){
+  function canUserRate() {
     let ratingEmails = [];
     const classQuery = query(
       collection(db, "availableClasses"),
@@ -106,8 +104,8 @@ function RateClass({ className, email }) {
         class_from_responses.at(0).data.ratings.forEach((item, index) => {
           ratingEmails.push(item.email);
         });
-        ratingEmails.forEach(element => {
-          if(element == email){
+        ratingEmails.forEach((element) => {
+          if (element == email) {
             setCanRate(false);
           }
         });
@@ -115,31 +113,31 @@ function RateClass({ className, email }) {
       .catch((error) => console.log(error));
   }
   async function getNameAndPfp() {
-      const userQuery = query(
-        collection(db, "users"),
-        where("email", "==", email)
-      );
-  
-      /*Use query to get user object (contains first name, last name, etc.) */
-  
-      getDocs(userQuery)
-        .then((response) => {
-          const users_from_response = response.docs.map((doc) => ({
-            data: doc.data(),
-            id: doc.id,
-          }));
-          {
-            /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-          }
-          var toSend;
-          toSend = users_from_response.at(0).data.firstName;
-          toSend += " ";
-          toSend += users_from_response.at(0).data.lastName;
-          setName(toSend);
-          setImageUrl(users_from_response.at(0).data.pfpUrl);
-        })
-        .catch((error) => console.log(error));
-    }
+    const userQuery = query(
+      collection(db, "users"),
+      where("email", "==", email)
+    );
+
+    /*Use query to get user object (contains first name, last name, etc.) */
+
+    getDocs(userQuery)
+      .then((response) => {
+        const users_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        var toSend;
+        toSend = users_from_response.at(0).data.firstName;
+        toSend += " ";
+        toSend += users_from_response.at(0).data.lastName;
+        setName(toSend);
+        setImageUrl(users_from_response.at(0).data.pfpUrl);
+      })
+      .catch((error) => console.log(error));
+  }
 
   async function getAllRatings() {
     /*Create query to get the user object from their email*/
@@ -184,7 +182,7 @@ function RateClass({ className, email }) {
       }
       class_id = class_from_response.at(0).id;
       const classDocRef = doc(db, "availableClasses", class_id);
-      if(canRate){
+      if (canRate) {
         updateDoc(classDocRef, {
           ratings: arrayUnion({
             name: name,
@@ -195,16 +193,14 @@ function RateClass({ className, email }) {
           }),
         });
         updateDoc(classDocRef, {
-                numberOfRatings: increment(1),
-              });
-        
+          numberOfRatings: increment(1),
+        });
+
         setRatings(ratings);
-      }else{
+      } else {
         alert("You have already rated.");
       }
-      
     });
-    
   }
 
   //validate rating
@@ -217,22 +213,21 @@ function RateClass({ className, email }) {
     setFeedbackToSend(e.target.value);
   };
 
-  function handleRatingChange(x){
-    setStarRating(x)
+  function handleRatingChange(x) {
+    setStarRating(x);
   }
-function test(){
-  alert(starRating);
-}
+  function test() {
+    alert(starRating);
+  }
   return (
     <>
-    
       <div className="rate-info">
         <div className="rate">
-          <label for="url">Rating:</label>
-          <RatedStars avg = {averageRating}/>
+          <label for="rating">Rating:</label>
+          <RatedStars avg={averageRating} />
         </div>
         <div className="resource-field">
-          <label for="url"> Reviews:</label>
+          <label for="reviews"> Reviews:</label>
           <p>{numberOfRatings}</p>
         </div>
       </div>
@@ -244,29 +239,29 @@ function test(){
             name={each_class.name}
             feedback={each_class.feedback}
             pfpurl={each_class.pfpurl}
-            rating = {each_class.rating}
+            rating={each_class.rating}
           />
         ))}
       </div>
 
       <div class="add-resource-elements">
         <div class="rate">
-        <label for="rating" className="resource-field-label">
-              Rating:
-            </label>
-          <Stars rateFunc = {handleRatingChange}/>
+          <label for="rating" className="resource-field-label">
+            Rating:
+          </label>
+          <Stars rateFunc={handleRatingChange} />
         </div>
         <form>
           <div className="resource-field">
             <label for="feedback" className="resource-field-label">
               Feedback:
             </label>
-            
+
             <input
               type="text"
               id="url"
               value={feedBackToSend}
-              onChange = {handleNewFeedbackChange}
+              onChange={handleNewFeedbackChange}
               required
             />
           </div>
@@ -277,21 +272,30 @@ function test(){
   );
 }
 
-function Rating({name, pfpurl, feedback, rating}){
-  return(
+function Rating({ name, pfpurl, feedback, rating }) {
+  const stars = "★".repeat(rating);
+  return (
     <>
-    <p>Name: {name}</p>
-    <p>pfpurl: {pfpurl}</p>
-    <p>feedback: {feedback}</p>
-    <p>Num of stars: {rating}</p>
+      <div class="resource-box">
+        <img src={pfpurl} alt="Profile Image" class="profile-image" />
+
+        <div class="resource">
+          <div class="name">{name}</div>
+          <div className="complete-star">
+            <strong>Rating: </strong> {stars}
+          </div>
+          <div className="feedback-text">
+            <strong>Feedback:</strong> {feedback}
+          </div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 export default RateClass;
 
-
 //I DID NOT DO THIS: https://codesandbox.io/p/sandbox/musing-lamarr-r3dnvx
-function Stars( {rateFunc}) {
+function Stars({ rateFunc }) {
   const [rating, setRating] = useState(0);
   let stars = ["★", "★", "★", "★", "★"];
   const handleClick = (rating) => {
@@ -309,7 +313,7 @@ function Stars( {rateFunc}) {
         let elementColor = "";
 
         if (isActiveColor) {
-          elementColor = "yellow";
+          elementColor = "#ffcc00";
         } else {
           elementColor = "grey";
         }
@@ -333,16 +337,15 @@ function Stars( {rateFunc}) {
   );
 }
 
-function RatedStars({avg}){
+function RatedStars({ avg }) {
   let starVal = Math.round(avg);
   let starz = "";
   for (let i = 0; i < starVal; i++) {
     starz += "★";
   }
-  return(
+  return (
     <>
-    <p>{starz}</p>
+      <p>{starz}</p>
     </>
   );
 }
-

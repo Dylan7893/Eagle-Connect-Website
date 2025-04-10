@@ -1,13 +1,25 @@
 .starsContainer {
-    display: flex;
-  }
-  
-  .star {
-    cursor: pointer;
-    transition: all 0.1s linear;
-  }
-  
-  .star:hover {
-    transform: scale(1.1);
-  }
-  
+  display: flex;
+}
+
+.star {
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.complete-star {
+  color: #ffcc00;
+}
+
+.complete-star strong {
+  color: black;
+}
+
+.feedback-text {
+  text-align: left;
+  margin-top: "100px";
+}
