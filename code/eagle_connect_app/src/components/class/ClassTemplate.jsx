@@ -1,29 +1,42 @@
 import "../../design/ClassPageStyle.css";
+import React, { useState } from "react"; 
+
 
 function ClassTemplate({ toClassPage, className }) {
+
+  const [sectionTitle, setSectionTitle] = useState("Chat"); // this will be used to see what component the user is clicked on at top right
+                                                                      // corner of page
+
   {
     /*There has GOT to be a better way to do this. ~Chase*/
   }
   function notes() {
     toClassPage("notes");
+    setSectionTitle("Notes"); // change the title name to Notes
   }
   function resources() {
     toClassPage("resources");
+    setSectionTitle("Resources"); // change the title name to Resources
   }
   function chat() {
     toClassPage("chat");
+    setSectionTitle("Chat"); // change the title name to Chat
   }
   function reminders() {
-    toClassPage("reminders");
+    toClassPage("reminders"); 
+    setSectionTitle("Reminders"); // change the title name to Reminders
   }
   function rate() {
     toClassPage("rate");
+    setSectionTitle("Rate Class"); // change the title name to Rate Class
   }
   function info() {
     toClassPage("info");
+    setSectionTitle("Class Info"); // change the title name to Class Info
   }
   function toDashboard(){
     toClassPage("none");
+    setSectionTitle(""); // reset the title name
   }
   return (
     <>
@@ -36,17 +49,10 @@ function ClassTemplate({ toClassPage, className }) {
       <header className="navigation-bar">
         {/* replace with any class name and number */}
         <h1>{className}</h1>
-        {/* right navigation buttons */}
+        {/* right navigation header */}
         <div className="navigation-bar-right">
-          {/* profile image serving as a button for profile */}
-          <button className="profile-button">
-            {/* default image asset */}
-            <img
-              className="profile-picture"
-              src="default_pfp.jpg"
-              alt="profile picture"
-            />
-          </button>
+          {/* section title of component that user is currently clicked on */}
+          <h1>{sectionTitle}</h1>
         </div>
       </header>
       {/* sidebar start */}
