@@ -16,9 +16,11 @@ import ProfilePage from "../profile/ProfilePage";
   /*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */
 }
 function Dashboard({ email }) {
+  
   //control visibility
   const [open, setOpen] = useState(false);
-  const closeModal = () => setOpen(!open);
+  const closeModal = () => setOpen(false);
+  const openModal = () => setOpen(true);
 
   //for search all functionality
   const [searchInput, setSearchInput] = useState(""); //string state variable and function to set it
@@ -140,7 +142,7 @@ function Dashboard({ email }) {
           <h2>Join Class</h2>
 
           {/* when click add new class button a popup appears */}
-          <button className="add-new-class" onClick={closeModal}>
+          <button className="add-new-class" onClick={openModal}>
             Create Class
           </button>
 

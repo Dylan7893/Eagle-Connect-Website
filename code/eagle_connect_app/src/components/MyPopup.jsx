@@ -21,6 +21,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   const[ratings] = useState([])//so we can send ratings
   const[notes] = useState([]);//so we can send notes ~ Landon
   const[reminders] = useState([])//so we can send reminders
+  
 
   // Function to handle adding the class to the avaiableClasses collection
   async function handleCreate() {
@@ -70,10 +71,12 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
           console.log("Class successfully created!"); // console log if successful
           alert(`You have created the class: ${className}`); // alert user if successful
           setClassName(""); // Clear input field
+          closePopup();
       } catch (error) { // if any errors
           console.error("Error creating class:", error); // console log if error
           alert("Failed to create the class. Please try again."); // alert user if error
       }
+      
   }
   // not sure how to comment in return function
   // only changes that I have done is the onChange=...
@@ -81,7 +84,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   // other than that, this is the same as what Dylan implemented
 
   return (
-    <Popup open={isOpen} closeOnDocumentClick onClose={closePopup}> 
+    <Popup open={isOpen} close={isOpen}> 
       <h2>Create A Class</h2>
       <form onSubmit={(e) => e.preventDefault()}>
         <label htmlFor="className">Class Number: </label>
@@ -128,12 +131,12 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
         <label htmlFor="classNumber">Class Name: </label>
         <input type="text" id="classNumber" className="input-with-padding" onChange={(e) => setClassName(e.target.value)}/>
  
-        <button type="submit" onClick={handleCreate} class="add-button">
+        <button type="submit" class="add-button" onClick={handleCreate}>
           Add
         </button>
       </form>
     </Popup>
   );
-};
+}; 
 
 export default MyPopup;

@@ -182,6 +182,13 @@ select {
   max-width: 1600px;
 }
 
+.resource-box-no-line-user {
+  display: flex;
+  margin-left: "100px";
+  margin-bottom: 15px;
+  max-width: 1600px;
+}
+
 .profile-image {
   width: 50px;
   height: 50px;

@@ -158,7 +158,8 @@ function Chat({ className, email }) {
 function Message({ name, message, pfpUrl }) {
   return (
     <>
-      <div className="resource-box-no-line">
+    
+      <div className="resource-box-no-line-user">
         <img
           src={pfpUrl}
           alt="Profile Image"
@@ -170,6 +171,7 @@ function Message({ name, message, pfpUrl }) {
           <div className="message">{message}</div>
         </div>
       </div>
+
     </>
   );
 }
