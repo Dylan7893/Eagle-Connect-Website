@@ -127,6 +127,8 @@
   margin-bottom: 5px; /*space below individual class list items*/
   text-align: center; /*center text alignment for individual class list items*/
   border-radius: 5px; /*rounded edges*/
+  word-wrap: break-word; /* wraps text instead of overflowing */
+  overflow: hidden; /* incase there is any overflow somehow i read that this will just not show it*/
 }
 
 /* joined classes card layout */
@@ -143,8 +145,8 @@
   border-radius: 5px; /*card rounded edges*/
   border: 1px solid #ddd; /*card border*/
   text-align: center; /*align text to center of card*/
-  width: 215px; /*dimenstion of card*/
-  height: 150px;
+  width: 215px; /*width of card*/
+  height: 150px; /*height of card*/
   word-wrap: break-word; /* wraps text instead of overflowing */
   overflow: hidden; /* incase there is any overflow somehow i read that this will just not show it*/
 }
