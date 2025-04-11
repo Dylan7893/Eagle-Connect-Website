@@ -266,7 +266,9 @@ function RateClass({ className, email }) {
             />
           </div>
         </form>
-        <button onClick={handleFeedBackSubmit}>Submit</button>
+        <button className="blue-buttons" onClick={handleFeedBackSubmit}>
+          Submit
+        </button>
       </div>
     </>
   );

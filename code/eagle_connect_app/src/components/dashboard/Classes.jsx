@@ -129,7 +129,13 @@ function Classes({ email }) {
               {each_class.data.classLevelUp}{" "}
             </p>
             <p> Students: {each_class.data.numberOfStudents} </p>
-            <button onClick={() => joinClass(each_class)}>Join</button>
+
+            <button
+              className="blue-buttons"
+              onClick={() => joinClass(each_class)}
+            >
+              Join
+            </button>
           </div>
         </li>
       ))}

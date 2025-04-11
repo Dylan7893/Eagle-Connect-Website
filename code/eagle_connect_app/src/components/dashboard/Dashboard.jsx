@@ -16,7 +16,6 @@ import ProfilePage from "../profile/ProfilePage";
   /*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */
 }
 function Dashboard({ email }) {
-  
   //control visibility
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
@@ -181,7 +180,10 @@ function Dashboard({ email }) {
                       {classListItem.classLevelUp}{" "}
                     </p>
                     <p> Students: {classListItem.numberOfStudents} </p>
-                    <button onClick={() => {}}>Join</button>
+
+                    <button className="blue-buttons" onClick={() => {}}>
+                      Join
+                    </button>
                   </li>
                 )
               )

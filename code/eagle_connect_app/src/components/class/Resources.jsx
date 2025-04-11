@@ -30,31 +30,31 @@ function Resources({ className, email }) {
   }, []);
 
   async function getNameAndPfp() {
-      const userQuery = query(
-        collection(db, "users"),
-        where("email", "==", email)
-      );
-  
-      /*Use query to get user object (contains first name, last name, etc.) */
-  
-      getDocs(userQuery)
-        .then((response) => {
-          const users_from_response = response.docs.map((doc) => ({
-            data: doc.data(),
-            id: doc.id,
-          }));
-          {
-            /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-          }
-          var toSend;
-          toSend = users_from_response.at(0).data.firstName;
-          toSend += " ";
-          toSend += users_from_response.at(0).data.lastName;
-          setName(toSend);
-          setImageUrl(users_from_response.at(0).data.pfpUrl);
-        })
-        .catch((error) => console.log(error));
-    }
+    const userQuery = query(
+      collection(db, "users"),
+      where("email", "==", email)
+    );
+
+    /*Use query to get user object (contains first name, last name, etc.) */
+
+    getDocs(userQuery)
+      .then((response) => {
+        const users_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        var toSend;
+        toSend = users_from_response.at(0).data.firstName;
+        toSend += " ";
+        toSend += users_from_response.at(0).data.lastName;
+        setName(toSend);
+        setImageUrl(users_from_response.at(0).data.pfpUrl);
+      })
+      .catch((error) => console.log(error));
+  }
 
   async function getAllResources() {
     const classQuery = query(
@@ -157,7 +157,7 @@ function Resources({ className, email }) {
     <>
       {resources.map((each_class) => (
         <Resource
-        key={each_class.id}
+          key={each_class.id}
           name={each_class.name}
           title={each_class.title}
           url={each_class.url}
@@ -190,7 +190,9 @@ function Resources({ className, email }) {
             />
           </div>
         </form>
-        <button onClick={handleLinkSubmit}>Submit</button>
+        <button className="blue-buttons" onClick={handleLinkSubmit}>
+          Submit
+        </button>
       </div>
     </>
   );
@@ -200,11 +202,7 @@ function Resource({ name, title, url, pfpUrl }) {
   return (
     <>
       <div class="resource-box">
-        <img
-          src={pfpUrl}
-          alt="Profile Image"
-          class="profile-image"
-        />
+        <img src={pfpUrl} alt="Profile Image" class="profile-image" />
 
         <div class="resource">
           <div class="name">{name}</div>
