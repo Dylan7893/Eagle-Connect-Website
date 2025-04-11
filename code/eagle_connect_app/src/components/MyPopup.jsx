@@ -71,6 +71,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
         });
 
           console.log("Class successfully created!"); // console log if successful
+          alert(`You have created the class: ${className}`); // alert user if successful
           setClassName(""); // Clear input field
           closePopup();
       } catch (error) { // if any errors
@@ -87,15 +88,45 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   return (
     <Popup open={isOpen} close={isOpen}> 
       <h2>Create A Class</h2>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form autoComplete="off" onSubmit={(e) => { 
+        e.preventDefault(); // this disables the automatic reload of the page
+        if (classInitials === '' || // if any field is empty other than extension or levelUP then ...
+            classNumber === '' ||   
+            classSection === '' ||
+            className === '' ||
+            classDescription === ''
+        ) {
+          return; // this will prevent from creating a class with empty required fields
+        }
+        handleCreate(); // this will only execute if input is valid, that's why I moved it up here - Landon
+        setClassInitials(""); // resets class initials so it doesn't keep its previous value
+        setClassNumber(""); // resets class number so it doesn't keep its previous value
+        setClassExtension(""); // resets class extension so it doesn't keep its previous value
+        setClassSection(""); // resets class section so it doesn't keep its previous value
+        setClassLevelUp(""); // resets class levelUp so it doesn't keep its previous value
+        setClassName(""); // resets class name so it doesn't keep its previous value
+        setClassDescription(""); // resets class description so it doesn't keep its previous value
+        // for some reason it will hold the value of previous class created by user so this should solve that problem - Landon
+  }}>
         <label htmlFor="className">Class Number: </label>
- 
-        <div class="className">
-          <input type="text" id="className" className="input-small" onChange={(e) => setClassInitials(e.target.value)} />
-          <label htmlFor="className3" class="dash">
+
+        <div className="className">
+          {/*This is for the class initials input field*/}
+          {/*Value is required as this will eliminate the ability to enter anything except for letters for initials*/}
+          {/*limits characters between 2-4*/}
+          {/*the .replace will search through the string and replace any characters that not a letter with empty string (updates in reali time)*/}
+          <input type="text" id="className" className="input-small" 
+            placeholder="CS"
+            value={classInitials} 
+            minLength="2" 
+            maxLength="4" 
+            onChange={(e) => setClassInitials(e.target.value.replace(/[^A-Za-z]/g, ""))}
+            required />
+          <label htmlFor="className3" className="dash">
             -
           </label>
- 
+          {/*This input field is for the class number input field*/}
+          {/*limits numbers between 0-999*/}
           <input
             type="number"
             id="className"
@@ -103,8 +134,11 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
             className="classNameIn"
             min="0"
             max="999"
+            placeholder="170"
+            required
           />
- 
+          {/*This input field is for the class extension (lab, capstone C/D) input field*/}
+          {/*drop down menu*/}
           <select onChange={(e) => setClassExtension(e.target.value)}>
             <option value=""></option>
             <option value="L">L</option>
@@ -115,6 +149,8 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
           <label htmlFor="className3" class="dash">
             -
           </label>
+          {/*This input field is for the class section input field*/}
+          {/*limits numbers between 0-999*/}
           <input
             type="number"
             id="className"
@@ -122,7 +158,11 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
             className="classNameIn"
             min="0"
             max="999"
+            placeholder="001"
+            required
           />
+          {/*This input field is for the class levelUP (UR) input field*/}
+          {/*drop down menu*/}
           <select onChange={(e) => setClassLevelUp(e.target.value)}>
             <option value=""></option>
             <option value="UR">UR</option>
@@ -130,13 +170,22 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
         </div>
  
         <label htmlFor="classNumber">Class Name: </label>
-        <input type="text" id="classNumber" className="input-with-padding" onChange={(e) => setClassName(e.target.value)}/>
+        {/*This input field is for the class name input field*/}
+        <input type="text" id="classNumber" className="input-with-padding" placeholder="Introduction to Computer Science" 
+            onChange={(e) => setClassName(e.target.value)}
+            required/>
 
 
         <label htmlFor="classNumber">Class Description: </label>
-        <input type="text" id="classNumber" className="input-with-padding" onChange={(e) => setClassDescription(e.target.value)}/>
+        {/*This input field is for the class description input field*/}
+        <input type="text" id="classNumber" className="input-with-padding" 
+         placeholder="An overview of modern computer science."
+          onChange={(e) => setClassDescription(e.target.value)}
+          required/>
 
-        <button type="submit" class="add-button" onClick={handleCreate}>
+        {/*This the add class button. This only registers the "submit" type if all input is valid*/}
+        {/*Since the field is type onSubmit, the handleCreate() function earlier takes care of class creation if input is valid*/}
+        <button type="submit" class="add-button">
           Add
         </button>
       </form>
