@@ -15,7 +15,8 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
   const [className, setClassName] = useState(""); // this is for the class name like Intro to Computer Science
   const [numberOfStudents] = useState(1); // this is for the number of students within a class
                           // initialized to 1 because when student creates a class, they will have joined the class
-  const [numberOfRatings] = useState(0);
+  const[classDescription, setClassDescription] = useState("");
+  const[numberOfRatings] = useState(0);
   const[messages] = useState([]); //so we can send chat messages ~Chase
   const[resources] = useState([]);//so we can send resources ~ Chase
   const[ratings] = useState([])//so we can send ratings
@@ -51,6 +52,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
                 numberOfRatings: numberOfRatings,
                 notes: notes,
                 reminders: reminders,
+                description: classDescription,
 
           });
 
@@ -130,7 +132,11 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
  
         <label htmlFor="classNumber">Class Name: </label>
         <input type="text" id="classNumber" className="input-with-padding" onChange={(e) => setClassName(e.target.value)}/>
- 
+
+
+        <label htmlFor="classNumber">Class Description: </label>
+        <input type="text" id="classNumber" className="input-with-padding" onChange={(e) => setClassDescription(e.target.value)}/>
+
         <button type="submit" class="add-button" onClick={handleCreate}>
           Add
         </button>
