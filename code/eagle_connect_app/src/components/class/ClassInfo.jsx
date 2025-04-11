@@ -16,13 +16,63 @@ function ClassInfo({ className, toClassPage }) {
   const [classInitials, setClassInitials] = useState("");
   const [classNumber, setClassNumber] = useState(0);
   const [classSection, setClassSection] = useState("")
+  const [classIsLevelUp, setClassIsLevelUp] = useState("");
+  const [classRequiresLab, setClassRequiresLab] = useState("");
+
+
   useEffect(() => {
         getClassData();
     }, []);
 
 
     async function saveClassChanges(){
+
+    const user = auth.currentUser; // gets the current user from firebase authentication
+
+    const userId = user.uid; // gets firebase authentication uid
+
+    // gets the user document reference from firestore with auth uid
+    const userDocRef = doc(db, "users", userId);
+
+    // gets the user document that contains all of the various fields
+    const userDoc = await getDoc(userDocRef);
+
+    // this will hold all of the data/fields that is retreived from the user documents
+    const userDocData = userDoc.data();
+    
+      if(classData.data.createdBy != userId){
+        alert("You didnt create this class");
+        return;
+      }
+
+      if(classIsLevelUp != "No" && classIsLevelUp != "Yes"){
+        alert("Invalid input for is class level up.");
+        return;
+      }
+
+      if(classRequiresLab != "No" && classRequiresLab != "Yes"){
+        alert("Invalid input for is class requires lab.");
+        return;
+      }
+
+
       const classDocRef = doc(db, "availableClasses", classData.id);
+      var clu = "";
+      var clab = "";
+      if(classIsLevelUp == "Yes"){
+        clu = "UR";
+      }
+
+      if(classRequiresLab == "Yes"){
+        clab = "L";
+      }
+      console.log("Class level up stuff: ");
+      console.log(classLab);
+
+      console.log("Class lab stuff: ");
+      console.log(classLab);
+
+
       try {
         await updateDoc(classDocRef, {
           className: classNameEdit,
@@ -30,8 +80,8 @@ function ClassInfo({ className, toClassPage }) {
           classInitials: classInitials,
           classNumber: classNumber,
           classSection: classSection,
-
-          
+          classLevelUp: clu,
+          classExtension: clab,
         });
         alert("Changes saved successfully!");
       }catch (error) { // catch any errors if any
@@ -90,19 +140,23 @@ getDocs(classQuery).then((response) => {
   // if the classLevelUp from firebase is UR then it is a level up course
   if (class_from_response.at(0).data.classLevelUp === "UR") {
     setClassLevelUp("Yes");
+    setClassIsLevelUp("Yes");
   }
   // if the classLevelUp from firebase is not UR then it is not a level up course
   else {
     setClassLevelUp("No");
+    setClassIsLevelUp("No");
   }
 
   // if the classExtension from firebase is L then it has a lab
   if (class_from_response.at(0).data.classExtension === "L") {
     setClassLab("Yes");
+    setClassRequiresLab("Yes");
   }
   // if the classExtension from firebase is not L then it does not have a lab
   else {
     setClassLab("No");
+    setClassRequiresLab("No");
   }
 })
   }
@@ -197,12 +251,16 @@ getDocs(classQuery).then((response) => {
             <span className="info">{classToLeave.numberOfStudents}</span> {/*Pulled directly from firebase*/}
           </div>
           <div>
-            <span className="title">Level UP?: </span>
-            <span className="info">{classLevelUp}</span> {/*Pulled from const variables declared at top of code*/}
+            <label> Level UP?:</label>
+            <input type="text" value={classIsLevelUp} onChange={(e) => setClassIsLevelUp(e.target.value)} />
+
+
           </div>
           <div>
-            <span className="title">Requires Lab?: </span>
-            <span className="info">{classLab}</span> {/*Pulled from const variables declared at top of code*/}
+            <label> Requires Lab?:</label>
+            <input type="text" value={classRequiresLab} onChange={(e) => setClassRequiresLab(e.target.value)} />
+
+
           </div>
           <div>
 
