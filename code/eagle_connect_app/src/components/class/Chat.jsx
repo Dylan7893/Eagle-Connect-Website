@@ -131,7 +131,7 @@ function Chat({ className, email }) {
             key={each_class.id}
             name={each_class.name}
             message={each_class.message}
-            pfpUrl ={each_class.pfpUrl}
+            pfpUrl={each_class.pfpUrl}
           />
         ))}
       </div>
@@ -148,7 +148,10 @@ function Chat({ className, email }) {
               required
             />
           </form>
-          <button onClick={handleMessageSubmit}>Send</button>
+
+          <button className="blue-buttons" onClick={handleMessageSubmit}>
+            Send
+          </button>
         </div>
       </div>
     </>
@@ -158,20 +161,14 @@ function Chat({ className, email }) {
 function Message({ name, message, pfpUrl }) {
   return (
     <>
-    
       <div className="resource-box-no-line-user">
-        <img
-          src={pfpUrl}
-          alt="Profile Image"
-          className="profile-image"
-        />
+        <img src={pfpUrl} alt="Profile Image" className="profile-image" />
 
         <div className="resource">
           <div className="name">{name}</div>
           <div className="message">{message}</div>
         </div>
       </div>
-
     </>
   );
 }
@@ -180,11 +177,7 @@ function UserSentMessage({ name, message, pfpUrl }) {
   return (
     <>
       <div className="resource-box-no-line">
-        <img
-          src={pfpUrl}
-          alt="Profile Image"
-          className="profile-image"
-        />
+        <img src={pfpUrl} alt="Profile Image" className="profile-image" />
 
         <div className="resource">
           <div className="name">{name}</div>

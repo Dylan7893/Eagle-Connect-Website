@@ -12,8 +12,8 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-//Component where you can upload pdf documents for certain study resources or notes 
-function Notes({ className, email, }) {
+//Component where you can upload pdf documents for certain study resources or notes
+function Notes({ className, email }) {
   //form handling stuff
   const [title, setTitle] = useState(""); // title for notes
   const [notesUrl, setNotesURL] = useState(null); // for firebase storage purposes
@@ -24,7 +24,7 @@ function Notes({ className, email, }) {
   //this function will refresh the notes every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getAllNotes(); 
+      getAllNotes();
       getNameAndPfp();
     }, 100);
     return () => clearInterval(intervalId);
@@ -32,31 +32,33 @@ function Notes({ className, email, }) {
 
   //function for handling the uploaded note files
   async function handleNotesFileUpload() {
-    // prevents user from uploading same file and title 
+    // prevents user from uploading same file and title
     if (!notesUrl || !notesUrl.name) {
       alert("You have already uploaded this document or the file is missing.");
       return;
     }
 
-    const uniqueFileUrl = `${Date.now()}-${notesUrl.name}`;  //timestamp will avoid overwritting file in storage
-                          //took a while to debug, only most recent would be shown, but this line solved the issue
+    const uniqueFileUrl = `${Date.now()}-${notesUrl.name}`; //timestamp will avoid overwritting file in storage
+    //took a while to debug, only most recent would be shown, but this line solved the issue
     const storageRef = ref(storage, `notes/${email}/${uniqueFileUrl}`); //storage reference location
     const uploadTask = uploadBytesResumable(storageRef, notesUrl); //task to upload from that reference location
 
     //uploading the file
-    uploadTask.on('state_changed',
+    uploadTask.on(
+      "state_changed",
       (snapshot) => {
         //observe upload progress
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
       },
       (error) => {
         //handle errors
-        console.error('Upload failed:', error);
+        console.error("Upload failed:", error);
       },
       () => {
         //this will get the download URL once the upload is complete (this will be stored in storage)
-        console.log("notes upload is complete")
+        console.log("notes upload is complete");
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log(downloadURL);
           setNotesURL(downloadURL);
@@ -66,7 +68,7 @@ function Notes({ className, email, }) {
         });
       }
     );
-  };
+  }
   //function for getting the user's name and profile pic
   async function getNameAndPfp() {
     const userQuery = query(
@@ -74,7 +76,7 @@ function Notes({ className, email, }) {
       where("email", "==", email)
     );
 
-    //Use query to get user object (contains first name, last name, etc.) 
+    //Use query to get user object (contains first name, last name, etc.)
     getDocs(userQuery)
       .then((response) => {
         const users_from_response = response.docs.map((doc) => ({
@@ -101,7 +103,7 @@ function Notes({ className, email, }) {
       where("className", "==", className)
     );
 
-    //use query to get user object (contains first name, last name, etc.) 
+    //use query to get user object (contains first name, last name, etc.)
     getDocs(classQuery)
       .then((response) => {
         const class_from_responses = response.docs.map((doc) => ({
@@ -113,7 +115,7 @@ function Notes({ className, email, }) {
       .catch((error) => console.log(error));
   }
 
-  // this function will allow for the new notes to be uploaded 
+  // this function will allow for the new notes to be uploaded
   async function uploadNewNotesFile(x) {
     var class_id;
     getNameAndPfp();
@@ -157,64 +159,67 @@ function Notes({ className, email, }) {
     console.log("Handle url change called."); // debugging statement (will take out later)
     const selectedNotesFile = e.target.files[0]; // whatever file the user selects
     console.log(selectedNotesFile); // debugging statement (will take out later)
-    if (selectedNotesFile) { // ensures that user selected a file
+    if (selectedNotesFile) {
+      // ensures that user selected a file
       setNotesURL(selectedNotesFile); // set the url to the file that user selected
     }
   };
 
-return (
-  <>
-    {notes.map((each_class) => ( // mapping 
-      <Note // parent
-        key={each_class.id} // user id
-        name={each_class.name} // user name
-        title={each_class.title} // user uploaded file title
-        notesUrl={each_class.notesUrl} // user uploaded file full url
-        notesUrlName={each_class.notesUrlName} // user uploaded file display url
-        pfpUrl={each_class.pfpUrl} // user uploaded profile picture
-      />
-    ))}
-
-    <div class="add-resource-elements">
-      <form>
-        <div class="resource-field">
-          <label for="Title">Title:</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Enter Title"
-            required
-          />
-        </div>
-        <div class="resource-field">
-          <label for="url">Upload File:</label>
-          <input
-            type="file"
-            id="url"
-            accept="application/pdf"
-            onChange={handleURLChange}
-            placeholder="Choose File"
-            required
-          />
-        </div>
-      </form>
-      <button onClick={handleNotesFileUpload}>Submit</button>
-    </div>
-  </>
-);
-}
-
-function Note({ name, title, notesUrl, notesUrlName, pfpUrl}) {
   return (
     <>
-      <div class="resource-box"> 
-        <img
-          src={pfpUrl}
-          alt="Profile Image"
-          className="profile-image"
-        />
+      {notes.map(
+        (
+          each_class // mapping
+        ) => (
+          <Note // parent
+            key={each_class.id} // user id
+            name={each_class.name} // user name
+            title={each_class.title} // user uploaded file title
+            notesUrl={each_class.notesUrl} // user uploaded file full url
+            notesUrlName={each_class.notesUrlName} // user uploaded file display url
+            pfpUrl={each_class.pfpUrl} // user uploaded profile picture
+          />
+        )
+      )}
+
+      <div class="add-resource-elements">
+        <form>
+          <div class="resource-field">
+            <label for="Title">Title:</label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="Enter Title"
+              required
+            />
+          </div>
+          <div class="resource-field">
+            <label for="url">Upload File:</label>
+            <input
+              type="file"
+              id="url"
+              accept="application/pdf"
+              onChange={handleURLChange}
+              placeholder="Choose File"
+              required
+            />
+          </div>
+        </form>
+        <button className="blue-buttons" onClick={handleNotesFileUpload}>
+          Submit
+        </button>
+      </div>
+    </>
+  );
+}
+
+function Note({ name, title, notesUrl, notesUrlName, pfpUrl }) {
+  return (
+    <>
+      <div class="resource-box">
+        <img src={pfpUrl} alt="Profile Image" className="profile-image" />
 
         <div class="resource">
           <div class="name">{name}</div>

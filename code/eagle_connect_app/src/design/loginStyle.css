@@ -243,7 +243,7 @@ select {
   box-shadow: 0 0 10px rgba(0, 122, 254, 0.3); /* when hovering shadow */
 }
 
-button {
+.blue-buttons {
   padding: 10px 20px;
   width: 100%;
   background-color: #0729af;
@@ -254,8 +254,12 @@ button {
   transition: background-color 0.3s; /*transistion for changing the background color*/
 }
 
-button:hover {
+.blue-buttons:hover {
   background-color: #0056b3; /*when hovering the settings button color darkens*/
+  transform: scale(1.01); /* when hovering settings button enlarge*/
+}
+
+button:hover {
   transform: scale(1.01); /* when hovering settings button enlarge*/
 }
 
