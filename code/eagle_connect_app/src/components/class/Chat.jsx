@@ -12,21 +12,22 @@ import {
 } from "firebase/firestore";
 
 /*Component where you can send chat messages */
-function Chat({ className, email, updateEvent }) {
+function Chat({ className, email, updateEvent, userName }) {
   //form handling stuff
   const [message_to_send, setMessageToSend] = useState("");
   const [messages, setMessages] = useState([]);
   const [name, setName] = useState("Test");
   const [imgageUrl, setImageUrl] = useState("");
+  const [user_messages, setUserMessages] = useState([]);
   const messageContainerRef = useRef(null);
-  const [numOfMessages, setNumOfMessages] = useState(0);
+  
 
   //refresh the messages every 100ms
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getAllMessages();
       getNameAndPfp();
+      getAllMessages();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
@@ -64,7 +65,7 @@ function Chat({ className, email, updateEvent }) {
 
   async function getAllMessages() {
     /*Create query to get the user object from their email*/
-
+    await getNameAndPfp();
     const classQuery = query(
       collection(db, "availableClasses"),
       where("className", "==", className)
@@ -139,6 +140,7 @@ function Chat({ className, email, updateEvent }) {
             name={each_class.name}
             message={each_class.message}
             pfpUrl={each_class.pfpUrl}
+            userName = {userName}
           />
         ))}
         
@@ -166,7 +168,24 @@ function Chat({ className, email, updateEvent }) {
   );
 }
 
-function Message({ name, message, pfpUrl }) {
+function Message({ name, message, pfpUrl, userName }) {
+  //if the message is from the currently logged in user then we want to display it on the right side
+  //of the screen instead.
+  if(name == userName){
+    return(
+      <>
+      <div className="user-sent-message">
+        
+
+        <div className="resource">
+          <div className="name">{name}</div>
+          <div className="message">{message}</div>
+        </div>
+        <img src={pfpUrl} alt="Profile Image" className="profile-image" />
+      </div>
+    </>
+    );
+  }
   return (
     <>
       <div className="resource-box-no-line-user">

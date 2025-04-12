@@ -10,18 +10,52 @@ import Reminders from "./Reminders";
 import Chat from "./Chat";
 import Dashboard from "../dashboard/Dashboard";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from "../../firebase";
-
+import { auth, db } from "../../firebase";
+import {
+  collection,
+  getDocs,
+  arrayUnion,
+  updateDoc,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 function ClassPage({ className, email }) {
 
   const [user] = useAuthState(auth);
 
   const [sectionClicked, setSectionClicked] = useState("chat");
-
+  const[username, setUsername] = useState("");
   const messageContainerRef = useRef(null);
     //refresh the messages every 100ms
   
-  
+  useEffect(() => {
+      getUserName();
+    }, []);
+
+    function getUserName(){
+       const userQuery = query(
+             collection(db, "users"),
+             where("email", "==", email)
+           );
+       
+           /*Use query to get user object (contains first name, last name, etc.) */
+       
+           getDocs(userQuery)
+             .then((response) => {
+               const users_from_response = response.docs.map((doc) => ({
+                 data: doc.data(),
+                 id: doc.id,
+               }));
+               
+               var toSend;
+               toSend = users_from_response.at(0).data.firstName;
+               toSend += " ";
+               toSend += users_from_response.at(0).data.lastName;
+               setUsername(toSend);
+             })
+             .catch((error) => console.log(error));
+    }
     function scrollDown(){
       const el = messageContainerRef.current;
       if (el) {
@@ -50,7 +84,7 @@ function ClassPage({ className, email }) {
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
           <main className="main-section" ref ={messageContainerRef}>
-            <Chat className={className} email={email} updateEvent = {scrollDown} />
+            <Chat className={className} userName = {username} email={email} updateEvent = {scrollDown} />
             {/* end main */}
           </main>
         </>

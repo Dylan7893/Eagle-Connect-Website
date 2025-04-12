@@ -182,6 +182,14 @@ select {
   max-width: 1600px;
 }
 
+.user-sent-message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  max-width: 1600px;
+  justify-content: flex-end;
+}
+
 .resource-box-no-line-user {
   display: flex;
   margin-left: "100px";
