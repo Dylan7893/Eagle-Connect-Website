@@ -5,13 +5,13 @@
 }
 
 /*body*/
-body {
-  background-color: #f3f3f3; /*background color*/
-  display: flex; /*using flex layout*/
-  justify-content: space-evenly; /*distribute space evenly*/
-  align-items: center; /*centers the box*/
-  height: 100vh; /*make body fill all of the view*/
-}
+/*body { 
+ background-color: #fafafa; *//*background color*/
+  /*display: flex; */ /*using flex layout*/
+  /*justify-content: space-evenly; *//*distribute space evenly*/
+  /*align-items: center; *//*centers the box*/
+  /*height: 100vh;*/ /*make body fill all of the view*/
+/*}*/
 
 /* Error Message */
 .error-box {

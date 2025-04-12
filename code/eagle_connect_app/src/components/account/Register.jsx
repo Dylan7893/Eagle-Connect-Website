@@ -44,7 +44,7 @@ const Register = () => {
     if (!email.endsWith("@moreheadstate.edu")) {
       alert("Must be an MSU Email to Sign Up.");
     } else {
-      if (password == confirmPassword) {
+      if (password == confirmPassword) {  // if passwords match, creates the account successfully
         createUserWithEmailAndPassword(auth, email, password, firstName, lastName)
           .then((userCredential) => {
             console.log(userCredential);
@@ -52,14 +52,16 @@ const Register = () => {
               /*Add users info the database*/
             }
             databaseAddUser(userCredential);
-            navigate("/app");
+            navigate("/app"); // nagivate to dashboard
           })
-          .catch((error) => {
+          .catch((error) => { // if there's any error (user already has an account)
             console.log(error);
+            alert("User already exists. Please sign in."); // alerts user that they already have an account
+            setState("login"); // navigates them back to login screen
           });
       }
       else {
-        alert("Password doesn't match!")
+        alert("Password doesn't match!"); // if passwords don't match, alert user
       }
     }
   };

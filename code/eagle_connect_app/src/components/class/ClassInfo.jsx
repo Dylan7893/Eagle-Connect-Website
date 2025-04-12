@@ -3,6 +3,7 @@ import React from "react";
 import { auth, db } from "../../firebase";
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, where, arrayRemove, increment, doc, arrayUnion, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 // function for retrieving class information for the class info component
 function ClassInfo({ className, toClassPage }) {
@@ -19,14 +20,23 @@ function ClassInfo({ className, toClassPage }) {
   const [classIsLevelUp, setClassIsLevelUp] = useState("");
   const [classRequiresLab, setClassRequiresLab] = useState("");
 
+  const navigate = useNavigate();
+    navigate("/error-404");
+  
+try {
 
   useEffect(() => {
         getClassData();
     }, []);
+  }
+  catch(error)
+  {
+    navigate();
+  }
 
-
+  
     async function saveClassChanges(){
-
+      try {
     const user = auth.currentUser; // gets the current user from firebase authentication
 
     const userId = user.uid; // gets firebase authentication uid
@@ -40,17 +50,17 @@ function ClassInfo({ className, toClassPage }) {
     // this will hold all of the data/fields that is retreived from the user documents
     const userDocData = userDoc.data();
     
-      if(classData.data.createdBy != userId){
+      if(classData.data.createdBy !== userId){
         alert("You didnt create this class");
         return;
       }
 
-      if(classIsLevelUp != "No" && classIsLevelUp != "Yes"){
+      if(classIsLevelUp !== "No" && classIsLevelUp !== "Yes"){
         alert("Invalid input for is class level up.");
         return;
       }
 
-      if(classRequiresLab != "No" && classRequiresLab != "Yes"){
+      if(classRequiresLab !== "No" && classRequiresLab !== "Yes"){
         alert("Invalid input for is class requires lab.");
         return;
       }
@@ -59,11 +69,11 @@ function ClassInfo({ className, toClassPage }) {
       const classDocRef = doc(db, "availableClasses", classData.id);
       var clu = "";
       var clab = "";
-      if(classIsLevelUp == "Yes"){
+      if(classIsLevelUp === "Yes"){
         clu = "UR";
       }
 
-      if(classRequiresLab == "Yes"){
+      if(classRequiresLab === "Yes"){
         clab = "L";
       }
       console.log("Class level up stuff: ");
@@ -90,9 +100,15 @@ function ClassInfo({ className, toClassPage }) {
         alert("Failed to leave the class. Please try again.");
       }
     }
-
+  
+  catch(error)
+  {
+    navigate();
+  }
+    }
 
   function getClassData(){
+    try {
 //create class query to get the class object from the class name 
 const classQuery = query(
   collection(db, "availableClasses"),
@@ -160,11 +176,15 @@ getDocs(classQuery).then((response) => {
   }
 })
   }
-  
+  catch(error)
+  {
+    navigate();
+  }
+}
 
   //validate message
   async function handleLeaveClass() {
-
+    try {
     const user = auth.currentUser; // gets the current user from firebase authentication
 
     const userId = user.uid; // gets firebase authentication uid
@@ -210,11 +230,23 @@ getDocs(classQuery).then((response) => {
       alert("Failed to leave the class. Please try again.");
     }
   }
+  catch(error)
+  {
+    navigate();
+  }
+}
   // function for redirecting to dashboard 
   function toDashboard() {
+    try {
     toClassPage("none");
     handleLeaveClass();
   }
+  catch(error)
+  {
+    navigate();
+  }
+}
+
   return (
     <>
       <title>Class Information</title>
@@ -276,6 +308,5 @@ getDocs(classQuery).then((response) => {
     </>
   );
 }
-
 
 export default ClassInfo;
