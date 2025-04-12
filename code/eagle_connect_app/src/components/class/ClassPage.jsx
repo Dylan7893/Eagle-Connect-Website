@@ -1,6 +1,6 @@
 
 import "../../design/ClassPageStyle.css";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ClassTemplate from "./ClassTemplate";
 import ClassInfo from "./ClassInfo";
 import Notes from "./Notes";
@@ -17,6 +17,27 @@ function ClassPage({ className, email }) {
   const [user] = useAuthState(auth);
 
   const [sectionClicked, setSectionClicked] = useState("chat");
+
+  const messageContainerRef = useRef(null);
+    //refresh the messages every 100ms
+  
+  
+    function scrollDown(){
+      const el = messageContainerRef.current;
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    }
+  
+    /*
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        scrollDown();
+      }, 100);
+      return () => clearInterval(intervalId);
+    }, []);
+  */
+
   function handleCallBack(x) {
     setSectionClicked(x);
   }
@@ -28,8 +49,8 @@ function ClassPage({ className, email }) {
       return (
         <>
           <ClassTemplate toClassPage={handleCallBack} className={className} />
-          <main className="main-section">
-            <Chat className={className} email={email} />
+          <main className="main-section" ref ={messageContainerRef}>
+            <Chat className={className} email={email} updateEvent = {scrollDown} />
             {/* end main */}
           </main>
         </>

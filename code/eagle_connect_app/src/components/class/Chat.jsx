@@ -1,6 +1,6 @@
 import React from "react";
 import { auth, db } from "../../firebase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   collection,
   getDocs,
@@ -12,14 +12,17 @@ import {
 } from "firebase/firestore";
 
 /*Component where you can send chat messages */
-function Chat({ className, email }) {
+function Chat({ className, email, updateEvent }) {
   //form handling stuff
   const [message_to_send, setMessageToSend] = useState("");
   const [messages, setMessages] = useState([]);
   const [name, setName] = useState("Test");
   const [imgageUrl, setImageUrl] = useState("");
+  const messageContainerRef = useRef(null);
+  const [numOfMessages, setNumOfMessages] = useState(0);
 
   //refresh the messages every 100ms
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllMessages();
@@ -75,7 +78,8 @@ function Chat({ className, email }) {
           data: doc.data(),
           id: doc.id,
         }));
-        setMessages(class_from_responses.at(0).data.messages);
+        const messages = class_from_responses.at(0).data.messages;
+        setMessages(messages.slice(-20));
       })
       .catch((error) => console.log(error));
   }
@@ -110,7 +114,9 @@ function Chat({ className, email }) {
         }),
       });
     });
+    
     setMessages(messages);
+    updateEvent();
   }
 
   //validate message
@@ -125,7 +131,8 @@ function Chat({ className, email }) {
 
   return (
     <>
-      <div className="messages-container">
+      <div className="messages-container" ref = {messageContainerRef}>
+        
         {messages.map((each_class) => (
           <Message
             key={each_class.id}
@@ -134,6 +141,7 @@ function Chat({ className, email }) {
             pfpUrl={each_class.pfpUrl}
           />
         ))}
+        
       </div>
 
       <div class="bar">
