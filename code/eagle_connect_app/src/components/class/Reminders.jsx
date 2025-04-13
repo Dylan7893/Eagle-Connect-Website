@@ -21,6 +21,8 @@ function Reminders({ className, email }) {
   const [imgageUrl, setImageUrl] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
 
+
+
   //refresh the messages every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -35,31 +37,31 @@ function Reminders({ className, email }) {
   };
 
   async function getNameAndPfp() {
-    const userQuery = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(userQuery)
-      .then((response) => {
-        const users_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
-        var toSend;
-        toSend = users_from_response.at(0).data.firstName;
-        toSend += " ";
-        toSend += users_from_response.at(0).data.lastName;
-        setName(toSend);
-        setImageUrl(users_from_response.at(0).data.pfpUrl);
-      })
-      .catch((error) => console.log(error));
-  }
+        const userQuery = query(
+          collection(db, "users"),
+          where("email", "==", email)
+        );
+    
+        /*Use query to get user object (contains first name, last name, etc.) */
+    
+        getDocs(userQuery)
+          .then((response) => {
+            const users_from_response = response.docs.map((doc) => ({
+              data: doc.data(),
+              id: doc.id,
+            }));
+            {
+              /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+            }
+            var toSend;
+            toSend = users_from_response.at(0).data.firstName;
+            toSend += " ";
+            toSend += users_from_response.at(0).data.lastName;
+            setName(toSend);
+            setImageUrl(users_from_response.at(0).data.pfpUrl);
+          })
+          .catch((error) => console.log(error));
+      }
 
   async function getAllReminders() {
     /*Create query to get the user object from their email*/
@@ -83,46 +85,49 @@ function Reminders({ className, email }) {
   }
 
   async function uploadNewReminder() {
-    var class_id;
+      var class_id;
+  
+      getNameAndPfp();
 
-    getNameAndPfp();
+      const formatted = new Date(date);
 
-    const formatted = new Date(date);
+      setFormattedDate(formatted.toDateString());
 
-    setFormattedDate(formatted.toDateString());
+      console.log(formattedDate);
 
-    console.log(formattedDate);
-
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery).then((response) => {
-      const class_from_response = response.docs.map((doc) => ({
-        data: doc.data(),
-        id: doc.id,
-      }));
-      {
-        /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-      }
-      class_id = class_from_response.at(0).id;
-      const classDocRef = doc(db, "availableClasses", class_id);
-
-      updateDoc(classDocRef, {
-        reminders: arrayUnion({
-          name: name,
-          pfpurl: imgageUrl,
-          text: reminder_to_send,
-          date: formattedDate,
-        }),
+      const classQuery = query(
+        collection(db, "availableClasses"),
+        where("className", "==", className)
+      );
+  
+      /*Use query to get user object (contains first name, last name, etc.) */
+  
+      getDocs(classQuery).then((response) => {
+        const class_from_response = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        {
+          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+        }
+        class_id = class_from_response.at(0).id;
+        const classDocRef = doc(db, "availableClasses", class_id);
+        
+          updateDoc(classDocRef, {
+            reminders: arrayUnion({
+              name: name,
+              pfpurl: imgageUrl,
+              text: reminder_to_send,
+              date: formattedDate,
+            }),
+          });
+          console.log("PFP URL: ");
+          console.log(imgageUrl);
+        
+        
       });
-      console.log("PFP URL: ");
-      console.log(imgageUrl);
-    });
-  }
+      
+    }
 
   //validate message
   function handleReminderSubmit() {
@@ -135,6 +140,7 @@ function Reminders({ className, email }) {
   };
 
   const handleNewDateChange = (e) => {
+    
     setDate(e.target.value);
   };
   return (
@@ -145,7 +151,7 @@ function Reminders({ className, email }) {
             key={each_class.id}
             name={each_class.name}
             text={each_class.text}
-            date={each_class.date}
+            date = {each_class.date}
             pfpurl={each_class.pfpurl}
           />
         ))}
@@ -170,20 +176,25 @@ function Reminders({ className, email }) {
               required
             />
           </form>
-          <button className="blue-buttons" onClick={handleReminderSubmit}>
-            Send
-          </button>
+          <button onClick={handleReminderSubmit}>Send</button>
         </div>
       </div>
     </>
   );
 }
 
-function Reminder({ name, pfpurl, text, date }) {
-  return (
+function Reminder({name, pfpurl, text, date}){
+
+
+
+  return(
     <>
       <div className="resource-box-no-line">
-        <img src={pfpurl} alt="Profile Image" className="profile-image" />
+        <img
+          src={pfpurl}
+          alt="Profile Image"
+          className="profile-image"
+        />
 
         <div className="resource">
           <div className="name">{name}</div>
@@ -192,6 +203,6 @@ function Reminder({ name, pfpurl, text, date }) {
         </div>
       </div>
     </>
-  );
+  )
 }
 export default Reminders;

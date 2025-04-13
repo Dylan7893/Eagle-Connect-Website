@@ -17,18 +17,17 @@ import "../../design/dashboard2Style.css";
 function Classes({ email }) {
   const [classes, setClasses] = useState([]);
   const [userJoinedClasses, setUserJoinedClasses] = useState([]);
-  const [notUserJoinedClasses, setNotUserJoinedClasses] = useState([]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       getClasses();
+      getUserJoinedClasses();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
-  function getUserJoinedClasses() {
+  const getUserJoinedClasses = async () => {
     let userJoinedClassesArr = [];
-    console.log("get user classes called");
 
     const userQuery = query(
       collection(db, "users"),
@@ -49,14 +48,13 @@ function Classes({ email }) {
         }
         users_from_response.at(0).data.joinedClasses.forEach((item, index) => {
           userJoinedClassesArr.push(item.className);
+
         });
+        setUserJoinedClasses(userJoinedClassesArr);
       })
       .catch((error) => console.log(error));
-    console.log("user joined classes array: ");
-    console.log(userJoinedClassesArr);
-    setUserJoinedClasses(userJoinedClassesArr);
-    console.log("User joined classes use state thing: ");
-    console.log(userJoinedClasses);
+    //console.log("user joined classes array: ");
+    //console.log(userJoinedClassesArr);
   }
   // Function to handle getting the availableClasses collection
   function getClasses() {
@@ -85,62 +83,116 @@ function Classes({ email }) {
 
     // Gets the user document reference from firestore with auth uid
     const userDocRef = doc(db, "users", userId);
-
+    var shouldJoinClass = true;
     // Gets the class document reference from firestore with class id
     const classDocRef = doc(db, "availableClasses", classToJoin.id);
+    await getUserJoinedClasses();
+    userJoinedClasses.forEach((item, index) => {
+      if (item == classToJoin.data.className) {
+        alert("Already joined this class.");
+        shouldJoinClass = false;
+        return;
+      }
+
+    });
+
 
     // adds the class to the joinedClasses array
     // users can now successfully join a class from avaiable class sidebar
-    try {
-      await updateDoc(userDocRef, {
-        joinedClasses: arrayUnion({
-          classInitials: classToJoin.data.classInitials.toUpperCase(),
-          classNumber: classToJoin.data.classNumber,
-          classExtension: classToJoin.data.classExtension,
-          classSection: classToJoin.data.classSection,
-          classLevelUp: classToJoin.data.classLevelUp,
-          className: classToJoin.data.className.toUpperCase(),
-          joinedAt: new Date(),
-        }),
-      });
+    console.log("we are inside join class. this is userJoined classes: " + userJoinedClasses);
+    if (shouldJoinClass) {
+      try {
+        await updateDoc(userDocRef, {
+          joinedClasses: arrayUnion({
+            classInitials: classToJoin.data.classInitials.toUpperCase(),
+            classNumber: classToJoin.data.classNumber,
+            classExtension: classToJoin.data.classExtension,
+            classSection: classToJoin.data.classSection,
+            classLevelUp: classToJoin.data.classLevelUp,
+            className: classToJoin.data.className.toUpperCase(),
+            joinedAt: new Date(),
+          }),
+        });
 
-      // each time a class is joined, the number of students will increment by one each time
-      await updateDoc(classDocRef, {
-        numberOfStudents: increment(1),
-      });
 
-      console.log("Class successfully joined!");
-    } catch (error) {
-      console.log("Error joining class:", error);
-      alert("Failed to join the class. Please try again.");
+        // each time a class is joined, the number of students will increment by one each time
+        await updateDoc(classDocRef, {
+          numberOfStudents: increment(1),
+        });
+
+        console.log("Class successfully joined!");
+      } catch (error) {
+        console.log("Error joining class:", error);
+        alert("Failed to join the class. Please try again.");
+      }
     }
+
   }
 
   return (
     <>
       {classes.map((each_class) => (
         <li className="class-list-item">
-          <div>
-            <h3>{each_class.data.className}</h3>
-            <p>
-              {" "}
-              {each_class.data.classInitials}-{each_class.data.classNumber}
-              {each_class.data.classExtension}-{each_class.data.classSection}
-              {each_class.data.classLevelUp}{" "}
-            </p>
-            <p> Students: {each_class.data.numberOfStudents} </p>
-
-            <button
-              className="blue-buttons"
-              onClick={() => joinClass(each_class)}
-            >
-              Join
-            </button>
-          </div>
+          <Class classDataStuff={each_class} joinClassCallback={joinClass} userJoinedClasses={userJoinedClasses} />
         </li>
       ))}
+
     </>
   );
 }
+function Class({ classDataStuff, joinClassCallback, userJoinedClasses }) {
+  var classAlreadyJoined = false;
+  userJoinedClasses.forEach((item, index) => {
+    if (item == classDataStuff.data.className) {
+      classAlreadyJoined = true;
+        }
 
+  });
+
+  if(classAlreadyJoined){
+    return (
+      <>
+        <div>
+          <h3>{classDataStuff.data.className}</h3>
+          <p>
+            {" "}
+            {classDataStuff.data.classInitials}-{classDataStuff.data.classNumber}
+            {classDataStuff.data.classExtension}-{classDataStuff.data.classSection}
+            {classDataStuff.data.classLevelUp}{" "}
+          </p>
+          <p> Students: {classDataStuff.data.numberOfStudents} </p>
+  
+          <button
+            className="blue-buttons"
+            onClick={() => joinClassCallback(classDataStuff)}
+          >
+            Already Joined
+          </button>
+        </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <div>
+        <h3>{classDataStuff.data.className}</h3>
+        <p>
+          {" "}
+          {classDataStuff.data.classInitials}-{classDataStuff.data.classNumber}
+          {classDataStuff.data.classExtension}-{classDataStuff.data.classSection}
+          {classDataStuff.data.classLevelUp}{" "}
+        </p>
+        <p> Students: {classDataStuff.data.numberOfStudents} </p>
+
+        <button
+          className="blue-buttons"
+          onClick={() => joinClassCallback(classDataStuff)}
+        >
+          Join
+        </button>
+      </div>
+    </>
+  );
+
+}
 export default Classes;
