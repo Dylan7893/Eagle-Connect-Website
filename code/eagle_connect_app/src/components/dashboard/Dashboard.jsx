@@ -7,10 +7,10 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import Classes from "./Classes";
 import { db } from "../../firebase";
 import JoinedClasses from "./JoinedClasses";
-import CreateClass from "./CreateClass";
-import defaultImage from "../../design/default_pfp.jpg";
 import ClassPage from "../class/ClassPage";
 import ProfilePage from "../profile/ProfilePage";
+import JoinedClass from "./JoinedClass";
+
 
 {
   /*Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database */
@@ -24,6 +24,47 @@ function Dashboard({ email }) {
   //for search all functionality
   const [searchInput, setSearchInput] = useState(""); //string state variable and function to set it
   const [classInfo, setClassInfo] = useState([]); //list state variable and function to set it
+  const [joinedClasses, setJoinedClasses] = useState([]);
+
+      useEffect(() => {
+        //function to retreive searched classes
+        const getJoinedClasses = async () =>{
+          {
+            /*Create query to get the user object from their email*/
+          }
+          const userQuery = query(
+            collection(db, "users"),
+            where("email", "==", email)
+          );
+      
+          {
+            /*Use query to get user object (contains first name, last name, etc.) */
+          }
+          getDocs(userQuery)
+            .then((response) => {
+              const users_from_response = response.docs.map((doc) => ({
+                data: doc.data(),
+                id: doc.id,
+              }));
+              {
+                /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+              }
+      
+              {
+                /*Get the joined classes from the user*/
+              }
+              //console.log("user from response joined classes: ", users_from_response.at(0).data.joinedClasses);
+              setJoinedClasses(users_from_response.at(0).data.joinedClasses);
+              //users_from_response.at(0).joinedClasses.array.forEach(element => {
+                //console.log(element);
+              //});
+            })
+            .catch((error) => console.log(error));
+        }
+    
+        //call back to the get classes function whenever the search input changes
+        getJoinedClasses();
+      }, [joinedClasses]);
 
   //functionality for searching all available classes
   useEffect(() => {
@@ -66,7 +107,7 @@ function Dashboard({ email }) {
   {
     /*Used for changing the componenet to the class template page*/
   }
-  const [classClicked, setClassClicked] = useState("none");
+  const [classClickedID, setClassClickedID] = useState("none");
   const [isProfilePage, setProfilePage] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
 
@@ -98,7 +139,7 @@ function Dashboard({ email }) {
   }
 
   function handleClassChange(x) {
-    setClassClicked(x);
+    setClassClickedID(x);
   }
 
   function toProfilePage() {
@@ -112,7 +153,7 @@ function Dashboard({ email }) {
       </>
     );
   }
-  if (classClicked == "none") {
+  if (classClickedID == "none") {
     return (
       <>
         {/* navigation header */}
@@ -200,10 +241,12 @@ function Dashboard({ email }) {
           <section className="joined-classes">
             <h2>Joined Classes</h2>
             <div className="joined-classes-layout">
-              <JoinedClasses
-                toDashboardCallBack={handleClassChange}
-                email={email}
-              />
+              {joinedClasses.map((each_class) => (
+                <JoinedClass
+                  classID={each_class}
+                  toParentCallBack={handleClassChange}
+                />
+              ))}
 
               {/* end main layout */}
             </div>
@@ -221,10 +264,11 @@ function Dashboard({ email }) {
   } else {
     return (
       <>
-        <ClassPage className={classClicked} email={email} />
+        <ClassPage classID={classClickedID} email={email} />
       </>
     );
   }
 }
+
 
 export default Dashboard;

@@ -6,8 +6,8 @@ import { collection, getDocs, query, where, arrayRemove, increment, doc, arrayUn
 import { useNavigate } from "react-router-dom";
 
 // function for retrieving class information for the class info component
-function ClassInfo({ className, toClassPage }) {
-  const [classData, setClassData] = useState(""); // this will hold all of the class data that is pulled from firebase
+function ClassInfo({ classID, toClassPage }) {
+  const [classData, setClassData] = useState(null); // this will hold all of the class data that is pulled from firebase
   const [classToLeave, setClassToLeave] = useState(""); // this will hold all of the class info that user wants to leave that is pulled from firebase
   const [classLevel, setClassLevel] = useState(""); // this will hold what level the class is (fresh, soph, jun, sen.)
   const [classLevelUp, setClassLevelUp] = useState(""); // this will hold if class is a level up class 
@@ -19,15 +19,14 @@ function ClassInfo({ className, toClassPage }) {
   const [classSection, setClassSection] = useState("")
   const [classIsLevelUp, setClassIsLevelUp] = useState("");
   const [classRequiresLab, setClassRequiresLab] = useState("");
-
+  const [shouldGetClassData, setShouldGetClassData] = useState(true);
   const navigate = useNavigate();
-    navigate("/error-404");
   
 try {
 
   useEffect(() => {
         getClassData();
-    }, []);
+    }, [classData]);
   }
   catch(error)
   {
@@ -36,6 +35,9 @@ try {
 
   
     async function saveClassChanges(){
+      console.log("Save class changes called");
+      console.log(classDescription);
+      console.log(classNumber);
       try {
     const user = auth.currentUser; // gets the current user from firebase authentication
 
@@ -49,8 +51,8 @@ try {
 
     // this will hold all of the data/fields that is retreived from the user documents
     const userDocData = userDoc.data();
-    
-      if(classData.data.createdBy !== userId){
+
+      if(classData.createdBy !== userId){
         alert("You didnt create this class");
         return;
       }
@@ -66,7 +68,7 @@ try {
       }
 
 
-      const classDocRef = doc(db, "availableClasses", classData.id);
+      const classDocRef = doc(db, "availableClasses", classID.classID);
       var clu = "";
       var clab = "";
       if(classIsLevelUp === "Yes"){
@@ -107,45 +109,42 @@ try {
   }
     }
 
-  function getClassData(){
-    try {
-//create class query to get the class object from the class name 
-const classQuery = query(
-  collection(db, "availableClasses"),
-  where("className", "==", className),
-);
+  const getClassData = async () => {
 
-// use query to get class object (contains all class data) 
-getDocs(classQuery).then((response) => {
-  const class_from_response = response.docs.map((doc) => ({
-    data: doc.data(),
-    id: doc.id,
-  }));
-  setClassData(class_from_response.at(0)) // this will store all the class info in the classData variable 
-  setClassToLeave(class_from_response.at(0).data) // this will store all the class info in the classData variable 
-  setClassDescription(class_from_response.at(0).data.description);
-  setClassNameEdit(class_from_response.at(0).data.className);
-  setClassInitials(class_from_response.at(0).data.classInitials);
-  setClassNumber(class_from_response.at(0).data.classNumber);
-  setClassSection(class_from_response.at(0).data.classSection);
+    if(shouldGetClassData){
+      console.log("get class data called");
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+    const classSnap = await getDoc(classDocRef);
+    if (classSnap.exists) {
+      const thisclassData = classSnap.data();
+      console.log("class data: ", thisclassData);
+      setClassData(thisclassData);
+      // this will store all the class info in the classData variable 
+  setClassToLeave(thisclassData) // this will store all the class info in the classData variable 
+  setClassDescription(thisclassData.description);
+  setClassNameEdit(thisclassData.className);
+  setClassInitials(thisclassData.classInitials);
+  setClassNumber(thisclassData.classNumber);
+  setClassSection(thisclassData.classSection);
+  setShouldGetClassData(false);
   // if the class number is between 100-199, then the classLevel variable will be a freshmen level course
-  if (class_from_response.at(0).data.classNumber < 200) {
+  if (thisclassData.classNumber < 200) {
     setClassLevel("Freshman");
   }
   // if the class number is between 200-299, then the classLevel variable will be a sophomore level course
-  else if (class_from_response.at(0).data.classNumber >= 200 && class_from_response.at(0).data.classNumber < 300) {
+  else if (thisclassData.classNumber >= 200 && thisclassData.classNumber < 300) {
     setClassLevel("Sophomore");
   }
   // if the class number is between 300-399, then the classLevel variable will be a junior level course
-  else if (class_from_response.at(0).data.classNumber >= 300 && class_from_response.at(0).data.classNumber < 400) {
+  else if (thisclassData.classNumber >= 300 && thisclassData.classNumber < 400) {
     setClassLevel("Junior");
   }
   // if the class number is between 400-499, then the classLevel variable will be a senior level course
-  else if (class_from_response.at(0).data.classNumber >= 400 && class_from_response.at(0).data.classNumber < 500) {
+  else if (thisclassData.classNumber >= 400 && thisclassData.classNumber < 500) {
     setClassLevel("Senior");
   }
   // if the class number is 500 or above, then the classLevel variable will be a graduate level course
-  else if (class_from_response.at(0).data.classNumber >= 500) {
+  else if (thisclassData.classNumber >= 500) {
     setClassLevel("Graduate");
   }
   // else any user input error for class number
@@ -154,7 +153,7 @@ getDocs(classQuery).then((response) => {
   }
 
   // if the classLevelUp from firebase is UR then it is a level up course
-  if (class_from_response.at(0).data.classLevelUp === "UR") {
+  if (thisclassData.classLevelUp === "UR") {
     setClassLevelUp("Yes");
     setClassIsLevelUp("Yes");
   }
@@ -165,7 +164,7 @@ getDocs(classQuery).then((response) => {
   }
 
   // if the classExtension from firebase is L then it has a lab
-  if (class_from_response.at(0).data.classExtension === "L") {
+  if (thisclassData.classExtension === "L") {
     setClassLab("Yes");
     setClassRequiresLab("Yes");
   }
@@ -174,13 +173,16 @@ getDocs(classQuery).then((response) => {
     setClassLab("No");
     setClassRequiresLab("No");
   }
-})
+
+    } else {
+      console.log("get class data classnap does not exist.");
+    }
+    }
+    
   }
-  catch(error)
-  {
-    navigate();
-  }
-}
+    
+    
+          
 
   //validate message
   async function handleLeaveClass() {
@@ -199,14 +201,12 @@ getDocs(classQuery).then((response) => {
     const userDocData = userDoc.data();
 
     // gets the class document reference from firestore with class id
-    const classDocRef = doc(db, "availableClasses", classData.id);
+    const classDocRef = doc(db, "availableClasses", classID.classID);
 
     // this will search through the joinedClasses array and find the class that matches
     // the class that the user wants to leave
     const specificJoinedClass = userDocData.joinedClasses.find((classToFind) =>
-      classToFind.className === classToLeave.className &&
-      classToFind.classNumber === classToLeave.classNumber &&
-      classToFind.classSection === classToLeave.classSection
+      classToFind.classID === classID.classID
     );
 
     // removes the class from the joinedClasses array
@@ -246,7 +246,7 @@ getDocs(classQuery).then((response) => {
     navigate();
   }
 }
-
+if(classData != null){
   return (
     <>
       <title>Class Information</title>
@@ -307,6 +307,15 @@ getDocs(classQuery).then((response) => {
       </div>
     </>
   );
+}else{
+  return(
+    <>
+    <p>Loading I guess?</p>
+    <p>Class data is null.</p>
+    </>
+  )
+}
+  
 }
 
 export default ClassInfo;

@@ -20,7 +20,7 @@ import {
   where,
   doc,
 } from "firebase/firestore";
-function ClassPage({ className, email }) {
+function ClassPage({ classID, email }) {
 
   const [user] = useAuthState(auth);
 
@@ -82,9 +82,9 @@ function ClassPage({ className, email }) {
     case "chat":
       return (
         <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section" ref ={messageContainerRef}>
-            <Chat className={className} userName = {username} email={email} updateEvent = {scrollDown} />
+            <Chat classID={classID} userName = {username} email={email} updateEvent = {scrollDown} />
             {/* end main */}
           </main>
         </>
@@ -93,9 +93,9 @@ function ClassPage({ className, email }) {
     case "notes":
       return (
         <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
-            <Notes className={className} email={email} />
+            <Notes classID={classID} email={email} />
             {/* end main */}
           </main>
         </>
@@ -104,9 +104,9 @@ function ClassPage({ className, email }) {
     case "reminders":
       return (
         <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
-            <Reminders className={className} email={email} />
+            <Reminders classID={classID} email={email} />
             {/* end main */}
           </main>
         </>
@@ -115,9 +115,9 @@ function ClassPage({ className, email }) {
     case "resources":
       return (
         <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
-            <Resources className={className} email={email} />
+            <Resources classID={classID} email={email} />
             {/* end main */}
           </main>
         </>
@@ -126,9 +126,9 @@ function ClassPage({ className, email }) {
     case "rate":
       return (
         <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
-            <RateClass className={className} email={email} />
+            <RateClass classID={classID} email={email} />
             {/* end main */}
           </main>
         </>
@@ -137,9 +137,9 @@ function ClassPage({ className, email }) {
       case "info":
       return (
         <>
-          <ClassTemplate toClassPage={handleCallBack} className={className} />
+          <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
-            <ClassInfo className={className} toClassPage={handleCallBack}/>
+            <ClassInfo classID={classID} toClassPage={handleCallBack}/>
             {/* end main */}
           </main>
         </>

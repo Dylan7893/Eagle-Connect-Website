@@ -9,10 +9,11 @@ import {
   query,
   where,
   doc,
+  getDoc,
 } from "firebase/firestore";
 
 /*Component where you can send chat messages */
-function Reminders({ className, email }) {
+function Reminders({ classID, email }) {
   //form handling stuff
   const [reminder_to_send, setReminderToSend] = useState("");
   const [reminders, setReminders] = useState([]);
@@ -64,24 +65,13 @@ function Reminders({ className, email }) {
       }
 
   async function getAllReminders() {
-    /*Create query to get the user object from their email*/
+   const classDocRef = doc(db, "availableClasses", classID.classID);
+       const classSnap = await getDoc(classDocRef);
+       const thisclassData = classSnap.data();
 
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setReminders(class_from_responses.at(0).data.reminders);
-      })
-      .catch((error) => console.log(error));
+    
+      setReminders(thisclassData.reminders);
+     
   }
 
   async function uploadNewReminder() {
@@ -95,23 +85,8 @@ function Reminders({ className, email }) {
 
       console.log(formattedDate);
 
-      const classQuery = query(
-        collection(db, "availableClasses"),
-        where("className", "==", className)
-      );
-  
-      /*Use query to get user object (contains first name, last name, etc.) */
-  
-      getDocs(classQuery).then((response) => {
-        const class_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
-        class_id = class_from_response.at(0).id;
-        const classDocRef = doc(db, "availableClasses", class_id);
+      
+        const classDocRef = doc(db, "availableClasses", classID.classID);
         
           updateDoc(classDocRef, {
             reminders: arrayUnion({
@@ -124,8 +99,7 @@ function Reminders({ className, email }) {
           console.log("PFP URL: ");
           console.log(imgageUrl);
         
-        
-      });
+    
       
     }
 

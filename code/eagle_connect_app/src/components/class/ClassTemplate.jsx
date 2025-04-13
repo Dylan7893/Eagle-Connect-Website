@@ -2,7 +2,7 @@ import "../../design/ClassPageStyle.css";
 import React, { useState } from "react"; 
 
 
-function ClassTemplate({ toClassPage, className }) {
+function ClassTemplate({ toClassPage, classID, className }) {
 
   const [sectionTitle, setSectionTitle] = useState("Chat"); // this will be used to see what component the user is clicked on at top right
                                                                       // corner of page

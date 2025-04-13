@@ -11,10 +11,11 @@ import {
   where,
   doc,
   increment,
+  getDoc,
 } from "firebase/firestore";
 
 /*Component where you can send chat messages */
-function RateClass({ className, email }) {
+function RateClass({ classID, email }) {
   //form handling stuff
   const [feedBackToSend, setFeedbackToSend] = useState("");
   const [ratings, setRatings] = useState([]);
@@ -24,6 +25,24 @@ function RateClass({ className, email }) {
   const [canRate, setCanRate] = useState(true);
   const [numberOfRatings, setNumberOfRatings] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
+  const [classData, setClassData] = useState([]);
+
+  useEffect(() => {
+    const getClassData = async () =>{
+      const classDocRef = doc(db, "availableClasses", classID.classID);
+          const classSnap = await getDoc(classDocRef);
+          if(classSnap.exists){
+            const thisclassData = classSnap.data();
+    
+            setClassData(thisclassData);
+          }else{
+            console.log("getclass data classnap no exist");
+          }
+    }
+    getClassData();
+  }, [classData]);
+
+
   //refresh the messages every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -36,81 +55,61 @@ function RateClass({ className, email }) {
     return () => clearInterval(intervalId);
   }, []);
 
-  function getAverageRating() {
+  const getAverageRating = async () => {
     let ratings = [];
     let average = 0.0;
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        class_from_responses.at(0).data.ratings.forEach((item, index) => {
-          ratings.push(item.rating);
-        });
-        ratings.forEach((item, index) => {
-          average += parseFloat(item);
-        });
-        average = average / ratings.length;
-        setAverageRating(average);
-        console.log(average);
-      })
-      .catch((error) => console.log(error));
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+          const classSnap = await getDoc(classDocRef);
+          if(classSnap.exists){
+            const thisclassData = classSnap.data();
+            thisclassData.ratings.forEach((item, index) => {
+              ratings.push(item.rating);
+            });
+            ratings.forEach((item, index) => {
+              average += parseFloat(item);
+            });
+            average = average / ratings.length;
+            setAverageRating(average);
+            
+          }else{
+            console.log("getAveragerating data classnap no exist");
+          }
   }
-  function getNumberOfRatings() {
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
+  const getNumberOfRatings = async () => {
 
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setNumberOfRatings(class_from_responses.at(0).data.numberOfRatings);
-      })
-      .catch((error) => console.log(error));
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+          const classSnap = await getDoc(classDocRef);
+          if(classSnap.exists){
+            const thisclassData = classSnap.data();
+    
+            setNumberOfRatings(thisclassData.numberOfRatings);
+          }else{
+            console.log("getnumofratings class snap does not exist");
+          }
+          
   }
   const handleClearFeedback = () => {
     setFeedbackToSend("");
   };
 
-  function canUserRate() {
+  const canUserRate = async () => {
     let ratingEmails = [];
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
+    
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+          const classSnap = await getDoc(classDocRef);
+          if(classSnap.exists){
+            const thisclassData = classSnap.data();
 
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        class_from_responses.at(0).data.ratings.forEach((item, index) => {
-          ratingEmails.push(item.email);
-        });
-        ratingEmails.forEach((element) => {
-          if (element == email) {
-            setCanRate(false);
+            thisclassData.ratings.forEach((item, index) => {
+              ratingEmails.push(item.email);
+            });
+            ratingEmails.forEach((element) => {
+              if (element == email) {
+                setCanRate(false);
+              }
+            });
           }
-        });
-      })
-      .catch((error) => console.log(error));
+          
   }
   async function getNameAndPfp() {
     const userQuery = query(
@@ -139,25 +138,20 @@ function RateClass({ className, email }) {
       .catch((error) => console.log(error));
   }
 
-  async function getAllRatings() {
+  const getAllRatings = async () => {
     /*Create query to get the user object from their email*/
 
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setRatings(class_from_responses.at(0).data.ratings);
-      })
-      .catch((error) => console.log(error));
+          const classDocRef = await doc(db, "availableClasses", classID.classID);
+          const classSnap = await getDoc(classDocRef);
+          if(classSnap.exists){
+            const thisclassData = classSnap.data();
+            setRatings(thisclassData.ratings);
+          }else{
+            console.log("class snap dont exist");
+          }
+          
+        
+      
   }
 
   async function uploadNewRating() {
@@ -165,23 +159,7 @@ function RateClass({ className, email }) {
 
     getNameAndPfp();
     await canUserRate();
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery).then((response) => {
-      const class_from_response = response.docs.map((doc) => ({
-        data: doc.data(),
-        id: doc.id,
-      }));
-      {
-        /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-      }
-      class_id = class_from_response.at(0).id;
-      const classDocRef = doc(db, "availableClasses", class_id);
+      const classDocRef = doc(db, "availableClasses", classID.classID);
       if (canRate) {
         updateDoc(classDocRef, {
           ratings: arrayUnion({
@@ -200,7 +178,7 @@ function RateClass({ className, email }) {
       } else {
         alert("You have already rated.");
       }
-    });
+    
   }
 
   //validate rating
@@ -216,9 +194,7 @@ function RateClass({ className, email }) {
   function handleRatingChange(x) {
     setStarRating(x);
   }
-  function test() {
-    alert(starRating);
-  }
+ 
   return (
     <>
       <div className="rate-info">

@@ -59,14 +59,7 @@ const MyPopup = ({ isOpen, closePopup }) => { // popup menu
           // this will update the joined classes for the user immediately after the user creates the class
           await updateDoc(userDocRef, {
             joinedClasses: arrayUnion({
-                classId: createClassRef.id, // joined created class id
-                classInitials: classInitials.toUpperCase(), // joined created class abbrev. CS, MATH, EEC
-                classNumber: classNumber, // joined created class number 170, 308, 355
-                classExtension: classExtension, // joined created class extension L, C, D
-                classSection: classSection, // joined created class section 001, 002, 700
-                classLevelUp: classLevelUp, // joined created class levelUp UR
-                className: className.toUpperCase(), // joined created class name Intro to Computer Science
-                joinedAt: new Date(), // timestamp for joined the created class
+                classID: createClassRef.id, // joined created class id
             }),
         });
 

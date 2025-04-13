@@ -104,13 +104,7 @@ function Classes({ email }) {
       try {
         await updateDoc(userDocRef, {
           joinedClasses: arrayUnion({
-            classInitials: classToJoin.data.classInitials.toUpperCase(),
-            classNumber: classToJoin.data.classNumber,
-            classExtension: classToJoin.data.classExtension,
-            classSection: classToJoin.data.classSection,
-            classLevelUp: classToJoin.data.classLevelUp,
-            className: classToJoin.data.className.toUpperCase(),
-            joinedAt: new Date(),
+            classID: classToJoin.id,
           }),
         });
 
@@ -195,4 +189,7 @@ function Class({ classDataStuff, joinClassCallback, userJoinedClasses }) {
   );
 
 }
+
+
+
 export default Classes;

@@ -9,10 +9,11 @@ import {
   query,
   where,
   doc,
+  getDoc,
 } from "firebase/firestore";
 
 /*Component where you can send chat messages */
-function Chat({ className, email, updateEvent, userName }) {
+function Chat({ classID, email, updateEvent, userName }) {
   //form handling stuff
   const [message_to_send, setMessageToSend] = useState("");
   const [messages, setMessages] = useState([]);
@@ -66,23 +67,11 @@ function Chat({ className, email, updateEvent, userName }) {
   async function getAllMessages() {
     /*Create query to get the user object from their email*/
     await getNameAndPfp();
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
 
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        const messages = class_from_responses.at(0).data.messages;
-        setMessages(messages.slice(-20));
-      })
-      .catch((error) => console.log(error));
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+    const classSnap = await getDoc(classDocRef);
+    const thisclassData = classSnap.data();
+    setMessages(thisclassData.messages.slice(-20));
   }
 
   async function uploadNewMessage() {
@@ -90,23 +79,8 @@ function Chat({ className, email, updateEvent, userName }) {
 
     getNameAndPfp();
 
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery).then((response) => {
-      const class_from_response = response.docs.map((doc) => ({
-        data: doc.data(),
-        id: doc.id,
-      }));
-      {
-        /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-      }
-      class_id = class_from_response.at(0).id;
-      const classDocRef = doc(db, "availableClasses", class_id);
+    
+      const classDocRef = doc(db, "availableClasses", classID.classID);
       updateDoc(classDocRef, {
         messages: arrayUnion({
           name: name,
@@ -114,7 +88,7 @@ function Chat({ className, email, updateEvent, userName }) {
           pfpUrl: imgageUrl,
         }),
       });
-    });
+    
     
     setMessages(messages);
     updateEvent();

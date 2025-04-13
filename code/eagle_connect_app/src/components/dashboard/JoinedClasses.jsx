@@ -101,14 +101,7 @@ function JoinedClass({
           {extension}-{section}
           {levelUp}{" "}
         </p>
-        {/*  <div className="joined-class-actions">
-          <button className="action-button">⭐</button>
-          <button className="action-button">⚙️</button>
-          <button className="action-button">...</button>
-         
-        </div> */}
-        {/* end joined class actions */}
-        {/* end joined class card */}
+
       </div>
     </>
   );

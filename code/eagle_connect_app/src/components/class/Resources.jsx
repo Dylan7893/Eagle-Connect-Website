@@ -9,10 +9,11 @@ import {
   query,
   where,
   doc,
+  getDoc,
 } from "firebase/firestore";
 
 /*Component where you can post links for certain study resources */
-function Resources({ className, email }) {
+function Resources({ classID, email }) {
   //form handling stuff
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
@@ -57,22 +58,10 @@ function Resources({ className, email }) {
   }
 
   async function getAllResources() {
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(classQuery)
-      .then((response) => {
-        const class_from_responses = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setResources(class_from_responses.at(0).data.resources);
-      })
-      .catch((error) => console.log(error));
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+        const classSnap = await getDoc(classDocRef);
+        const thisclassData = classSnap.data();
+        setResources(thisclassData.resources);
   }
 
   async function uploadNewLink() {
@@ -83,24 +72,9 @@ function Resources({ className, email }) {
     console.log("pfpUrl: " + imgageUrl);
     var class_id;
     getNameAndPfp();
-    const classQuery = query(
-      collection(db, "availableClasses"),
-      where("className", "==", className)
-    );
 
-    {
-      /*Use query to get user object (contains first name, last name, etc.) */
-    }
-    getDocs(classQuery).then((response) => {
-      const class_from_response = response.docs.map((doc) => ({
-        data: doc.data(),
-        id: doc.id,
-      }));
-      {
-        /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-      }
-      class_id = class_from_response.at(0).id;
-      const classDocRef = doc(db, "availableClasses", class_id);
+    
+      const classDocRef = doc(db, "availableClasses", classID.classID);
       updateDoc(classDocRef, {
         resources: arrayUnion({
           name: name,
@@ -109,8 +83,8 @@ function Resources({ className, email }) {
           pfpUrl: imgageUrl,
         }),
       });
-    });
-  }
+    };
+  
 
   //assert that the URL is not malicious
   function isValidURL(link) {
