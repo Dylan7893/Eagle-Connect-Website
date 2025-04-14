@@ -1,3 +1,5 @@
+//Component that handles when a user forgets their password and has to reset it
+
 import { sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../../firebase";

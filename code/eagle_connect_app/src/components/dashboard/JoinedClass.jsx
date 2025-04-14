@@ -1,7 +1,8 @@
+//Template to handle joined class formatting within the dashboard
 import React from "react";
 import { db } from "../../firebase";
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 
 function JoinedClass({ toParentCallBack, classID }) {
@@ -18,6 +19,7 @@ function JoinedClass({ toParentCallBack, classID }) {
         toParentCallBack(classID);
     }
 
+    //class iD is passed in, the joined class component then retrieves class data via this function
     async function getClassData() {
         const classDocRef = doc(db, "availableClasses", classID.classID);
         const classSnap = await getDoc(classDocRef);
@@ -26,7 +28,8 @@ function JoinedClass({ toParentCallBack, classID }) {
         setLoading(false);
     }
 
-    if(!loading){
+    //if class data is done being retrieved, display that info
+    if (!loading) {
         return (
             <>
                 <div className="joined-class-card" onClick={initCallBack}>
@@ -41,9 +44,10 @@ function JoinedClass({ toParentCallBack, classID }) {
                 </div>
             </>
         );
-    }else{
-        return(
-<>
+    } else {
+        //if class data is still loading set everything to loading
+        return (
+            <>
                 <div className="joined-class-card" onClick={initCallBack}>
                     {/* example class */}
                     <h3>loading</h3>
@@ -57,7 +61,7 @@ function JoinedClass({ toParentCallBack, classID }) {
             </>
         );
     }
-    
+
 }
 
 export default JoinedClass;

@@ -1,3 +1,4 @@
+/*Component that handles user registration*/
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../../firebase";
@@ -18,9 +19,9 @@ const Register = () => {
   const [signUp_register, setState] = useState("register");
 
   
-  {
-    /* Upon successful registration, add that user's credential to the database*/
-  }
+  
+    //Upon successful registration, add that user's credential to the database
+  
   function databaseAddUser(userCredential) {
     // following three lines will make the firebase auth uid and firestore user uid the same
     // so that collections and documents won't have any issues
@@ -38,6 +39,7 @@ const Register = () => {
     });
   }
 
+  //handle the user signing up
   const signUp = (e) => {
     e.preventDefault();
 

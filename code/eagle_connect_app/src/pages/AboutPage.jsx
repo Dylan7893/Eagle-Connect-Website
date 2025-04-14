@@ -1,3 +1,5 @@
+//Page that shows information about the app
+
 import eagleLogo from "../design/logo.png";
 import aboutStyle from "../design/aboutStyle.css";
 import { useNavigate } from "react-router-dom";

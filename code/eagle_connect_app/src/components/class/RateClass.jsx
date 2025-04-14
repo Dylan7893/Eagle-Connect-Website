@@ -1,7 +1,11 @@
+/*
+Class Page component where a user can input their rating of the class (1 to 5 stars and a comment)
+The average rating is displayed at the top along with the number of ratings
+Limits one rating per user
+*/
 import React from "react";
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 import { useEffect, useState } from "react";
-import "../../design/Stars.css";
 import {
   collection,
   getDocs,
@@ -14,7 +18,9 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-/*Component where you can send chat messages */
+import "../../design/Stars.css";
+import { getNameAndPfp } from "../util/Util";
+
 function RateClass({ classID, email }) {
   //form handling stuff
   const [feedBackToSend, setFeedbackToSend] = useState("");
@@ -27,158 +33,141 @@ function RateClass({ classID, email }) {
   const [averageRating, setAverageRating] = useState(0);
   const [classData, setClassData] = useState([]);
 
+  //post-render get class information as it may not be ready when first rendered.
   useEffect(() => {
-    const getClassData = async () =>{
+    const getClassData = async () => {
       const classDocRef = doc(db, "availableClasses", classID.classID);
-          const classSnap = await getDoc(classDocRef);
-          if(classSnap.exists){
-            const thisclassData = classSnap.data();
-    
-            setClassData(thisclassData);
-          }else{
-            console.log("getclass data classnap no exist");
-          }
+      const classSnap = await getDoc(classDocRef);
+      if (classSnap.exists) {
+        const thisclassData = classSnap.data();
+
+        setClassData(thisclassData);
+      } else {
+        console.log("getclass data classnap no exist");
+      }
     }
     getClassData();
   }, [classData]);
 
 
-  //refresh the messages every 100ms
+  //refresh the component every 100ms if a new rating has occured
   useEffect(() => {
     const intervalId = setInterval(() => {
       getNumberOfRatings();
       getAllRatings();
-      getNameAndPfp();
+      getNameAndPfp(email, setName, setImageUrl);
       canUserRate();
       getAverageRating();
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
+  //function to take all ratings from the database and calculate average
   const getAverageRating = async () => {
     let ratings = [];
     let average = 0.0;
     const classDocRef = doc(db, "availableClasses", classID.classID);
-          const classSnap = await getDoc(classDocRef);
-          if(classSnap.exists){
-            const thisclassData = classSnap.data();
-            thisclassData.ratings.forEach((item, index) => {
-              ratings.push(item.rating);
-            });
-            ratings.forEach((item, index) => {
-              average += parseFloat(item);
-            });
-            average = average / ratings.length;
-            setAverageRating(average);
-            
-          }else{
-            console.log("getAveragerating data classnap no exist");
-          }
+    const classSnap = await getDoc(classDocRef);
+    if (classSnap.exists) {
+      const thisclassData = classSnap.data();
+      thisclassData.ratings.forEach((item, index) => {
+        ratings.push(item.rating);
+      });
+      ratings.forEach((item, index) => {
+        average += parseFloat(item);
+      });
+      average = average / ratings.length;
+      setAverageRating(average);
+
+    } else {
+      console.log("getAveragerating data classnap no exist");
+    }
   }
+
+  //function to get number of ratings from the database
   const getNumberOfRatings = async () => {
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
-          const classSnap = await getDoc(classDocRef);
-          if(classSnap.exists){
-            const thisclassData = classSnap.data();
-    
-            setNumberOfRatings(thisclassData.numberOfRatings);
-          }else{
-            console.log("getnumofratings class snap does not exist");
-          }
-          
+    const classSnap = await getDoc(classDocRef);
+    if (classSnap.exists) {
+      const thisclassData = classSnap.data();
+
+      setNumberOfRatings(thisclassData.numberOfRatings);
+    } else {
+      console.log("getnumofratings class snap does not exist");
+    }
+
   }
+  //upon rating the comment should be cleared from the message bar
   const handleClearFeedback = () => {
     setFeedbackToSend("");
   };
 
+  //checking to make sure user can rate (checks to see if they have already rated)
   const canUserRate = async () => {
     let ratingEmails = [];
-    
+
     const classDocRef = doc(db, "availableClasses", classID.classID);
-          const classSnap = await getDoc(classDocRef);
-          if(classSnap.exists){
-            const thisclassData = classSnap.data();
+    const classSnap = await getDoc(classDocRef);
+    if (classSnap.exists) {
+      const thisclassData = classSnap.data();
 
-            thisclassData.ratings.forEach((item, index) => {
-              ratingEmails.push(item.email);
-            });
-            ratingEmails.forEach((element) => {
-              if (element == email) {
-                setCanRate(false);
-              }
-            });
-          }
-          
-  }
-  async function getNameAndPfp() {
-    const userQuery = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(userQuery)
-      .then((response) => {
-        const users_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+      thisclassData.ratings.forEach((item, index) => {
+        ratingEmails.push(item.email);
+      });
+      ratingEmails.forEach((element) => {
+        if (element == email) {
+          setCanRate(false);
         }
-        var toSend;
-        toSend = users_from_response.at(0).data.firstName;
-        toSend += " ";
-        toSend += users_from_response.at(0).data.lastName;
-        setName(toSend);
-        setImageUrl(users_from_response.at(0).data.pfpUrl);
-      })
-      .catch((error) => console.log(error));
-  }
+      });
+    }
 
+  }
+  
+  //function to set the ratings to the ratings from the database
   const getAllRatings = async () => {
     /*Create query to get the user object from their email*/
 
-          const classDocRef = await doc(db, "availableClasses", classID.classID);
-          const classSnap = await getDoc(classDocRef);
-          if(classSnap.exists){
-            const thisclassData = classSnap.data();
-            setRatings(thisclassData.ratings);
-          }else{
-            console.log("class snap dont exist");
-          }
-          
-        
-      
+    const classDocRef = await doc(db, "availableClasses", classID.classID);
+    const classSnap = await getDoc(classDocRef);
+    if (classSnap.exists) {
+      const thisclassData = classSnap.data();
+      setRatings(thisclassData.ratings);
+    } else {
+      console.log("class snap dont exist");
+    }
+
+
+
   }
 
+  //upload the users inputted rating if they can rate
   async function uploadNewRating() {
     var class_id;
 
-    getNameAndPfp();
+    getNameAndPfp(email, setName, setImageUrl);
     await canUserRate();
-      const classDocRef = doc(db, "availableClasses", classID.classID);
-      if (canRate) {
-        updateDoc(classDocRef, {
-          ratings: arrayUnion({
-            name: name,
-            pfpurl: imgageUrl,
-            feedback: feedBackToSend,
-            rating: starRating,
-            email: email,
-          }),
-        });
-        updateDoc(classDocRef, {
-          numberOfRatings: increment(1),
-        });
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+    //update document reference appropriately
+    if (canRate) {
+      updateDoc(classDocRef, {
+        ratings: arrayUnion({
+          name: name,
+          pfpurl: imgageUrl,
+          feedback: feedBackToSend,
+          rating: starRating,
+          email: email,
+        }),
+      });
+      updateDoc(classDocRef, {
+        numberOfRatings: increment(1),
+      });
 
-        setRatings(ratings);
-      } else {
-        alert("You have already rated.");
-      }
-    
+      setRatings(ratings);
+    } else {
+      alert("You have already rated.");
+    }
+
   }
 
   //validate rating
@@ -191,10 +180,11 @@ function RateClass({ classID, email }) {
     setFeedbackToSend(e.target.value);
   };
 
+  //client-side set the star rating
   function handleRatingChange(x) {
     setStarRating(x);
   }
- 
+
   return (
     <>
       <div className="rate-info">
@@ -250,6 +240,7 @@ function RateClass({ classID, email }) {
   );
 }
 
+//component to handle each rating formating (number of stars, name, pfp, and comment)
 function Rating({ name, pfpurl, feedback, rating }) {
   const stars = "★".repeat(rating);
   return (
@@ -272,7 +263,8 @@ function Rating({ name, pfpurl, feedback, rating }) {
 }
 export default RateClass;
 
-//I DID NOT DO THIS: https://codesandbox.io/p/sandbox/musing-lamarr-r3dnvx
+//handles the star rating for the review
+//Inspiration: https://codesandbox.io/p/sandbox/musing-lamarr-r3dnvx
 function Stars({ rateFunc }) {
   const [rating, setRating] = useState(0);
   let stars = ["★", "★", "★", "★", "★"];
@@ -314,6 +306,7 @@ function Stars({ rateFunc }) {
   );
 }
 
+//function to return the rounded up stars
 function RatedStars({ avg }) {
   let starVal = Math.round(avg);
   let starz = "";

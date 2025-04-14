@@ -1,20 +1,23 @@
+/*
+Component to show uploaded notes on the class page
+allows the user to upload notes
+*/
+
 import React from "react";
 import { db, storage } from "../../firebase";
 import { useEffect, useState } from "react";
 import {
-  collection,
-  getDocs,
   arrayUnion,
   updateDoc,
-  query,
-  where,
   doc,
   getDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getNameAndPfp } from "../util/Util";
 
 //Component where you can upload pdf documents for certain study resources or notes
 function Notes({ classID, email }) {
+
   //form handling stuff
   const [title, setTitle] = useState(""); // title for notes
   const [notesUrl, setNotesURL] = useState(null); // for firebase storage purposes
@@ -26,7 +29,7 @@ function Notes({ classID, email }) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllNotes();
-      getNameAndPfp();
+      getNameAndPfp(email, setName, setImageUrl);
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
@@ -70,57 +73,31 @@ function Notes({ classID, email }) {
       }
     );
   }
-  //function for getting the user's name and profile pic
-  async function getNameAndPfp() {
-    const userQuery = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    //Use query to get user object (contains first name, last name, etc.)
-    getDocs(userQuery)
-      .then((response) => {
-        const users_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
-        var toSend;
-        toSend = users_from_response.at(0).data.firstName;
-        toSend += " ";
-        toSend += users_from_response.at(0).data.lastName;
-        setName(toSend);
-        setImageUrl(users_from_response.at(0).data.pfpUrl);
-      })
-      .catch((error) => console.log(error));
-  }
 
   //function for getting the notes collection in firestore and all of its data
   async function getAllNotes() {
     const classDocRef = doc(db, "availableClasses", classID.classID);
-        const classSnap = await getDoc(classDocRef);
-        const thisclassData = classSnap.data();
-        setNotes(thisclassData.notes);
+    const classSnap = await getDoc(classDocRef);
+    const thisclassData = classSnap.data();
+    setNotes(thisclassData.notes);
   }
 
   // this function will allow for the new notes to be uploaded
   async function uploadNewNotesFile(x) {
-    var class_id;
-    getNameAndPfp();
-    
-      const classDocRef = doc(db, "availableClasses", classID.classID);
-      updateDoc(classDocRef, {
-        notes: arrayUnion({
-          name: name, // name of user
-          title: title, // title of notes
-          notesUrl: x, // this is the full url from google api
-          notesUrlName: notesUrl.name, // this is the display file name (local)
-          pfpUrl: imgageUrl, // this is for the user's pfp
-        }),
-      });
-   
+
+    getNameAndPfp(email, setName, setImageUrl);
+
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+    updateDoc(classDocRef, {
+      notes: arrayUnion({
+        name: name, // name of user
+        title: title, // title of notes
+        notesUrl: x, // this is the full url from google api
+        notesUrlName: notesUrl.name, // this is the display file name (local)
+        pfpUrl: imgageUrl, // this is for the user's pfp
+      }),
+    });
+
     setNotes(notes); // this will set the notes collection
   }
 

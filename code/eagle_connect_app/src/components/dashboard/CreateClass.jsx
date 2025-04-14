@@ -1,3 +1,5 @@
+//This should probably be deleted soon ~Chase
+
 // CreateClass.jsx (Modified version of MyPopup.jsx)
 // This code should be uncommented. Currently, this code doesn't allow the user to successfully create a class
 // however, the MyPopup.jsx file successfully creates the class even though its the same code

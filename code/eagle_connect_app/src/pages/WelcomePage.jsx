@@ -1,4 +1,4 @@
-import homeStyle from "../design/homepageStyle.css";
+//first page that is shown when user enters the app, from here they can go to the main app page, or the about page to get information about the app
 import eagleLogo from "../design/logo.png";
 import { useNavigate } from "react-router-dom";
 import React from "react";

@@ -1,3 +1,4 @@
+/*Class Component where you can post links for certain study resources */
 import React from "react";
 import { db } from "../../firebase";
 import { useEffect, useState } from "react";
@@ -12,8 +13,11 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-/*Component where you can post links for certain study resources */
+import { getNameAndPfp } from "../util/Util";
+
+//handles displaying all resources and sending new resources
 function Resources({ classID, email }) {
+
   //form handling stuff
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
@@ -25,63 +29,36 @@ function Resources({ classID, email }) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllResources();
-      getNameAndPfp();
+      getNameAndPfp(email, setName, setImageUrl);
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
-  async function getNameAndPfp() {
-    const userQuery = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    /*Use query to get user object (contains first name, last name, etc.) */
-
-    getDocs(userQuery)
-      .then((response) => {
-        const users_from_response = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
-        var toSend;
-        toSend = users_from_response.at(0).data.firstName;
-        toSend += " ";
-        toSend += users_from_response.at(0).data.lastName;
-        setName(toSend);
-        setImageUrl(users_from_response.at(0).data.pfpUrl);
-      })
-      .catch((error) => console.log(error));
-  }
-
   async function getAllResources() {
     const classDocRef = doc(db, "availableClasses", classID.classID);
-        const classSnap = await getDoc(classDocRef);
-        const thisclassData = classSnap.data();
-        setResources(thisclassData.resources);
+    const classSnap = await getDoc(classDocRef);
+    const thisclassData = classSnap.data();
+    setResources(thisclassData.resources);
   }
 
+  //function to upload the users inputted resource
   async function uploadNewLink() {
-    var class_id;
-    getNameAndPfp();
+    getNameAndPfp(email, setName, setImageUrl);
 
-    
-      const classDocRef = doc(db, "availableClasses", classID.classID);
-      updateDoc(classDocRef, {
-        resources: arrayUnion({
-          name: name,
-          title: title,
-          url: url,
-          pfpUrl: imgageUrl,
-        }),
-      });
-    };
-  
 
-  //assert that the URL is not malicious
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+    updateDoc(classDocRef, {
+      resources: arrayUnion({
+        name: name,
+        title: title,
+        url: url,
+        pfpUrl: imgageUrl,
+      }),
+    });
+  };
+
+
+  //assert that the URL is not malicious, more URLS can be added later if need be
   function isValidURL(link) {
     var goodURL = false;
     const validURLs = [
@@ -115,6 +92,7 @@ function Resources({ classID, email }) {
     }
   }
 
+  //form input handling
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -167,6 +145,7 @@ function Resources({ classID, email }) {
   );
 }
 
+//component to handle resource formatting
 function Resource({ name, title, url, pfpUrl }) {
   return (
     <>

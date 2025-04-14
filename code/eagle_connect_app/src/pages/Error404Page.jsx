@@ -1,3 +1,5 @@
+//page that is shown when an error is caught anywhere in the app
+
 import Error404Style from "../design/Error404Style.css";
 import { useNavigate } from "react-router-dom";
 

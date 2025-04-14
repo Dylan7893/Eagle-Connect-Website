@@ -1,3 +1,7 @@
+//DEPRECATED SHOULD BE DELETED SOON. 
+//DO NOT USE THIS
+
+/*
 import React, { useEffect, useState } from "react";
 import {
   collection,
@@ -34,18 +38,14 @@ function Classes({ email }) {
       where("email", "==", email)
     );
 
-    {
-      /*Use query to get user object (contains first name, last name, etc.) */
-    }
+  
     getDocs(userQuery)
       .then((response) => {
         const users_from_response = response.docs.map((doc) => ({
           data: doc.data(),
           id: doc.id,
         }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
+      
         users_from_response.at(0).data.joinedClasses.forEach((item, index) => {
           userJoinedClassesArr.push(item.className);
 
@@ -192,3 +192,4 @@ function Class({ classDataStuff, joinClassCallback, userJoinedClasses }) {
 
 
 export default Classes;
+*/

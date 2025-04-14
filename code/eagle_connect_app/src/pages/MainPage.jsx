@@ -1,3 +1,5 @@
+//Main page of the app (/app)
+
 import "../components/Main";
 import Main from "../components/Main";
 

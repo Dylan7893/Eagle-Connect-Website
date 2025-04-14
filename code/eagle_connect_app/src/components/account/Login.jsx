@@ -1,3 +1,4 @@
+//page that handles the user logging in, user can input their email and password to go to dashboard or reset their password or create an account
 import "../../design/loginStyle.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
@@ -8,9 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function Login() {
-  {
-    /*Must use these useStates to track changes of these variables in functions */
-  }
+  /*Must use these useStates to track changes of these variables in functions */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login_register, setState] = useState("login");
@@ -99,12 +98,14 @@ function Login() {
       </div>
     );
   } else if (login_register === "register") {
+    //display register if user wants to create an account
     return (
       <>
         <Register />
       </>
     );
   } else {
+    //display forgot password if user clicks the link
     return (
       <>
         <ForgotPassword />

@@ -1,3 +1,5 @@
+//DEPRECATED THIS SHOULD BE DELETED SOON ~Chase
+/*
 import { getAuth, signOut } from "firebase/auth";
 import React from "react";
 import { auth } from "../../firebase";
@@ -21,34 +23,24 @@ function JoinedClasses({ toDashboardCallBack, email }) {
     toDashboardCallBack(x);
   }
 
-  {
-    /*Function that returns all of the joined clases the user has joined*/
-  }
+
   async function getJoinedClasses() {
-    {
-      /*Create query to get the user object from their email*/
-    }
+   
     const userQuery = query(
       collection(db, "users"),
       where("email", "==", email)
     );
 
-    {
-      /*Use query to get user object (contains first name, last name, etc.) */
-    }
+   
     getDocs(userQuery)
       .then((response) => {
         const users_from_response = response.docs.map((doc) => ({
           data: doc.data(),
           id: doc.id,
         }));
-        {
-          /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-        }
+       
 
-        {
-          /*Get the joined classes from the user*/
-        }
+     
         setJoinedClasses(users_from_response.at(0).data.joinedClasses);
       })
       .catch((error) => console.log(error));
@@ -56,7 +48,7 @@ function JoinedClasses({ toDashboardCallBack, email }) {
 
   return (
     <>
-      {/*Return every joined class and convert it using the template*/}
+
       {joinedClasses.map((each_class) => (
         <JoinedClass
           toParentCallBack={initCallBack}
@@ -72,9 +64,7 @@ function JoinedClasses({ toDashboardCallBack, email }) {
   );
 }
 
-{
-  /*Template For each joined class*/
-}
+
 function JoinedClass({
   toParentCallBack,
   name,
@@ -84,16 +74,14 @@ function JoinedClass({
   extension,
   levelUp,
 }) {
-  {
-    /*When a user clicks on a joined class, we want to set the component to that class.*/
-  }
+
   function initCallBack() {
     toParentCallBack(name, number, initials, section, extension, levelUp);
   }
   return (
     <>
       <div className="joined-class-card" onClick={initCallBack}>
-        {/* example class */}
+
         <h3>{name}</h3>
         <p>
           {" "}
@@ -108,3 +96,4 @@ function JoinedClass({
 }
 
 export default JoinedClasses;
+*/

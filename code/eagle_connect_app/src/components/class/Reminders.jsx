@@ -1,18 +1,18 @@
+/*
+Class Page Component where users can leave reminders for other students for quizzes, exams, due dates, etc.
+Reminders consist of Name, Profile Picture, reminder message, and reminder date
+*/
 import React from "react";
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import {
-  collection,
-  getDocs,
   arrayUnion,
   updateDoc,
-  query,
-  where,
   doc,
   getDoc,
 } from "firebase/firestore";
-
-/*Component where you can send chat messages */
+import { getNameAndPfp } from "../util/Util";
+//component that handles displaying all reminders and sending reminders
 function Reminders({ classID, email }) {
   //form handling stuff
   const [reminder_to_send, setReminderToSend] = useState("");
@@ -24,84 +24,59 @@ function Reminders({ classID, email }) {
 
 
 
-  //refresh the messages every 100ms
+  //refresh the reminders every 100ms
   useEffect(() => {
     const intervalId = setInterval(() => {
       getAllReminders();
-      getNameAndPfp();
+      getNameAndPfp(email, setName, setImageUrl);
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
 
+  //clear reminder form input upon entering a reminder
   const handleClearReminder = () => {
     setReminderToSend("");
   };
 
-  async function getNameAndPfp() {
-        const userQuery = query(
-          collection(db, "users"),
-          where("email", "==", email)
-        );
-    
-        /*Use query to get user object (contains first name, last name, etc.) */
-    
-        getDocs(userQuery)
-          .then((response) => {
-            const users_from_response = response.docs.map((doc) => ({
-              data: doc.data(),
-              id: doc.id,
-            }));
-            {
-              /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-            }
-            var toSend;
-            toSend = users_from_response.at(0).data.firstName;
-            toSend += " ";
-            toSend += users_from_response.at(0).data.lastName;
-            setName(toSend);
-            setImageUrl(users_from_response.at(0).data.pfpUrl);
-          })
-          .catch((error) => console.log(error));
-      }
 
+  //function to get all reminders frm the database
   async function getAllReminders() {
-   const classDocRef = doc(db, "availableClasses", classID.classID);
-       const classSnap = await getDoc(classDocRef);
-       const thisclassData = classSnap.data();
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+    const classSnap = await getDoc(classDocRef);
+    const thisclassData = classSnap.data();
 
-    
-      setReminders(thisclassData.reminders);
-     
+
+    setReminders(thisclassData.reminders);
+
   }
 
+  //function to upload a new reminder upon submitting one
   async function uploadNewReminder() {
-      var class_id;
-  
-      getNameAndPfp();
+    getNameAndPfp(email, setName, setImageUrl);
 
-      const formatted = new Date(date);
+    const formatted = new Date(date);
 
-      setFormattedDate(formatted.toDateString());
+    setFormattedDate(formatted.toDateString());
 
-      console.log(formattedDate);
+    console.log(formattedDate);
 
-      
-        const classDocRef = doc(db, "availableClasses", classID.classID);
-        
-          updateDoc(classDocRef, {
-            reminders: arrayUnion({
-              name: name,
-              pfpurl: imgageUrl,
-              text: reminder_to_send,
-              date: formattedDate,
-            }),
-          });
-          console.log("PFP URL: ");
-          console.log(imgageUrl);
-        
-    
-      
-    }
+
+    const classDocRef = doc(db, "availableClasses", classID.classID);
+
+    updateDoc(classDocRef, {
+      reminders: arrayUnion({
+        name: name,
+        pfpurl: imgageUrl,
+        text: reminder_to_send,
+        date: formattedDate,
+      }),
+    });
+    console.log("PFP URL: ");
+    console.log(imgageUrl);
+
+
+
+  }
 
   //validate message
   function handleReminderSubmit() {
@@ -109,14 +84,17 @@ function Reminders({ classID, email }) {
     uploadNewReminder();
   }
 
+  //set reminder message to send to whatever the user inputs
   const handleNewReminderChange = (e) => {
     setReminderToSend(e.target.value);
   };
 
+  //currently buggy, needs fixing ~Chase
   const handleNewDateChange = (e) => {
-    
     setDate(e.target.value);
   };
+
+
   return (
     <>
       <div className="messages-container">
@@ -125,7 +103,7 @@ function Reminders({ classID, email }) {
             key={each_class.id}
             name={each_class.name}
             text={each_class.text}
-            date = {each_class.date}
+            date={each_class.date}
             pfpurl={each_class.pfpurl}
           />
         ))}
@@ -157,11 +135,10 @@ function Reminders({ classID, email }) {
   );
 }
 
-function Reminder({name, pfpurl, text, date}){
+//component to handle reminder formatting
+function Reminder({ name, pfpurl, text, date }) {
 
-
-
-  return(
+  return (
     <>
       <div className="resource-box-no-line">
         <img

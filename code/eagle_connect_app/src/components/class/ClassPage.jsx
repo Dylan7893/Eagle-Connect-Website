@@ -1,4 +1,4 @@
-
+//Used to redirect the user to certain components
 import "../../design/ClassPageStyle.css";
 import { useState, useRef, useEffect } from "react";
 import ClassTemplate from "./ClassTemplate";
@@ -14,11 +14,8 @@ import { auth, db } from "../../firebase";
 import {
   collection,
   getDocs,
-  arrayUnion,
-  updateDoc,
   query,
   where,
-  doc,
 } from "firebase/firestore";
 function ClassPage({ classID, email }) {
 
@@ -27,7 +24,7 @@ function ClassPage({ classID, email }) {
   const [sectionClicked, setSectionClicked] = useState("chat");
   const[username, setUsername] = useState("");
   const messageContainerRef = useRef(null);
-    //refresh the messages every 100ms
+  
   
   useEffect(() => {
       getUserName();
@@ -56,28 +53,19 @@ function ClassPage({ classID, email }) {
              })
              .catch((error) => console.log(error));
     }
+    //we want to scroll down for chat messages, it must be defined here
     function scrollDown(){
       const el = messageContainerRef.current;
       if (el) {
         el.scrollTop = el.scrollHeight;
       }
     }
-  
-    /*
-    useEffect(() => {
-      const intervalId = setInterval(() => {
-        scrollDown();
-      }, 100);
-      return () => clearInterval(intervalId);
-    }, []);
-  */
 
   function handleCallBack(x) {
     setSectionClicked(x);
   }
-  {
-    /*There has GOT to be a better way to do this. ~Chase*/
-  }
+
+  //handle which component to render based on what section the user clicks
   switch (sectionClicked) {
     case "chat":
       return (
@@ -85,7 +73,7 @@ function ClassPage({ classID, email }) {
           <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section" ref ={messageContainerRef}>
             <Chat classID={classID} userName = {username} email={email} updateEvent = {scrollDown} />
-            {/* end main */}
+
           </main>
         </>
       );
@@ -96,7 +84,7 @@ function ClassPage({ classID, email }) {
           <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
             <Notes classID={classID} email={email} />
-            {/* end main */}
+            
           </main>
         </>
       );
@@ -107,7 +95,7 @@ function ClassPage({ classID, email }) {
           <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
             <Reminders classID={classID} email={email} />
-            {/* end main */}
+
           </main>
         </>
       );
@@ -118,7 +106,6 @@ function ClassPage({ classID, email }) {
           <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
             <Resources classID={classID} email={email} />
-            {/* end main */}
           </main>
         </>
       );
@@ -129,7 +116,6 @@ function ClassPage({ classID, email }) {
           <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
             <RateClass classID={classID} email={email} />
-            {/* end main */}
           </main>
         </>
       );
@@ -140,11 +126,10 @@ function ClassPage({ classID, email }) {
           <ClassTemplate toClassPage={handleCallBack} classID={classID} />
           <main className="main-section">
             <ClassInfo classID={classID} toClassPage={handleCallBack}/>
-            {/* end main */}
           </main>
         </>
       );
-
+//if no section is clicked then render the dashboard
       case "none":
       return (
         <>

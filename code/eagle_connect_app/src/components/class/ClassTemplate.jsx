@@ -1,15 +1,15 @@
+//Renders the clickable sections for the user to choose from
+//Notes, Resources, Chat, Reminders, Rating, Class Info
+
 import "../../design/ClassPageStyle.css";
 import React, { useState } from "react"; 
 
 
-function ClassTemplate({ toClassPage, classID, className }) {
+function ClassTemplate({ toClassPage, className }) {
 
   const [sectionTitle, setSectionTitle] = useState("Chat"); // this will be used to see what component the user is clicked on at top right
                                                                       // corner of page
 
-  {
-    /*There has GOT to be a better way to do this. ~Chase*/
-  }
   function notes() {
     toClassPage("notes");
     setSectionTitle("Notes"); // change the title name to Notes
@@ -38,6 +38,8 @@ function ClassTemplate({ toClassPage, classID, className }) {
     toClassPage("none");
     setSectionTitle(""); // reset the title name
   }
+
+  //template that displays the section buttons
   return (
     <>
       {/* Note: I have been getting the svgs from this website: https://iconduck.com/icons  */}
