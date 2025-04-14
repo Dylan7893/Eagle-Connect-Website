@@ -280,7 +280,6 @@ function Stars({ rateFunc }) {
     setRating(rating);
     rateFunc(rating);
     localStorage.setItem("starRating", rating);
-    console.log(rating);
   };
 
   return (

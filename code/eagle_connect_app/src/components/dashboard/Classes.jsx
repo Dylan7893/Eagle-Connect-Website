@@ -53,8 +53,7 @@ function Classes({ email }) {
         setUserJoinedClasses(userJoinedClassesArr);
       })
       .catch((error) => console.log(error));
-    //console.log("user joined classes array: ");
-    //console.log(userJoinedClassesArr);
+
   }
   // Function to handle getting the availableClasses collection
   function getClasses() {

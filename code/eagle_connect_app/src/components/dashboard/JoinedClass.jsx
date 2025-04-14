@@ -19,14 +19,9 @@ function JoinedClass({ toParentCallBack, classID }) {
     }
 
     async function getClassData() {
-        console.log("hello from getClassData");
-        console.log("ClassID: ", classID);
-
-
         const classDocRef = doc(db, "availableClasses", classID.classID);
         const classSnap = await getDoc(classDocRef);
         const thisclassData = classSnap.data();
-        console.log(thisclassData);
         setClassData(thisclassData);
         setLoading(false);
     }

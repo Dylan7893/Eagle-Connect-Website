@@ -3,13 +3,25 @@ import React, { useState, useEffect } from "react"; //useState for popup
 import MyPopup from "../MyPopup";
 import { auth } from "../../firebase";
 import "../../design/dashboard2Style.css";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import Classes from "./Classes";
 import { db } from "../../firebase";
 import JoinedClasses from "./JoinedClasses";
 import ClassPage from "../class/ClassPage";
 import ProfilePage from "../profile/ProfilePage";
 import JoinedClass from "./JoinedClass";
+import Class from "./Class";
+import {
+  collection,
+  getDocs,
+  doc,
+  arrayUnion,
+  updateDoc,
+  getDoc,
+  increment,
+  setDoc,
+  where,
+  query,
+} from "firebase/firestore";
 
 
 {
@@ -24,47 +36,77 @@ function Dashboard({ email }) {
   //for search all functionality
   const [searchInput, setSearchInput] = useState(""); //string state variable and function to set it
   const [classInfo, setClassInfo] = useState([]); //list state variable and function to set it
-  const [joinedClasses, setJoinedClasses] = useState([]);
+  const [classClickedID, setClassClickedID] = useState("none");
+  const [isProfilePage, setProfilePage] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
-      useEffect(() => {
-        //function to retreive searched classes
-        const getJoinedClasses = async () =>{
-          {
-            /*Create query to get the user object from their email*/
-          }
-          const userQuery = query(
-            collection(db, "users"),
-            where("email", "==", email)
-          );
-      
-          {
-            /*Use query to get user object (contains first name, last name, etc.) */
-          }
-          getDocs(userQuery)
-            .then((response) => {
-              const users_from_response = response.docs.map((doc) => ({
-                data: doc.data(),
-                id: doc.id,
-              }));
-              {
-                /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
-              }
-      
-              {
-                /*Get the joined classes from the user*/
-              }
-              //console.log("user from response joined classes: ", users_from_response.at(0).data.joinedClasses);
-              setJoinedClasses(users_from_response.at(0).data.joinedClasses);
-              //users_from_response.at(0).joinedClasses.array.forEach(element => {
-                //console.log(element);
-              //});
-            })
-            .catch((error) => console.log(error));
-        }
+  const [classes, setClasses] = useState([]);
+  const [userJoinedClasses, setUserJoinedClasses] = useState([]);
+  
+  useEffect(() => {
+    //function to retreive searched classes
+    const getUserJoinedClasses = async () =>{
+      {
+        /*Create query to get the user object from their email*/
+      }
+      const userQuery = query(
+        collection(db, "users"),
+        where("email", "==", email)
+      );
+  
+      {
+        /*Use query to get user object (contains first name, last name, etc.) */
+      }
+      getDocs(userQuery)
+        .then((response) => {
+          const users_from_response = response.docs.map((doc) => ({
+            data: doc.data(),
+            id: doc.id,
+          }));
+          
+            /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+          
+  
+          
+            /*Get the joined classes from the user*/
+          setUserJoinedClasses(users_from_response.at(0).data.joinedClasses);
+          //users_from_response.at(0).joinedClasses.array.forEach(element => {
+            //console.log(element);
+          //});
+        })
+        .catch((error) => console.log(error));
+    }
+
+    //call back to the get classes function whenever the search input changes
+    getUserJoinedClasses();
+  }, [userJoinedClasses]);
+
     
-        //call back to the get classes function whenever the search input changes
-        getJoinedClasses();
-      }, [joinedClasses]);
+  useEffect(() => {
+      const intervalId = setInterval(() => {
+        getClasses();
+      }, 100);
+      return () => clearInterval(intervalId);
+    }, []);
+
+    // Function to handle getting the availableClasses collection
+      function getClasses() {
+        // db is from the firebase.js file, exported constant so it can be used in different components
+        const classesRef = collection(db, "availableClasses");
+    
+        // Query handling function I believe
+        getDocs(classesRef)
+          .then((response) => {
+            const classes_from_response = response.docs.map((doc) => ({
+              data: doc.data(),
+              id: doc.id,
+            }));
+    
+            //WORK HERE:::: FOR EACH CLASS IN CLASSES FROM RESPONSE IF NAME IS NOT IN USER JOINED CLASSES THEN ADD IT TO THE CLASSES
+            setClasses(classes_from_response);
+          })
+          .catch((error) => console.log(error));
+      }
 
   //functionality for searching all available classes
   useEffect(() => {
@@ -90,8 +132,8 @@ function Dashboard({ email }) {
 
         //iterate over array of retreived classes and map documents
         const retrievedClasses = searchOutput.docs.map((document) => ({
-          id: document.id, //include the document id
-          ...document.data(), //and then set all other documents to there field name
+          data: document.data(),
+          id: document.id,
         }));
 
         setClassInfo(retrievedClasses);
@@ -107,9 +149,7 @@ function Dashboard({ email }) {
   {
     /*Used for changing the componenet to the class template page*/
   }
-  const [classClickedID, setClassClickedID] = useState("none");
-  const [isProfilePage, setProfilePage] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -117,6 +157,52 @@ function Dashboard({ email }) {
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
+
+ async function handleAttemptJoinClass(classToJoin) {
+     const user = auth.currentUser; // Gets the current user from firebase authentication
+ 
+     const userId = user.uid; // Gets firebase authentication uid
+ 
+     // Gets the user document reference from firestore with auth uid
+     const userDocRef = doc(db, "users", userId);
+     var shouldJoinClass = true;
+     // Gets the class document reference from firestore with class id
+     const classDocRef = doc(db, "availableClasses", classToJoin.id);
+     userJoinedClasses.forEach((item, index) => {
+       if (item.classID == classToJoin.id) {
+         alert("Already joined this class.");
+         shouldJoinClass = false;
+         return;
+       }
+ 
+     });
+ 
+ 
+     // adds the class to the joinedClasses array
+     // users can now successfully join a class from avaiable class sidebar
+     console.log("we are inside join class. this is userJoined classes: " + userJoinedClasses);
+     if (shouldJoinClass) {
+       try {
+         await updateDoc(userDocRef, {
+           joinedClasses: arrayUnion({
+             classID: classToJoin.id,
+           }),
+         });
+ 
+ 
+         // each time a class is joined, the number of students will increment by one each time
+         await updateDoc(classDocRef, {
+           numberOfStudents: increment(1),
+         });
+
+         console.log("Class successfully joined!");
+       } catch (error) {
+         console.log("Error joining class:", error);
+         alert("Failed to join the class. Please try again.");
+       }
+     }
+ 
+   }
 
   function getImageUrl() {
     const userQuery = query(
@@ -212,25 +298,19 @@ function Dashboard({ email }) {
                   classListItem //for every classListItem a list elemnt is created
                 ) => (
                   <li className="class-list-item">
-                    <h3>{classListItem.className}</h3>
-                    <p>
-                      {" "}
-                      {classListItem.classInitials}-{classListItem.classNumber}
-                      {classListItem.classExtension}-
-                      {classListItem.classSection}
-                      {classListItem.classLevelUp}{" "}
-                    </p>
-                    <p> Students: {classListItem.numberOfStudents} </p>
-
-                    <button className="blue-buttons" onClick={() => {}}>
-                      Join
-                    </button>
+                    <Class classDataStuff = {classListItem} joinClassCallback = {handleAttemptJoinClass} userJoinedClasses={userJoinedClasses}/>
                   </li>
                 )
               )
-            ) : (
-              //else...
-              <Classes email={email} /> //show all classes
+            ) : (//if not searching for any class in particular, then just return all classes.
+              <>
+                {classes.map((each_class) => (
+                  <li className="class-list-item">
+                    <Class classDataStuff={each_class} joinClassCallback={handleAttemptJoinClass} userJoinedClasses={userJoinedClasses} />
+                  </li>
+                ))}
+
+              </>
             )}
           </ul>
 
@@ -241,7 +321,7 @@ function Dashboard({ email }) {
           <section className="joined-classes">
             <h2>Joined Classes</h2>
             <div className="joined-classes-layout">
-              {joinedClasses.map((each_class) => (
+              {userJoinedClasses.map((each_class) => (
                 <JoinedClass
                   classID={each_class}
                   toParentCallBack={handleClassChange}

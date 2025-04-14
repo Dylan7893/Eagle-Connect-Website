@@ -65,11 +65,6 @@ function Resources({ classID, email }) {
   }
 
   async function uploadNewLink() {
-    console.log("Upload new Link called");
-    console.log("name: " + name);
-    console.log("title: " + title);
-    console.log("url: " + url);
-    console.log("pfpUrl: " + imgageUrl);
     var class_id;
     getNameAndPfp();
 

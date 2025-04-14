@@ -35,9 +35,7 @@ try {
 
   
     async function saveClassChanges(){
-      console.log("Save class changes called");
-      console.log(classDescription);
-      console.log(classNumber);
+     
       try {
     const user = auth.currentUser; // gets the current user from firebase authentication
 
@@ -78,11 +76,8 @@ try {
       if(classRequiresLab === "Yes"){
         clab = "L";
       }
-      console.log("Class level up stuff: ");
-      console.log(classLab);
-
-      console.log("Class lab stuff: ");
-      console.log(classLab);
+  
+   
 
 
       try {
@@ -112,12 +107,12 @@ try {
   const getClassData = async () => {
 
     if(shouldGetClassData){
-      console.log("get class data called");
+      
     const classDocRef = doc(db, "availableClasses", classID.classID);
     const classSnap = await getDoc(classDocRef);
     if (classSnap.exists) {
       const thisclassData = classSnap.data();
-      console.log("class data: ", thisclassData);
+     
       setClassData(thisclassData);
       // this will store all the class info in the classData variable 
   setClassToLeave(thisclassData) // this will store all the class info in the classData variable 
