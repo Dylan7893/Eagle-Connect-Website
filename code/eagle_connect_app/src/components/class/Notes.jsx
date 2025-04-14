@@ -6,12 +6,18 @@ allows the user to upload notes
 import React from "react";
 import { db, storage } from "../../firebase";
 import { useEffect, useState } from "react";
-import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  updateDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getNameAndPfp } from "../util/Util";
 
 //Component where you can upload pdf documents for certain study resources or notes
 function Notes({ classID, email }) {
+
   //form handling stuff
   const [title, setTitle] = useState(""); // title for notes
   const [notesUrl, setNotesURL] = useState(null); // for firebase storage purposes
@@ -78,6 +84,7 @@ function Notes({ classID, email }) {
 
   // this function will allow for the new notes to be uploaded
   async function uploadNewNotesFile(x) {
+
     getNameAndPfp(email, setName, setImageUrl);
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
@@ -97,6 +104,7 @@ function Notes({ classID, email }) {
   // function for handling a title change
   const handleTitleChange = (e) => {
     setTitle(e.target.value); // sets the title name to whatever user enters
+    
   };
   // function for handling a file upload change
   const handleURLChange = (e) => {
@@ -136,7 +144,7 @@ function Notes({ classID, email }) {
               value={title}
               onChange={handleTitleChange}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   handleNotesFileUpload();
                 }
@@ -153,7 +161,7 @@ function Notes({ classID, email }) {
               accept="application/pdf"
               onChange={handleURLChange}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   handleNotesFileUpload();
                 }

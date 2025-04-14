@@ -116,12 +116,6 @@ function Reminders({ classID, email }) {
               type="datetime-local"
               id="date-and-time"
               onChange={handleNewDateChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleReminderSubmit();
-                }
-              }}
               required
             />
           </form>
