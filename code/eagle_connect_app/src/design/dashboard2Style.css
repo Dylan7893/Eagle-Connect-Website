@@ -6,21 +6,6 @@
 }
 
 /* ------- navigation bar ------- */
-.navigation-bar {
-  display: flex; /* navigation bar elements are horizontal*/
-  padding: 15px 20px; /* navigation bar padding*/
-  background: #f4f4f4; /*navigation bar background light gray */
-  position: fixed; /*navigation bar does not overlap with sidebar*/
-  top: 0; /*navigation bar is positioned to the top*/
-  left: 250px; /* offset to not overlap sidebar*/
-  width: calc(100% - 250px); /*setting the width to match the offset*/
-}
-
-/* right navigation bar buttons*/
-.navigation-bar-right {
-  display: flex; /* buttons are horizontal */
-  margin-left: auto; /* pushed buttons to the right */
-}
 
 /* navigation search bar */
 .search-bar {

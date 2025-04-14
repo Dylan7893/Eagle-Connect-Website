@@ -224,11 +224,6 @@ function Dashboard({ email }) {
       <>
         {/* navigation header */}
         <header className="navigation-bar">
-          <input
-            type="text"
-            className="search-bar"
-            placeholder="Search Joined"
-          />
           {/* right navigation buttons */}
           <div className="navigation-bar-right">
             {/* profile image serving as a button for profile */}
