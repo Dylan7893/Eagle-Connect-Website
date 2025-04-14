@@ -161,6 +161,18 @@ select {
   cursor: pointer;
 }
 
+.close-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  background-color: red;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .resource {
   display: flex;
   flex-direction: column;

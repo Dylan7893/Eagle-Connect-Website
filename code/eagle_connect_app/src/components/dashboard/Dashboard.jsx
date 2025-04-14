@@ -25,8 +25,6 @@ import {
   query,
 } from "firebase/firestore";
 
-
-
 //Dashboard only takes 1 argument, that is the prop "email" because from the users email we use that to get all other information from the database
 function Dashboard({ email }) {
   //control visibility
@@ -43,7 +41,6 @@ function Dashboard({ email }) {
 
   const [classes, setClasses] = useState([]);
   const [userJoinedClasses, setUserJoinedClasses] = useState([]);
-
 
   //gets the users joined classes
   useEffect(() => {
@@ -66,7 +63,7 @@ function Dashboard({ email }) {
           setUserJoinedClasses(users_from_response.at(0).data.joinedClasses);
         })
         .catch((error) => console.log(error));
-    }
+    };
 
     //call back to the get classes function whenever the search input changes
     getUserJoinedClasses();
@@ -135,13 +132,14 @@ function Dashboard({ email }) {
         shouldJoinClass = false;
         return;
       }
-
     });
-
 
     // adds the class to the joinedClasses array
     // users can now successfully join a class from avaiable class sidebar
-    console.log("we are inside join class. this is userJoined classes: " + userJoinedClasses);
+    console.log(
+      "we are inside join class. this is userJoined classes: " +
+        userJoinedClasses
+    );
     if (shouldJoinClass) {
       try {
         await updateDoc(userDocRef, {
@@ -149,7 +147,6 @@ function Dashboard({ email }) {
             classID: classToJoin.id,
           }),
         });
-
 
         // each time a class is joined, the number of students will increment by one each time
         await updateDoc(classDocRef, {
@@ -162,7 +159,6 @@ function Dashboard({ email }) {
         alert("Failed to join the class. Please try again.");
       }
     }
-
   }
 
   // Function to handle getting the availableClasses collection
@@ -282,18 +278,26 @@ function Dashboard({ email }) {
                   classListItem //for every classListItem a list elemnt is created
                 ) => (
                   <li className="class-list-item">
-                    <Class classDataStuff={classListItem} joinClassCallback={handleAttemptJoinClass} userJoinedClasses={userJoinedClasses} />
+                    <Class
+                      classDataStuff={classListItem}
+                      joinClassCallback={handleAttemptJoinClass}
+                      userJoinedClasses={userJoinedClasses}
+                    />
                   </li>
                 )
               )
-            ) : (//if not searching for any class in particular, then just return all classes.
+            ) : (
+              //if not searching for any class in particular, then just return all classes.
               <>
                 {classes.map((each_class) => (
                   <li className="class-list-item">
-                    <Class classDataStuff={each_class} joinClassCallback={handleAttemptJoinClass} userJoinedClasses={userJoinedClasses} />
+                    <Class
+                      classDataStuff={each_class}
+                      joinClassCallback={handleAttemptJoinClass}
+                      userJoinedClasses={userJoinedClasses}
+                    />
                   </li>
                 ))}
-
               </>
             )}
           </ul>
@@ -319,7 +323,8 @@ function Dashboard({ email }) {
           {/* end main */}
         </main>
         {/*add class popup */}
-        <MyPopup isOpen={open} closePopup={closeModal} />
+        <MyPopup isOpen={open} closeOnDocumentClick={false} setOpen={setOpen} />
+
         {/* Log out button */}
 
         {/* end body */}
@@ -334,6 +339,5 @@ function Dashboard({ email }) {
     );
   }
 }
-
 
 export default Dashboard;
