@@ -5,12 +5,7 @@ Reminders consist of Name, Profile Picture, reminder message, and reminder date
 import React from "react";
 import { db } from "../../firebase";
 import { useEffect, useState } from "react";
-import {
-  arrayUnion,
-  updateDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { getNameAndPfp } from "../util/Util";
 //component that handles displaying all reminders and sending reminders
 function Reminders({ classID, email }) {
@@ -21,8 +16,6 @@ function Reminders({ classID, email }) {
   const [date, setDate] = useState(new Date());
   const [imgageUrl, setImageUrl] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
-
-
 
   //refresh the reminders every 100ms
   useEffect(() => {
@@ -38,16 +31,13 @@ function Reminders({ classID, email }) {
     setReminderToSend("");
   };
 
-
   //function to get all reminders frm the database
   async function getAllReminders() {
     const classDocRef = doc(db, "availableClasses", classID.classID);
     const classSnap = await getDoc(classDocRef);
     const thisclassData = classSnap.data();
 
-
     setReminders(thisclassData.reminders);
-
   }
 
   //function to upload a new reminder upon submitting one
@@ -59,7 +49,6 @@ function Reminders({ classID, email }) {
     setFormattedDate(formatted.toDateString());
 
     console.log(formattedDate);
-
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
 
@@ -73,9 +62,6 @@ function Reminders({ classID, email }) {
     });
     console.log("PFP URL: ");
     console.log(imgageUrl);
-
-
-
   }
 
   //validate message
@@ -93,7 +79,6 @@ function Reminders({ classID, email }) {
   const handleNewDateChange = (e) => {
     setDate(e.target.value);
   };
-
 
   return (
     <>
@@ -117,6 +102,12 @@ function Reminders({ classID, email }) {
               id="message"
               value={reminder_to_send}
               onChange={handleNewReminderChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleReminderSubmit();
+                }
+              }}
               placeholder="Enter Reminder"
               required
             />
@@ -125,6 +116,12 @@ function Reminders({ classID, email }) {
               type="datetime-local"
               id="date-and-time"
               onChange={handleNewDateChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleReminderSubmit();
+                }
+              }}
               required
             />
           </form>
@@ -137,15 +134,10 @@ function Reminders({ classID, email }) {
 
 //component to handle reminder formatting
 function Reminder({ name, pfpurl, text, date }) {
-
   return (
     <>
       <div className="resource-box-no-line">
-        <img
-          src={pfpurl}
-          alt="Profile Image"
-          className="profile-image"
-        />
+        <img src={pfpurl} alt="Profile Image" className="profile-image" />
 
         <div className="resource">
           <div className="name">{name}</div>
@@ -154,6 +146,6 @@ function Reminder({ name, pfpurl, text, date }) {
         </div>
       </div>
     </>
-  )
+  );
 }
 export default Reminders;

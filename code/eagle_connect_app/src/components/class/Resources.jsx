@@ -17,7 +17,6 @@ import { getNameAndPfp } from "../util/Util";
 
 //handles displaying all resources and sending new resources
 function Resources({ classID, email }) {
-
   //form handling stuff
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
@@ -45,7 +44,6 @@ function Resources({ classID, email }) {
   async function uploadNewLink() {
     getNameAndPfp(email, setName, setImageUrl);
 
-
     const classDocRef = doc(db, "availableClasses", classID.classID);
     updateDoc(classDocRef, {
       resources: arrayUnion({
@@ -55,8 +53,7 @@ function Resources({ classID, email }) {
         pfpUrl: imgageUrl,
       }),
     });
-  };
-
+  }
 
   //assert that the URL is not malicious, more URLS can be added later if need be
   function isValidURL(link) {
@@ -111,7 +108,6 @@ function Resources({ classID, email }) {
           pfpUrl={each_class.pfpUrl}
         />
       ))}
-
       <div class="add-resource-elements">
         <form>
           <div class="resource-field">
@@ -121,6 +117,12 @@ function Resources({ classID, email }) {
               id="title"
               value={title}
               onChange={handleTitleChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleLinkSubmit();
+                }
+              }}
               placeholder="Enter Title"
               required
             />
@@ -132,6 +134,12 @@ function Resources({ classID, email }) {
               id="url"
               value={url}
               onChange={handleURLChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleLinkSubmit();
+                }
+              }}
               placeholder="Enter URL"
               required
             />

@@ -8,16 +8,19 @@ function Error404Page() {
   const navigateClick = () => {
     navigate("/");
   };
-  return(
+  return (
     <>
-    <title>Page Not Found</title>
-    <link rel="stylesheet" href={Error404Style} />
+      <title>Page Not Found</title>
+      <link rel="stylesheet" href={Error404Style} />
 
-    <div class="error-box">
-      <h1>404</h1>
-      <p>This Page Not Found!</p>
-      <button className="home" onClick={navigateClick}> Return To Home </button>
-    </div>
+      <div class="error-box">
+        <h1>404</h1>
+        <p>This Page Not Found!</p>
+        <button className="home" onClick={navigateClick}>
+          {" "}
+          Return To Home{" "}
+        </button>
+      </div>
     </>
   );
 }

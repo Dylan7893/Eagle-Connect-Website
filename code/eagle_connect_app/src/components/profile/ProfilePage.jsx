@@ -3,14 +3,25 @@ Profile page for user to change their name, password, and profile picture
 */
 
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where, doc, updateDoc, } from "firebase/firestore";
-import { auth } from '../../firebase';
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut } from 'firebase/auth';
-import { storage, db } from '../../firebase'; // Adjust the import path
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { auth } from "../../firebase";
+import {
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  signOut,
+} from "firebase/auth";
+import { storage, db } from "../../firebase"; // Adjust the import path
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 function ProfilePage({ email, toDashFunction }) {
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -25,7 +36,6 @@ function ProfilePage({ email, toDashFunction }) {
     getUserInfo();
   }, []);
 
-
   //function to upload new profile picture
   async function handleImageUpload() {
     if (!image) {
@@ -37,19 +47,21 @@ function ProfilePage({ email, toDashFunction }) {
     const uploadTask = uploadBytesResumable(storageRef, image);
 
     //upload the new profile picture to firebase database
-    uploadTask.on('state_changed',
+    uploadTask.on(
+      "state_changed",
       (snapshot) => {
         // Observe upload progress
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
       },
       (error) => {
         // Handle errors
-        console.error('Upload failed:', error);
+        console.error("Upload failed:", error);
       },
       () => {
         // Get the download URL once the upload is complete
-        console.log("image upload is complete")
+        console.log("image upload is complete");
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log(downloadURL);
           setNewImgUrl(downloadURL);
@@ -59,9 +71,7 @@ function ProfilePage({ email, toDashFunction }) {
         });
       }
     );
-
-
-  };
+  }
 
   //get image when user uploads it
   const handleImageChange = (e) => {
@@ -77,7 +87,6 @@ function ProfilePage({ email, toDashFunction }) {
   function backToDashboard() {
     toDashFunction(false);
   }
-
 
   //handle user signing out
   const userSignOut = () => {
@@ -95,7 +104,6 @@ function ProfilePage({ email, toDashFunction }) {
     if (newPassword != "" || currentPassword != "" || confirmPassword != "") {
       handlePasswordChange();
     }
-
   }
 
   //change users password
@@ -106,15 +114,16 @@ function ProfilePage({ email, toDashFunction }) {
     }
     const user = auth.currentUser;
     try {
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, newPassword);
       userSignOut();
     } catch (err) {
       console.log(err.message);
-
     }
-
   }
 
   //updates the users information
@@ -163,14 +172,17 @@ function ProfilePage({ email, toDashFunction }) {
         setCurrentImageURL(users_from_response.at(0).data.pfpUrl);
       })
       .catch((error) => console.log(error));
-
   }
   //HTML to return the form
   return (
     <>
       <title>Profile</title>
       <div>
-        <button type="submit" onClick={backToDashboard} className="return-button">
+        <button
+          type="submit"
+          onClick={backToDashboard}
+          className="return-button"
+        >
           ←
         </button>
         {/*back arrow unicode symbol*/}
@@ -196,25 +208,49 @@ function ProfilePage({ email, toDashFunction }) {
           </div>
           <div className="profile-sections">
             <label> First Name:</label>
-            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
           </div>
           <div className="profile-sections">
             <label> Last Name:</label>
-            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
           </div>
           <div className="profile-sections">
             <label> Current Password:</label>
-            <input type="password" placeholder="Current Password" onChange={(e) => setCurrentPassword(e.target.value)} />
+            <input
+              type="password"
+              placeholder="Current Password"
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
           </div>
           <div className="profile-sections">
             <label> New Password:</label>
-            <input type="password" placeholder="New Password" onChange={(e) => setNewPassword(e.target.value)} />
+            <input
+              type="password"
+              placeholder="New Password"
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
           </div>
           <div className="profile-sections">
             <label> Confirm Password:</label>
-            <input type="password" placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e.target.value)} />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           </div>
-          <button className="save-button" type="submit" onClick={handleformSubmit}>
+          <button
+            className="save-button"
+            type="submit"
+            onClick={handleformSubmit}
+          >
             Update Profile
           </button>
         </h1>

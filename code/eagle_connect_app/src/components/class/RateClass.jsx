@@ -45,10 +45,9 @@ function RateClass({ classID, email }) {
       } else {
         console.log("getclass data classnap no exist");
       }
-    }
+    };
     getClassData();
   }, [classData]);
-
 
   //refresh the component every 100ms if a new rating has occured
   useEffect(() => {
@@ -78,15 +77,13 @@ function RateClass({ classID, email }) {
       });
       average = average / ratings.length;
       setAverageRating(average);
-
     } else {
       console.log("getAveragerating data classnap no exist");
     }
-  }
+  };
 
   //function to get number of ratings from the database
   const getNumberOfRatings = async () => {
-
     const classDocRef = doc(db, "availableClasses", classID.classID);
     const classSnap = await getDoc(classDocRef);
     if (classSnap.exists) {
@@ -96,8 +93,7 @@ function RateClass({ classID, email }) {
     } else {
       console.log("getnumofratings class snap does not exist");
     }
-
-  }
+  };
   //upon rating the comment should be cleared from the message bar
   const handleClearFeedback = () => {
     setFeedbackToSend("");
@@ -121,9 +117,8 @@ function RateClass({ classID, email }) {
         }
       });
     }
+  };
 
-  }
-  
   //function to set the ratings to the ratings from the database
   const getAllRatings = async () => {
     /*Create query to get the user object from their email*/
@@ -136,10 +131,7 @@ function RateClass({ classID, email }) {
     } else {
       console.log("class snap dont exist");
     }
-
-
-
-  }
+  };
 
   //upload the users inputted rating if they can rate
   async function uploadNewRating() {
@@ -167,7 +159,6 @@ function RateClass({ classID, email }) {
     } else {
       alert("You have already rated.");
     }
-
   }
 
   //validate rating
@@ -228,6 +219,12 @@ function RateClass({ classID, email }) {
               id="url"
               value={feedBackToSend}
               onChange={handleNewFeedbackChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleFeedBackSubmit();
+                }
+              }}
               required
             />
           </div>

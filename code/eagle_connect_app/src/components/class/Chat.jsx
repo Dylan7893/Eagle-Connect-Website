@@ -4,12 +4,7 @@ Component where users can send chat messages to fellow students who are in the c
 import React from "react";
 import { db } from "../../firebase";
 import { useEffect, useState, useRef } from "react";
-import {
-  arrayUnion,
-  updateDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { getNameAndPfp } from "../util/Util";
 
 /*Component where you can send chat messages */
@@ -21,6 +16,12 @@ function Chat({ classID, updateEvent, userName, email }) {
   const [imgageUrl, setImageUrl] = useState("");
   const messageContainerRef = useRef(null);
 
+  function scrollDownLocal() {
+    const el = messageContainerRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }
 
   //refresh the messages every 100ms and get name and profile picture
   useEffect(() => {
@@ -49,7 +50,6 @@ function Chat({ classID, updateEvent, userName, email }) {
 
   //function to upload a new chat message based on what the user entered
   async function uploadNewMessage() {
-
     getNameAndPfp(email, setName, setImageUrl);
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
@@ -62,6 +62,7 @@ function Chat({ classID, updateEvent, userName, email }) {
     });
     setMessages(messages);
     updateEvent();
+    scrollDownLocal();
   }
 
   //validate message
@@ -75,9 +76,8 @@ function Chat({ classID, updateEvent, userName, email }) {
   };
 
   return (
-    <>
+    <div className="contain">
       <div className="messages-container" ref={messageContainerRef}>
-
         {messages.map((each_class) => (
           <Message
             key={each_class.id}
@@ -87,7 +87,6 @@ function Chat({ classID, updateEvent, userName, email }) {
             userName={userName}
           />
         ))}
-
       </div>
 
       <div class="bar">
@@ -98,6 +97,12 @@ function Chat({ classID, updateEvent, userName, email }) {
               id="message"
               value={message_to_send}
               onChange={handleNewMessageChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleMessageSubmit();
+                }
+              }}
               placeholder="Enter Message"
               required
             />
@@ -108,7 +113,7 @@ function Chat({ classID, updateEvent, userName, email }) {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
