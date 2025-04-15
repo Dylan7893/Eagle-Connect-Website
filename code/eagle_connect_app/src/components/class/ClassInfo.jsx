@@ -32,7 +32,13 @@ function ClassInfo({ classID, toClassPage }) {
   const [classNumber, setClassNumber] = useState(0);
   const [classSection, setClassSection] = useState("");
   const [classIsLevelUp, setClassIsLevelUp] = useState("");
+  const [classIsLevelUpOpposite, setClassIsLevelUpOppopsite] = useState("");
   const [classRequiresLab, setClassRequiresLab] = useState("");
+  const [classExtension, setClassExtension] = useState("");
+  const [classExtensionOpp1, setClassExtensionOpp1] = useState("");
+  const [classExtensionOpp2, setClassExtensionOpp2] = useState("");
+  const [classExtensionOpp3, setClassExtensionOpp3] = useState("");
+  const [classRequiresLabOpposite, setClassRequiresLabOpposite] = useState("");
   const [shouldGetClassData, setShouldGetClassData] = useState(true);
   const navigate = useNavigate();
 
@@ -66,16 +72,6 @@ function ClassInfo({ classID, toClassPage }) {
         return;
       }
 
-      if (classIsLevelUp !== "No" && classIsLevelUp !== "Yes") {
-        alert("Invalid input for is class level up.");
-        return;
-      }
-
-      if (classRequiresLab !== "No" && classRequiresLab !== "Yes") {
-        alert("Invalid input for is class requires lab.");
-        return;
-      }
-
       const classDocRef = doc(db, "availableClasses", classID.classID);
       var clu = "";
       var clab = "";
@@ -83,8 +79,20 @@ function ClassInfo({ classID, toClassPage }) {
         clu = "UR";
       }
 
-      if (classRequiresLab === "Yes") {
+      if (classExtension === "L") {
         clab = "L";
+      }
+
+      if (classExtension === "C") {
+        clab = "C";
+      }
+
+      if (classExtension === "D") {
+        clab = "D";
+      }
+
+      if (classExtension === "") {
+        clab = "";
       }
       //update the document if there were changes and if the user created the class
       try {
@@ -126,6 +134,7 @@ function ClassInfo({ classID, toClassPage }) {
           setClassInitials(thisclassData.classInitials);
           setClassNumber(thisclassData.classNumber);
           setClassSection(thisclassData.classSection);
+          setClassExtension(thisclassData.classExtension)
           setShouldGetClassData(false);
 
           //logic for determining if class is for freshman, sophomore, junior, senior, or graduate
@@ -168,22 +177,42 @@ function ClassInfo({ classID, toClassPage }) {
           if (thisclassData.classLevelUp === "UR") {
             setClassLevelUp("Yes");
             setClassIsLevelUp("Yes");
+            setClassIsLevelUpOppopsite("No");
           }
           // if the classLevelUp from firebase is not UR then it is not a level up course
           else {
             setClassLevelUp("No");
             setClassIsLevelUp("No");
+            setClassIsLevelUpOppopsite("Yes");
           }
 
           // if the classExtension from firebase is L then it has a lab
           if (thisclassData.classExtension === "L") {
-            setClassLab("Yes");
-            setClassRequiresLab("Yes");
+            setClassExtension("L");
+            setClassExtensionOpp1("");
+            setClassExtensionOpp2("C");
+            setClassExtensionOpp3("D");
           }
-          // if the classExtension from firebase is not L then it does not have a lab
+          // if the classExtension from firebase is C then it has a capstone C
+          else if (thisclassData.classExtension === "C") {
+            setClassExtension("C");
+            setClassExtensionOpp1("");
+            setClassExtensionOpp2("L");
+            setClassExtensionOpp3("D");
+          }
+          // if the classExtension from firebase is D then it has a capstone D
+          else if (thisclassData.classExtension === "D") {
+            setClassExtension("D");
+            setClassExtensionOpp1("");
+            setClassExtensionOpp2("C");
+            setClassExtensionOpp3("L");
+          }
+          // if the classExtension from firebase is not L, C, D then it does not have an extension
           else {
-            setClassLab("No");
-            setClassRequiresLab("No");
+            setClassExtension("");
+            setClassExtensionOpp1("L");
+            setClassExtensionOpp2("C");
+            setClassExtensionOpp3("D");
           }
         } else {
           console.log("get class data classnap does not exist.");
@@ -258,99 +287,126 @@ function ClassInfo({ classID, toClassPage }) {
   if (classData != null) {
     return (
       <>
-        <title>Class Information</title>
-        <link rel="stylesheet" href={classInfoPageStyle} />
-        <div className="class-info">
-          <h1>Class Information</h1>
-          <div className="class-info-grid">
-            <div className="title-column">
-              <span className="title"> Class Name:</span>
-              <input
-                className="info-input"
-                type="text"
-                value={classNameEdit}
-                onChange={(e) => setClassNameEdit(e.target.value)}
-              />
-
-              <div>
-                <span className="title"> Description:</span>
+        <form onSubmit={(e) => {
+          e.preventDefault(); // this disables the automatic reload of the page
+          if (
+            classInitials === "" || // if any field is empty other than extension or levelUP then ...
+            classNumber === "" ||
+            classSection === "" ||
+            classNameEdit === "" ||
+            classDescription === ""
+          ) {
+            return; // this will prevent from creating a class with empty required fields
+          }
+          saveClassChanges(); // this will only execute if input is valid, that's why I moved it up here - Landon
+        }}>
+          <title>Class Information</title>
+          <link rel="stylesheet" href={classInfoPageStyle} />
+          <div className="class-info">
+            <h1>Class Information</h1>
+            <div className="class-info-grid">
+              <div className="title-column">
+                <span className="title"> Class Name:</span>
                 <input
                   className="info-input"
                   type="text"
-                  value={classDescription}
-                  onChange={(e) => setClassDescription(e.target.value)}
+                  value={classNameEdit}
+                  onChange={(e) => setClassNameEdit(e.target.value)}
+                  required
                 />
-              </div>
 
-              <div>
-                <div className="info-input-text">
-                  <span className="title">Course Level: </span>
-                  <span className="info">{classLevel}</span>{" "}
+                <div>
+                  <span className="title"> Description:</span>
+                  <input
+                    className="info-input"
+                    type="text"
+                    value={classDescription}
+                    onChange={(e) => setClassDescription(e.target.value)}
+                    required
+                  />
                 </div>
-                {/*Pulled from const variables declared at top of code*/}
+
+                <div>
+                  <div className="info-input-text">
+                    <span className="title">Course Level: </span>
+                    <span className="info">{classLevel}</span>{" "}
+                  </div>
+                  {/*Pulled from const variables declared at top of code*/}
+                </div>
+
+                <div>
+                  <span className="title">Number of Students: </span>
+                  <span className="info">
+                    {classToLeave.numberOfStudents}
+                  </span>{" "}
+                  {/*Pulled directly from firebase*/}
+                </div>
               </div>
 
-              <div>
-                <span className="title">Number of Students: </span>
-                <span className="info">
-                  {classToLeave.numberOfStudents}
-                </span>{" "}
-                {/*Pulled directly from firebase*/}
-              </div>
-            </div>
-
-            <div className="title-column">
-              <span className="title"> Class Initials:</span>
-              <input
-                className="info-input"
-                type="text"
-                value={classInitials}
-                onChange={(e) => setClassInitials(e.target.value)}
-              />
-
-              <span className="title"> Class Number:</span>
-              <input
-                className="info-input"
-                type="text"
-                value={classNumber}
-                onChange={(e) => setClassNumber(e.target.value)}
-              />
-
-              <span className="title"> Class Section:</span>
-              <input
-                className="info-input"
-                type="text"
-                value={classSection}
-                onChange={(e) => setClassSection(e.target.value)}
-              />
-
-              <div>
-                <span className="title"> Level UP?:</span>
+              <div className="title-column">
+                <span className="title"> Class Initials:</span>
                 <input
                   className="info-input"
                   type="text"
-                  value={classIsLevelUp}
-                  onChange={(e) => setClassIsLevelUp(e.target.value)}
+                  value={classInitials}
+                  minLength="2"
+                  maxLength="4"
+                  onChange={(e) =>
+                    setClassInitials(e.target.value.replace(/[^A-Za-z]/g, ""))}
+                  required
                 />
-              </div>
-              <div>
-                <span className="title"> Requires Lab?:</span>
+
+                <span className="title"> Class Number:</span>
                 <input
                   className="info-input"
-                  type="text"
-                  value={classRequiresLab}
-                  onChange={(e) => setClassRequiresLab(e.target.value)}
+                  type="number"
+                  value={classNumber}
+                  min="0"
+                  max="999"
+                  onChange={(e) => setClassNumber(e.target.value)}
+                  required
                 />
+
+                <span className="title"> Class Section:</span>
+                <input
+                  className="info-input"
+                  type="number"
+                  value={classSection}
+                  min="0"
+                  max="999"
+                  onChange={(e) => setClassSection(e.target.value)}
+                  required
+                />
+
+                <div>
+                  <span className="title"> Level UP?: </span>
+
+                  <select onChange={(e) => setClassIsLevelUp(e.target.value)}>
+                    <option value={classIsLevelUp}>{classIsLevelUp}</option>
+                    <option value={classIsLevelUpOpposite}>{classIsLevelUpOpposite}</option>
+                  </select>
+
+                </div>
+                <div>
+                  <span className="title"> Class Extension: </span>
+                  <select onChange={(e) => setClassExtension(e.target.value)}>
+                    <option value={classExtension}>{classExtension}</option>
+                    <option value={classExtensionOpp1}>{classExtensionOpp1}</option>
+                    <option value={classExtensionOpp2}>{classExtensionOpp2}</option>
+                    <option value={classExtensionOpp3}>{classExtensionOpp3}</option>
+                  </select>
+                </div>
               </div>
             </div>
+
+            <button className="save-class" type="submit">
+              Save Class Changes
+            </button>
+            <button className="leave-class" onClick={toDashboard}>
+              Leave Class
+            </button>
           </div>
-          <button className="save-class" onClick={saveClassChanges}>
-            Save Class Changes
-          </button>
-          <button className="leave-class" onClick={toDashboard}>
-            Leave Class
-          </button>
-        </div>
+        </form>
       </>
     );
   } else {

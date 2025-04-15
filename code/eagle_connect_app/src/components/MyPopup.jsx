@@ -138,11 +138,11 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
           <input
             type="number"
             id="className"
-            onChange={(e) => setClassNumber(e.target.value)}
             className="classNameIn"
             min="0"
             max="999"
             placeholder="170"
+            onChange={(e) => setClassNumber(e.target.value)}
             required
           />
           {/*This input field is for the class extension (lab, capstone C/D) input field*/}
