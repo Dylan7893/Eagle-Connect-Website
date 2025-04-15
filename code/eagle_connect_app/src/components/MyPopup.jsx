@@ -69,7 +69,7 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
 
       console.log("Class successfully created!"); // console log if successful
       alert(`You have created the class: ${className}`); // alert user if successful
-      setClassName(""); // Clear input field
+      //setClassName(""); // Clear input field
       closePopup();
     } catch (error) {
       // if any errors
@@ -200,7 +200,7 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
 
         {/*This the add class button. This only registers the "submit" type if all input is valid*/}
         {/*Since the field is type onSubmit, the handleCreate() function earlier takes care of class creation if input is valid*/}
-        <button type="submit" class="add-button">
+        <button type="submit" class="add-button" onClick={() => setOpen(false)}>
           Add
         </button>
 

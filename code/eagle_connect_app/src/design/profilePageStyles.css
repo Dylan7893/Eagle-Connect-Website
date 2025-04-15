@@ -7,18 +7,16 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 175px;
 }
 
 .save-button:hover {
   transform: scale(1.05);
 }
 
-.profile-picture {
+.edit-profile-picture {
   width: 150px;
   height: 150px;
   border-radius: 50%; /*rounded*/
-  margin-left: 250px;
   margin-bottom: 5px;
 }
 
@@ -38,7 +36,7 @@ input[type="password"] {
   color: #0729af;
   cursor: pointer;
   font-size: 16px;
-  margin-left: 286px;
+  margin-left: 260px;
 }
 
 .edit-profile:hover {
@@ -68,13 +66,34 @@ input[type="password"] {
 }
 
 .return-button {
-  background: none;
+  text-align:left;
+  margin-left: 10px;
+}
+.return-button button {
+  background:none;
   border: none;
   font-size: 50px;
   cursor: pointer;
+  color:#0729af;
 }
 
-.return-button:hover {
+.return-button button:hover {
   transform: scale(1.05);
   color: #0729af;
+}
+
+.signOut-button {
+  width: 250px;
+  padding: 15px;
+  margin-top: 5px;
+  font-size: 1.1rem;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signOut-button:hover {
+  transform: scale(1.05);
 }

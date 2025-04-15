@@ -5,13 +5,13 @@
 }
 
 /*body*/
-/*body { 
- background-color: #fafafa; *//*background color*/
-  /*display: flex; */ /*using flex layout*/
-  /*justify-content: space-evenly; *//*distribute space evenly*/
-  /*align-items: center; *//*centers the box*/
-  /*height: 100vh;*/ /*make body fill all of the view*/
-/*}*/
+.body-404 { 
+  background-color: #fafafa; /*background color*/
+  display: flex;  /*using flex layout*/
+  justify-content: space-evenly; /*distribute space evenly*/
+  align-items: center; /*centers the box*/
+  height: 100vh; /*make body fill all of the view*/
+}
 
 /* Error Message */
 .error-box {
@@ -22,24 +22,26 @@
   text-align: center; /*center align the text in this case the button*/
 }
 
-h1 {
+.h1-404 {
   font-size: 120px; /*large font for header*/
   color: #ffcf00; /*morehead yellow*/
 }
 
-p {
+.p-404 {
   font-size: 20px; /*changes the font size of paragraph text*/
   color: #7f8c8d; /*changes the color of paragraph text*/
   margin-bottom: 30px; /*adds space to bottom of paragraph*/
 }
 
-.home {
-  text-decoration: none; /*remove underline*/
-  color: #fff; /*test color*/
-  background-color: #0d6efd; /*button color*/
-  padding: 10px 20px; /*padding*/
-  font-size: 15px; /*font size*/
-  border-radius: 20px; /*button corner radius*/
+.button-404 {
+  padding: 10px 20px;
+  border-radius: 8px;
+  width: 150px;
+  background-color: #0729af;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
   transition: background-color 0.3s; /*transistion for changing the background color*/
 }
 

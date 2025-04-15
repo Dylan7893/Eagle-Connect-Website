@@ -20,6 +20,7 @@ import {
 } from "firebase/auth";
 import { storage, db } from "../../firebase"; // Adjust the import path
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import profilePageStyle from "../../design/profilePageStyles.css";
 
 function ProfilePage({ email, toDashFunction }) {
   const [firstName, setFirstName] = useState("");
@@ -177,11 +178,11 @@ function ProfilePage({ email, toDashFunction }) {
   return (
     <>
       <title>Profile</title>
-      <div>
+       <link rel="stylesheet" href={profilePageStyle} />
+      <div  className="return-button">
         <button
           type="submit"
           onClick={backToDashboard}
-          className="return-button"
         >
           ←
         </button>
@@ -191,7 +192,7 @@ function ProfilePage({ email, toDashFunction }) {
         <h1 className="profile-h1">Edit Profile</h1>
         <h1>
           <img
-            className="profile-picture"
+            className="edit-profile-picture"
             src={currentImageURL}
             alt="profile picture"
           />
@@ -254,7 +255,7 @@ function ProfilePage({ email, toDashFunction }) {
             Update Profile
           </button>
         </h1>
-        <button onClick={userSignOut}>Log Out</button>
+        <button className="signOut-button" onClick={userSignOut}>Log Out</button>
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 //first page that is shown when user enters the app, from here they can go to the main app page, or the about page to get information about the app
 import eagleLogo from "../design/logo.png";
+import homepageStyle from "../design/homepageStyle.css";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 
@@ -12,6 +13,7 @@ const WelcomePage = () => {
 
   return (
     <>
+      <link rel="stylesheet" href={homepageStyle} />
       <header>
         <nav class="navigationHeader">
           <div class="logo">
@@ -39,8 +41,8 @@ const WelcomePage = () => {
 
       <main>
         <section class="main-display">
-          <h1>Welcome to Eagle Connect</h1>
-          <p>Connect with colleagues today</p>
+          <h1>WELCOME TO EAGLE CONNECT</h1>
+          <p>CONNECT WITH COLLEAGUES TODAY</p>
         </section>
       </main>
     </>

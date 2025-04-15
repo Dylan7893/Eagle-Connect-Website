@@ -85,8 +85,9 @@ body {
 main {
   background-image: url("eagle.jpg"); /* image url */
   background-position: center center; /* center the image */
-  background-color: rgba(0, 0, 0, 100); /* dark overlay */
+  background-color: rgba(0, 0, 0, 0.9); /* dark overlay */
   padding: 20px; /*main padding*/
+  background-size: cover;
   overflow-y: auto; /*allow verticle scrolling*/
   height: 100vh; /*makes the main section the height of the window*/
 }
@@ -94,14 +95,14 @@ main {
 /* MAIN DISPLAY: */
 .main-display {
   text-align: center; /* align text to center */
-  padding-top: 150px; /* padding to move the text down */
+  padding-top: 100px; /* padding to move the text down */
   font-family: "Arial", sans-serif; /* text font */
 }
 
 /* MAIN DISPLAY HEADING */
 .main-display h1 {
-  font-size: 4rem; /* large font size*/
-  color: white; /* white text */
+  font-size: 3rem; /* large font size*/
+  color:#f1c40f; /* white text */
   font-weight: bold; /* bold text */
   margin-bottom: 10px; /* space below heading */
   letter-spacing: 2px; /* spacing between characters */
@@ -109,6 +110,6 @@ main {
 
 /* MAIN DISPLAY PARAGRAPH */
 .main-display p {
-  font-size: 1.5rem; /* smaller font size */
+  font-size: 1.4rem; /* smaller font size */
   color: white; /* white text color */
 }

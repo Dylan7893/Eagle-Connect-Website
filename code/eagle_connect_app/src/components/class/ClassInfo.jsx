@@ -111,6 +111,7 @@ function ClassInfo({ classID, toClassPage }) {
 
   //function to get class data, may not be avaiable upon rendering so must be async
   const getClassData = async () => {
+    try {
     //only get class data once! if this happens constantly then user can not edit class info
     if (shouldGetClassData) {
       const classDocRef = doc(db, "availableClasses", classID.classID);
@@ -181,6 +182,10 @@ function ClassInfo({ classID, toClassPage }) {
         console.log("get class data classnap does not exist.");
       }
     }
+  }
+  catch (error) {
+    navigate();
+  }
 
   }
 
