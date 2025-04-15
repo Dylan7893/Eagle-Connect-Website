@@ -13,9 +13,8 @@ function Reminders({ classID, email }) {
   const [reminder_to_send, setReminderToSend] = useState("");
   const [reminders, setReminders] = useState([]);
   const [name, setName] = useState("Test");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState("");
   const [imgageUrl, setImageUrl] = useState("");
-  const [formattedDate, setFormattedDate] = useState("");
 
   //refresh the reminders every 100ms
   useEffect(() => {
@@ -43,21 +42,22 @@ function Reminders({ classID, email }) {
   //function to upload a new reminder upon submitting one
   async function uploadNewReminder() {
     getNameAndPfp(email, setName, setImageUrl);
-
-    const formatted = new Date(date);
-
-    setFormattedDate(formatted.toDateString());
-
-    console.log(formattedDate);
-
     const classDocRef = doc(db, "availableClasses", classID.classID);
+
+    const [year, month, day] = date.split('-');
+    const prettyDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
 
     updateDoc(classDocRef, {
       reminders: arrayUnion({
         name: name,
         pfpurl: imgageUrl,
         text: reminder_to_send,
-        date: formattedDate,
+        date: prettyDate,
       }),
     });
     console.log("PFP URL: ");
@@ -73,11 +73,6 @@ function Reminders({ classID, email }) {
   //set reminder message to send to whatever the user inputs
   const handleNewReminderChange = (e) => {
     setReminderToSend(e.target.value);
-  };
-
-  //currently buggy, needs fixing ~Chase
-  const handleNewDateChange = (e) => {
-    setDate(e.target.value);
   };
 
   return (
@@ -117,9 +112,9 @@ function Reminders({ classID, email }) {
             <div class="resource-field">
               <label>Date</label>
               <input
-                type="datetime-local"
-                id="date-and-time"
-                onChange={handleNewDateChange}
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
                 required
               />
             </div>
