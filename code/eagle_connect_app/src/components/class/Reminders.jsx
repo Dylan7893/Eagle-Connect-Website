@@ -28,6 +28,7 @@ function Reminders({ classID, email }) {
   //clear reminder form input upon entering a reminder
   const handleClearReminder = () => {
     setReminderToSend("");
+    setDate("");
   };
 
   //function to get all reminders frm the database
@@ -115,6 +116,12 @@ function Reminders({ classID, email }) {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleReminderSubmit();
+                  }
+                }}
                 required
               />
             </div>
