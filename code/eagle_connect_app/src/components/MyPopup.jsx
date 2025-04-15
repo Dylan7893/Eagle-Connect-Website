@@ -70,7 +70,8 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
       console.log("Class successfully created!"); // console log if successful
       alert(`You have created the class: ${className}`); // alert user if successful
       //setClassName(""); // Clear input field
-      closePopup();
+      //closePopup();
+      setOpen(false);
     } catch (error) {
       // if any errors
       console.error("Error creating class:", error); // console log if error
@@ -83,7 +84,7 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
   // other than that, this is the same as what Dylan implemented
 
   return (
-    <Popup open={isOpen} closeOnDocumentClick={false}>
+    <Popup open={isOpen} close={isOpen}>
       <h2>Create A Class</h2>
       <form
         autoComplete="off"
@@ -200,7 +201,7 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
 
         {/*This the add class button. This only registers the "submit" type if all input is valid*/}
         {/*Since the field is type onSubmit, the handleCreate() function earlier takes care of class creation if input is valid*/}
-        <button type="submit" class="add-button" onClick={() => setOpen(false)}>
+        <button type="submit" class="add-button">
           Add
         </button>
 
