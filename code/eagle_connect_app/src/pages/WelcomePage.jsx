@@ -14,37 +14,39 @@ const WelcomePage = () => {
   return (
     <>
       <link rel="stylesheet" href={homepageStyle} />
-      <header>
-        <nav class="navigationHeader">
-          <div class="logo">
-            <img
-              src={eagleLogo}
-              alt="Eagle Logo"
-              class="logo-image"
-              EAGLE
-              CONNECT
-            ></img>
-          </div>
+      <div className="home-body">
+        <header>
+          <nav class="navigationHeader">
+            <div class="logo">
+              <img
+                src={eagleLogo}
+                alt="Eagle Logo"
+                class="logo-image"
+                EAGLE
+                CONNECT
+              ></img>
+            </div>
 
-          <ul class="navigation-links">
-            <li>
-              <a href="/about">About</a>
-            </li>
-            <li>
-              <button class="get-started" onClick={navigateClick}>
-                Get Started
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </header>
+            <ul class="navigation-links">
+              <li>
+                <a href="/about">About</a>
+              </li>
+              <li>
+                <button class="get-started" onClick={navigateClick}>
+                  Get Started
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </header>
 
-      <main>
-        <section class="main-display">
-          <h1>WELCOME TO EAGLE CONNECT</h1>
-          <p>CONNECT WITH COLLEAGUES TODAY</p>
-        </section>
-      </main>
+        <main>
+          <section class="main-display">
+            <h1>WELCOME TO EAGLE CONNECT</h1>
+            <p>CONNECT WITH COLLEAGUES TODAY</p>
+          </section>
+        </main>
+      </div>
     </>
   );
 };
