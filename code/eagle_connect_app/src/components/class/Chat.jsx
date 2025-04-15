@@ -63,11 +63,16 @@ function Chat({ classID, updateEvent, userName, email }) {
     setMessages(messages);
     updateEvent();
     scrollDownLocal();
+    handleClearMessage();
   }
 
   //validate message
   function handleMessageSubmit() {
-    handleClearMessage();
+    if (message_to_send === "")
+    {
+      alert("Must enter a message to send.");
+      return;
+    }
     uploadNewMessage();
   }
   //set the message to send contents to what the user input
@@ -91,7 +96,7 @@ function Chat({ classID, updateEvent, userName, email }) {
 
       <div class="bar">
         <div class="message-field">
-          <form>
+          <form autoComplete="off">
             <input
               type="text"
               id="message"
@@ -106,7 +111,9 @@ function Chat({ classID, updateEvent, userName, email }) {
               placeholder="Enter Message"
               required
             />
+
           </form>
+
 
           <button className="blue-buttons" onClick={handleMessageSubmit}>
             Send
