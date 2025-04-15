@@ -97,9 +97,9 @@ function ClassInfo({ classID, toClassPage }) {
       //update the document if there were changes and if the user created the class
       try {
         await updateDoc(classDocRef, {
-          className: classNameEdit,
+          className: classNameEdit.toUpperCase(),
           description: classDescription,
-          classInitials: classInitials,
+          classInitials: classInitials.toUpperCase(),
           classNumber: classNumber,
           classSection: classSection,
           classLevelUp: clu,

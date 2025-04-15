@@ -10,6 +10,9 @@ import {
   doc,
   arrayUnion,
   updateDoc,
+  getDocs,
+  query,
+  where,
 } from "firebase/firestore";
 
 const MyPopup = ({ isOpen, closePopup, setOpen }) => {
@@ -37,9 +40,28 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
     const userId = user.uid; // gets the current user unique id
 
     const userDocRef = doc(db, "users", userId); // reference to current user
-
+   
     // try this
     try {
+      // query to search through the fields of available classes, searches to match by initials, number, extension, section, levelUp
+      const classQuery = query(
+        collection(db, "availableClasses"),
+        where("classInitials", "==", classInitials.toUpperCase()),
+        where("classNumber", "==", classNumber),
+        where("classExtension", "==", classExtension),
+        where("classSection", "==", classSection),
+        where("classLevelUp", "==", classLevelUp),
+      );
+
+      // after the query searches through the avaiable classes
+      const snapshot = await getDocs(classQuery);
+      if (!snapshot.empty) // if the fields match
+      {
+        alert("This class has already been created."); // alearts user that the class already has been created
+        setOpen(false); // closes the popup
+        return; // returns and doesn't continue with rest of this code
+      }
+
       // this will add the created class that user creates into the avaiableClasses collection
       const createClassRef = await addDoc(collection(db, "availableClasses"), {
         classInitials: classInitials.toUpperCase(), // created class abbrev. CS, MATH, EEC
@@ -51,31 +73,30 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
         createdBy: userId, // created by current user
         numberOfStudents: numberOfStudents, // created field to hold num of students
         createdAt: new Date(), // created at certain date and time
-        resources: resources,
-        messages: messages,
-        ratings: ratings,
-        numberOfRatings: numberOfRatings,
-        notes: notes,
-        reminders: reminders,
-        description: classDescription,
+        resources: resources, // created to hold resources
+        messages: messages, // created to hold messages
+        ratings: ratings, // created to hold ratings
+        numberOfRatings: numberOfRatings, // created to hold number of ratings
+        notes: notes, // created to hold notes
+        reminders: reminders, // created to hold reminders
+        description: classDescription, // created to hold class description
       });
 
-      // this will update the joined classes for the user immediately after the user creates the class
-      await updateDoc(userDocRef, {
-        joinedClasses: arrayUnion({
-          classID: createClassRef.id, // joined created class id
-        }),
-      });
+        // this will update the joined classes for the user immediately after the user creates the class
+        await updateDoc(userDocRef, {
+          joinedClasses: arrayUnion({
+            classID: createClassRef.id, // joined created class id
+          }),
+        });
 
-      console.log("Class successfully created!"); // console log if successful
-      alert(`You have created the class: ${className}`); // alert user if successful
-      //setClassName(""); // Clear input field
-      //closePopup();
-      setOpen(false);
-    } catch (error) {
-      // if any errors
-      console.error("Error creating class:", error); // console log if error
-      alert("Failed to create the class. Please try again."); // alert user if error
+        console.log("Class successfully created!"); // console log if successful
+        alert(`You have created the class: ${className}`); // alert user if successful
+        setOpen(false);
+      } catch (error) {
+        // if any errors
+        console.error("Error creating class:", error); // console log if error
+        alert("Failed to create the class. Please try again."); // alert user if error
+      
     }
   }
   // not sure how to comment in return function
@@ -208,7 +229,16 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
         <button
           type="button"
           className="close-button"
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false);
+            setClassInitials("");
+            setClassDescription("");
+            setClassName("");
+            setClassLevelUp("");
+            setClassNumber("");
+            setClassSection("");
+            setClassExtension("");
+          }}
         >
           Close
         </button>
