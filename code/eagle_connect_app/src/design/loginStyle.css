@@ -226,12 +226,12 @@ select {
   padding: 25px;
   background-color: white;
 
-  width: 1150px;
   box-sizing: border-box;
   position: fixed;
   bottom: 0;
   left: 250px;
   width: calc(100% - 250px); /*setting the width to match the offset*/
+  height: 200px;
 }
 
 .resource-field {
@@ -312,6 +312,16 @@ button:hover {
 .messages-container {
   overflow-y: auto;
   padding-bottom: 40px;
+}
+
+.rateClass-container {
+  overflow-y: auto;
+  padding-top: 85px;
+  padding-bottom: 200px;
+}
+.notes-resource-reminder-container {
+  overflow-y: auto;
+  padding-bottom: 175px;
 }
 
 .bar {

@@ -189,7 +189,7 @@ function RateClass({ classID, email }) {
         </div>
       </div>
 
-      <div className="messages-container">
+      <div className="rateClass-container">
         {ratings.map((each_class) => (
           <Rating
             key={each_class.id}

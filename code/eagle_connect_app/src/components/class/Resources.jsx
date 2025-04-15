@@ -99,15 +99,17 @@ function Resources({ classID, email }) {
 
   return (
     <>
-      {resources.map((each_class) => (
-        <Resource
-          key={each_class.id}
-          name={each_class.name}
-          title={each_class.title}
-          url={each_class.url}
-          pfpUrl={each_class.pfpUrl}
-        />
-      ))}
+      <div className="notes-resource-reminder-container">
+        {resources.map((each_class) => (
+          <Resource
+            key={each_class.id}
+            name={each_class.name}
+            title={each_class.title}
+            url={each_class.url}
+            pfpUrl={each_class.pfpUrl}
+          />
+        ))}
+      </div>
       <div class="add-resource-elements">
         <form>
           <div class="resource-field">

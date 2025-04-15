@@ -6,6 +6,7 @@ body {
 .class-info {
   max-width: 1000px; /*width of box for informaiton*/
   margin: 0 auto; /*removes margins and center */
+  margin-top: 90px;
   padding: 20px; /*space from top*/
   border-radius: 10px; /*rounded edges*/
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /*box shadow*/
@@ -41,6 +42,19 @@ body {
 .leave-class {
   width: 50%; /*leave button width match sidebar*/
   padding: 10px; /*leave button padding*/
+  background: red; /*leave button colorr*/
+  color: white; /*leave button text color*/
+  border: none; /*leavebutton no border*/
+  border-radius: 5px; /*leave button rounded corner*/
+  cursor: pointer; /*changes cursor*/
+  font-size: 18px; /*changes the font size on the button*/
+  transition: background-color 0.3s ease, transform 0.2s ease; /*hover animation specification*/
+  margin-top: 10px;
+}
+
+.save-class {
+  width: 50%; /*leave button width match sidebar*/
+  padding: 10px; /*leave button padding*/
   background: #0729af; /*leave button colorr*/
   color: white; /*leave button text color*/
   border: none; /*leavebutton no border*/
@@ -48,9 +62,21 @@ body {
   cursor: pointer; /*changes cursor*/
   font-size: 18px; /*changes the font size on the button*/
   transition: background-color 0.3s ease, transform 0.2s ease; /*hover animation specification*/
+  margin-top: 10px;
 }
 
-.leave-class:hover {
-  background-color: red; /*leave button changes color when hovering */
-  transform: scale(1.05); /*leave button enlarges when hovering */
+.title-column {
+  text-align: left;
+}
+
+.info-input {
+  margin-bottom: 15px;
+}
+
+.info-input-text {
+  margin-bottom: 15px;
+}
+
+.info-input:hover {
+  outline: 1px solid #0729af;
 }

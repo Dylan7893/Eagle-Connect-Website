@@ -82,7 +82,7 @@ function Reminders({ classID, email }) {
 
   return (
     <>
-      <div className="messages-container">
+      <div className="notes-resource-reminder-container">
         {reminders.map((each_class) => (
           <Reminder
             key={each_class.id}
@@ -95,31 +95,38 @@ function Reminders({ classID, email }) {
       </div>
 
       <div class="bar">
-        <div class="message-field">
+        <div class="add-resource-elements">
           <form>
-            <input
-              type="text"
-              id="message"
-              value={reminder_to_send}
-              onChange={handleNewReminderChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleReminderSubmit();
-                }
-              }}
-              placeholder="Enter Reminder"
-              required
-            />
-            <label>Date</label>
-            <input
-              type="datetime-local"
-              id="date-and-time"
-              onChange={handleNewDateChange}
-              required
-            />
+            <div class="resource-field">
+              <label for="Reminder">Reminder:</label>
+              <input
+                type="text"
+                id="message"
+                value={reminder_to_send}
+                onChange={handleNewReminderChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleReminderSubmit();
+                  }
+                }}
+                placeholder="Enter Reminder"
+                required
+              />
+            </div>
+            <div class="resource-field">
+              <label>Date</label>
+              <input
+                type="datetime-local"
+                id="date-and-time"
+                onChange={handleNewDateChange}
+                required
+              />
+            </div>
           </form>
-          <button onClick={handleReminderSubmit}>Send</button>
+          <button className="blue-buttons" onClick={handleReminderSubmit}>
+            Send
+          </button>
         </div>
       </div>
     </>
