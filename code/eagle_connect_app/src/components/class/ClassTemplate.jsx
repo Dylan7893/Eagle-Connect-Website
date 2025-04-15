@@ -2,14 +2,34 @@
 //Notes, Resources, Chat, Reminders, Rating, Class Info
 
 import "../../design/ClassPageStyle.css";
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 
-function ClassTemplate({ toClassPage, className }) {
+function ClassTemplate({ toClassPage, classID }) {
 
   const [sectionTitle, setSectionTitle] = useState("Chat"); // this will be used to see what component the user is clicked on at top right
                                                                       // corner of page
+  const[className, setClassName] = useState("");
 
+  //function to get the class name after render
+  useEffect(() => {
+    const getClassName = async () =>{
+          const classDocRef = doc(db, "availableClasses", classID.classID);
+          const classSnap = await getDoc(classDocRef);
+          if(classSnap.exists){
+            const thisclassData = classSnap.data();
+            setClassName(thisclassData.className)
+          }
+         
+    }
+    getClassName();
+    }, [className]);
+  
   function notes() {
     toClassPage("notes");
     setSectionTitle("Notes"); // change the title name to Notes

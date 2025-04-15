@@ -8,7 +8,6 @@ import {
 import { db } from "../../firebase";
 //get the current user's name and profile picture url
   export async function getNameAndPfp(email, setName, setImageUrl) {
-    console.log("Email: ", email);
     const userQuery = query(
       collection(db, "users"),
       where("email", "==", email)
