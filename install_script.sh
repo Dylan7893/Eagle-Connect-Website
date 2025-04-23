@@ -19,6 +19,7 @@ echo ********OTHERS INSTALL********
 npm install --save-dev ajv@^7 
 npm install reactjs-popup
 npm install react-firebase-hooks
+npm install bad-words
 ####Put OUR Code back
 rm -r public/
 rm -r src/

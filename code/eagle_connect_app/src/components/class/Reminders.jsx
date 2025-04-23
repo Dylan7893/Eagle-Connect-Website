@@ -7,6 +7,9 @@ import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { getNameAndPfp } from "../util/Util";
+import {Filter} from 'bad-words';
+
+const filter = new Filter();
 //component that handles displaying all reminders and sending reminders
 function Reminders({ classID, email }) {
   //form handling stuff
@@ -45,6 +48,11 @@ function Reminders({ classID, email }) {
     getNameAndPfp(email, setName, setImageUrl);
     const classDocRef = doc(db, "availableClasses", classID.classID);
 
+    //do not let the users say profane things on the reminders
+    if(filter.isProfane(reminder_to_send)){
+      alert("Inappropriate language was detected. Please do not send profane messages");
+      return;
+    }
     const [year, month, day] = date.split('-');
     const prettyDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
       weekday: 'short',

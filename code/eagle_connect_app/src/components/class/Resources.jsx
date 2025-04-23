@@ -14,7 +14,9 @@ import {
 } from "firebase/firestore";
 
 import { getNameAndPfp } from "../util/Util";
+import {Filter} from "bad-words";
 
+const filter = new Filter();
 //handles displaying all resources and sending new resources
 function Resources({ classID, email }) {
   //form handling stuff
@@ -43,7 +45,13 @@ function Resources({ classID, email }) {
   //function to upload the users inputted resource
   async function uploadNewLink() {
     getNameAndPfp(email, setName, setImageUrl);
-
+    //do not let users send bad messages!
+    if(filter.isProfane(title)){
+      alert("Do not put profanity in the title.");
+      setTitle("");
+      setURL("");
+      return; 
+    }
     const classDocRef = doc(db, "availableClasses", classID.classID);
     updateDoc(classDocRef, {
       resources: arrayUnion({

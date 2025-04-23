@@ -18,9 +18,12 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+import {Filter} from "bad-words";
+
 import "../../design/Stars.css";
 import { getNameAndPfp } from "../util/Util";
 
+const filter = new Filter();
 function RateClass({ classID, email }) {
   //form handling stuff
   const [feedBackToSend, setFeedbackToSend] = useState("");
@@ -140,6 +143,12 @@ function RateClass({ classID, email }) {
     getNameAndPfp(email, setName, setImageUrl);
     await canUserRate();
     const classDocRef = doc(db, "availableClasses", classID.classID);
+
+    if(filter.isProfane(feedBackToSend)){
+      alert("Inappropriate language was detected. Please do not send profane messages");
+      return;
+    }
+
     //update document reference appropriately
     if (canRate) {
       updateDoc(classDocRef, {

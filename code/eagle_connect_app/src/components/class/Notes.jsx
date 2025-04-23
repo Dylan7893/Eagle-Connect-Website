@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getNameAndPfp } from "../util/Util";
+import {Filter} from "bad-words";
 
+const filter = new Filter();
 //Component where you can upload pdf documents for certain study resources or notes
 function Notes({ classID, email }) {
   //form handling stuff
@@ -30,6 +32,14 @@ function Notes({ classID, email }) {
 
   //function for handling the uploaded note files
   async function handleNotesFileUpload() {
+
+    //do not let users send bad messages!
+    if(filter.isProfane(title)){
+      alert("Do not put profanity in the title.");
+      setTitle("");
+      return; 
+    }
+
     // prevents user from uploading same file and title
     if (!notesUrl || !notesUrl.name) {
       alert("You have already uploaded this document or the file is missing.");

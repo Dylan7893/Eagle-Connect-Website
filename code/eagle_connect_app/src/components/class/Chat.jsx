@@ -6,7 +6,9 @@ import { db } from "../../firebase";
 import { useEffect, useState, useRef } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { getNameAndPfp } from "../util/Util";
+import {Filter} from 'bad-words';
 
+const filter = new Filter();
 /*Component where you can send chat messages */
 function Chat({ classID, updateEvent, userName, email }) {
   //form handling stuff
@@ -53,6 +55,14 @@ function Chat({ classID, updateEvent, userName, email }) {
     getNameAndPfp(email, setName, setImageUrl);
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
+
+    //do not let users send bad messages!
+    if(filter.isProfane(message_to_send)){
+      alert("Youre bad that message is bad.");
+      handleClearMessage();
+      return; 
+    }
+
     updateDoc(classDocRef, {
       messages: arrayUnion({
         name: name,
