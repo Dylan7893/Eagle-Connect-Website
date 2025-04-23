@@ -63,6 +63,12 @@ function Chat({ classID, updateEvent, userName, email }) {
       return; 
     }
 
+    if(message_to_send.length > 250){
+      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
+        + (message_to_send.length - 250) + " characters");
+        return;
+    }
+
     //SRS document states we must alert the user if chat message fails to send
     try{
       updateDoc(classDocRef, {

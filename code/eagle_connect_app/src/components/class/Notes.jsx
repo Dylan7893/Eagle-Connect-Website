@@ -40,6 +40,14 @@ function Notes({ classID, email }) {
       return; 
     }
 
+    //assert char limit has not been reached
+    if(title.length > 250){
+      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
+        + (title.length - 250) + " characters");
+        return;
+    }
+
+
     // prevents user from uploading same file and title
     if (!notesUrl || !notesUrl.name) {
       alert("You have already uploaded this document or the file is missing.");

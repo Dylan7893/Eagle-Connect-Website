@@ -144,10 +144,19 @@ function RateClass({ classID, email }) {
     await canUserRate();
     const classDocRef = doc(db, "availableClasses", classID.classID);
 
+    //filter out bad words 
     if(filter.isProfane(feedBackToSend)){
       alert("Inappropriate language was detected. Please do not send profane messages");
       return;
     }
+
+    //assert rating is not too long
+    if(feedBackToSend.length > 250){
+      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
+        + (feedBackToSend.length - 250) + " characters");
+        return;
+    }
+
 
     //update document reference appropriately
     if (canRate) {
@@ -168,11 +177,11 @@ function RateClass({ classID, email }) {
     } else {
       alert("You have already rated.");
     }
+    handleClearFeedback();
   }
 
   //validate rating
   function handleFeedBackSubmit() {
-    handleClearFeedback();
     uploadNewRating();
   }
 

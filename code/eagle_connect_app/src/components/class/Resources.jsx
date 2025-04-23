@@ -52,6 +52,14 @@ function Resources({ classID, email }) {
       setURL("");
       return; 
     }
+
+    //assert title is not too long
+    if(title.length > 250){
+      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
+        + (title.length - 250) + " characters");
+        return;
+    }
+
     const classDocRef = doc(db, "availableClasses", classID.classID);
     updateDoc(classDocRef, {
       resources: arrayUnion({

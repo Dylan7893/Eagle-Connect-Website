@@ -53,6 +53,15 @@ function Reminders({ classID, email }) {
       alert("Inappropriate language was detected. Please do not send profane messages");
       return;
     }
+
+    //assert reminder is not too long
+    if(reminder_to_send.length > 250){
+      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
+        + (reminder_to_send.length - 250) + " characters");
+        return;
+    }
+
+
     const [year, month, day] = date.split('-');
     const prettyDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
       weekday: 'short',
@@ -71,11 +80,12 @@ function Reminders({ classID, email }) {
     });
     console.log("PFP URL: ");
     console.log(imgageUrl);
+    handleClearReminder();
   }
 
   //validate message
   function handleReminderSubmit() {
-    handleClearReminder();
+    
     uploadNewReminder();
   }
 
