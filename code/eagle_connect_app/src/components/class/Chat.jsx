@@ -63,17 +63,24 @@ function Chat({ classID, updateEvent, userName, email }) {
       return; 
     }
 
-    updateDoc(classDocRef, {
-      messages: arrayUnion({
-        name: name,
-        message: message_to_send,
-        pfpUrl: imgageUrl,
-      }),
-    });
-    setMessages(messages);
+    //SRS document states we must alert the user if chat message fails to send
+    try{
+      updateDoc(classDocRef, {
+        messages: arrayUnion({
+          name: name,
+          message: message_to_send,
+          pfpUrl: imgageUrl,
+        }),
+      });
+      setMessages(messages);
     updateEvent();
     scrollDownLocal();
     handleClearMessage();
+    }catch(error){
+      alert("An Error occured while sending the chat message. Please try again.");
+    }
+    
+    
   }
 
   //validate message
