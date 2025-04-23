@@ -47,7 +47,7 @@ function Chat({ classID, updateEvent, userName, email }) {
     const classDocRef = doc(db, "availableClasses", classID.classID);
     const classSnap = await getDoc(classDocRef);
     const thisclassData = classSnap.data();
-    setMessages(thisclassData.messages.slice(-20));
+    setMessages(thisclassData.messages.slice(-50));
   }
 
   //function to upload a new chat message based on what the user entered

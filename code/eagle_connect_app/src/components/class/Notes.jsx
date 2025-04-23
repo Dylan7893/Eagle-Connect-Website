@@ -91,7 +91,8 @@ function Notes({ classID, email }) {
     const classDocRef = doc(db, "availableClasses", classID.classID);
     const classSnap = await getDoc(classDocRef);
     const thisclassData = classSnap.data();
-    setNotes(thisclassData.notes);
+    //SRS States we may only show last 15 notes
+    setNotes(thisclassData.notes.slice(-15));
   }
 
   // this function will allow for the new notes to be uploaded
