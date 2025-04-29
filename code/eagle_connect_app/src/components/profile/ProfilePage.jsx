@@ -118,7 +118,7 @@ function ProfilePage({ email, toDashFunction }) {
       return;
     }
 
-    if (newPassword != "" || currentPassword != "" || confirmPassword != "") {
+    if (newPassword != "" && currentPassword != "" && confirmPassword != "") {
       handlePasswordChange();
     }
   }
