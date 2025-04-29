@@ -30,6 +30,7 @@ function ProfilePage({ email, toDashFunction }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentImageURL, setCurrentImageURL] = useState("");
   const [image, setImage] = useState(null);
+  const [isNewImage, setIsNewImage] = useState(false);
   const [newImageUrl, setNewImgUrl] = useState("");
 
   //get users name and profile picture
@@ -39,39 +40,43 @@ function ProfilePage({ email, toDashFunction }) {
 
   //function to upload new profile picture
   async function handleImageUpload() {
-    if (!image) {
-      alert("You must select an image!");
-      return;
-    }
-    //save the image as {their email address}.jpg
-    const storageRef = ref(storage, `images/${email}`);
-    const uploadTask = uploadBytesResumable(storageRef, image);
 
-    //upload the new profile picture to firebase database
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe upload progress
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-      },
-      (error) => {
-        // Handle errors
-        console.error("Upload failed:", error);
-      },
-      () => {
-        // Get the download URL once the upload is complete
-        console.log("image upload is complete");
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log(downloadURL);
-          setNewImgUrl(downloadURL);
-          console.log("okay img url is now: ");
-          console.log(newImageUrl);
-          handleUpdateUser(downloadURL);
-        });
-      }
-    );
+    // if user changes their profile picture then continue with the saving process
+    if (image) {
+
+      //save the image as {their email address}.jpg
+      const storageRef = ref(storage, `images/${email}`);
+      const uploadTask = uploadBytesResumable(storageRef, image);
+
+      //upload the new profile picture to firebase database
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe upload progress
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+        },
+        (error) => {
+          // Handle errors
+          console.error("Upload failed:", error);
+        },
+        () => {
+          // Get the download URL once the upload is complete
+          console.log("image upload is complete");
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+            setNewImgUrl(downloadURL);
+            console.log("okay img url is now: ");
+            console.log(newImageUrl);
+            handleUpdateUser(downloadURL);
+          });
+        }
+      );
+    }
+    else {
+      // else, user doesn't want to change profile picture, ignore the if block statements to save it
+    }
   }
 
   //get image when user uploads it
@@ -81,6 +86,7 @@ function ProfilePage({ email, toDashFunction }) {
     console.log(selectedImage);
     if (selectedImage) {
       setImage(selectedImage);
+      setIsNewImage(true);
     }
   };
 
