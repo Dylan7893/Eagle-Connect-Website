@@ -23,16 +23,16 @@
 
 /* navigation bar profile picture */
 .profile-picture {
-  width: 35px; /*dimension of profile picture*/
-  height: 35px; /*dimension of profile picture*/
+  width: 55px; /*dimension of profile picture*/
+  height: 55px; /*dimension of profile picture*/
   border-radius: 50%; /*makes a circle*/
   margin-left: 10px; /*space between settings and profile*/
 }
 
 /* navigation bar profile button */
 .profile-button {
-  width: 35px; /*dimension of profile picture*/
-  height: 35px; /*dimension of profile picture*/
+  width: 55px; /*dimension of profile picture*/
+  height: 55px; /*dimension of profile picture*/
   background: none; /* removes background */
   border: none; /* removes button border */
   padding: 0; /* removes default padding */
@@ -145,7 +145,7 @@
 .main-section {
   margin-left: 250px; /*shifts the main the distance of sidebar*/
   margin-top: 70px; /*shifts the main the distance of the navigation bar*/
-  padding: 20px; /*main padding*/
+  padding: 40px; /*main padding*/
   background: #fafafa; /*main background color*/
   overflow-y: auto; /*allow verticle scrolling*/
   height: 100vh; /*makes the main section the height of the window*/

@@ -34,28 +34,6 @@
   margin-top: 10px; /*moving number down*/
 }
 
-/* navigation bar profile picture */
-.profile-picture {
-  width: 35px; /*dimension of profile picture*/
-  height: 35px; /*dimension of profile picture*/
-  border-radius: 50%; /*makes a circle*/
-  margin-left: 10px; /*space between settings and profile*/
-}
-
-/* navigation bar profile button */
-.profile-button {
-  background: none; /* removes background */
-  border: none; /* removes button border */
-  padding: 0; /* removes default padding */
-  cursor: pointer; /* changes cursor */
-  border-radius: 50%; /*makes a circle*/
-}
-
-/* navigation bar profile button */
-.profile-button:hover .profile-picture {
-  transform: scale(1.05); /* slightly scale the image when hovering */
-}
-
 /* ------- side bar ------- */
 .sidebar {
   display: flex; /*create flexbox*/

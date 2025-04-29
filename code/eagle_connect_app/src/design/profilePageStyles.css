@@ -66,15 +66,15 @@ input[type="password"] {
 }
 
 .return-button {
-  text-align:left;
+  text-align: left;
   margin-left: 10px;
 }
 .return-button button {
-  background:none;
+  background: none;
   border: none;
   font-size: 50px;
   cursor: pointer;
-  color:#0729af;
+  color: #0729af;
 }
 
 .return-button button:hover {
