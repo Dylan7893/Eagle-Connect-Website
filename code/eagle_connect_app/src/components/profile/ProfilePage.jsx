@@ -113,8 +113,14 @@ function ProfilePage({ email, toDashFunction }) {
     handleImageUpload();
 
     //confirms new password is 6 characters
-    if (newPassword.length <= 6) {
-      alert("Error! new password must be atleast six characters.");
+    if (newPassword.length < 6) {
+      alert("Error! New password must be atleast six characters.");
+      return;
+    }
+
+    //confirms new password is 6 characters
+    if (confirmPassword.length < 6) {
+      alert("Error! Confirm password must be atleast six characters.");
       return;
     }
 
