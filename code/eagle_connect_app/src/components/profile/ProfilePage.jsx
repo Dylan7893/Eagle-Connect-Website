@@ -178,12 +178,9 @@ function ProfilePage({ email, toDashFunction }) {
   return (
     <>
       <title>Profile</title>
-       <link rel="stylesheet" href={profilePageStyle} />
-      <div  className="return-button">
-        <button
-          type="submit"
-          onClick={backToDashboard}
-        >
+      <link rel="stylesheet" href={profilePageStyle} />
+      <div className="return-button">
+        <button type="submit" onClick={backToDashboard}>
           ←
         </button>
         {/*back arrow unicode symbol*/}
@@ -235,6 +232,7 @@ function ProfilePage({ email, toDashFunction }) {
             <label> New Password:</label>
             <input
               type="password"
+              minLength={6}
               placeholder="New Password"
               onChange={(e) => setNewPassword(e.target.value)}
             />
@@ -243,6 +241,7 @@ function ProfilePage({ email, toDashFunction }) {
             <label> Confirm Password:</label>
             <input
               type="password"
+              minLength={6}
               placeholder="Confirm Password"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -255,7 +254,9 @@ function ProfilePage({ email, toDashFunction }) {
             Update Profile
           </button>
         </h1>
-        <button className="signOut-button" onClick={userSignOut}>Log Out</button>
+        <button className="signOut-button" onClick={userSignOut}>
+          Log Out
+        </button>
       </div>
     </>
   );
