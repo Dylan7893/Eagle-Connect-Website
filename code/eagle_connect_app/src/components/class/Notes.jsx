@@ -5,7 +5,7 @@ allows the user to upload notes
 
 import React from "react";
 import { db, storage } from "../../firebase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getNameAndPfp } from "../util/Util";
@@ -17,6 +17,7 @@ function Notes({ classID, email }) {
   //form handling stuff
   const [title, setTitle] = useState(""); // title for notes
   const [notesUrl, setNotesURL] = useState(null); // for firebase storage purposes
+  const resetNotesURL = useRef(null); // reset the notes url field upon upload from user
   const [name, setName] = useState("Test"); // user's name will display
   const [notes, setNotes] = useState([]); // for firebase firestore purposes
   const [imgageUrl, setImageUrl] = useState(""); // user's profile pic will display
@@ -91,6 +92,12 @@ function Notes({ classID, email }) {
         });
       }
     );
+
+    setTitle(""); // resets the title field
+    // this if statement is for resetting the notes url field
+    if (resetNotesURL.current) { // if the notes url is still the current notes that user uploaded
+      resetNotesURL.current.value = ""; // reset the notes url field 
+    }
   }
 
   //function for getting the notes collection in firestore and all of its data
@@ -178,6 +185,7 @@ function Notes({ classID, email }) {
               type="file"
               id="url"
               accept="application/pdf"
+              ref={resetNotesURL}
               onChange={handleURLChange}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
