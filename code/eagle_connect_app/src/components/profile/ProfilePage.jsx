@@ -30,7 +30,6 @@ function ProfilePage({ email, toDashFunction }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentImageURL, setCurrentImageURL] = useState("");
   const [image, setImage] = useState(null);
-  const [isNewImage, setIsNewImage] = useState(false);
   const [newImageUrl, setNewImgUrl] = useState("");
 
   //get users name and profile picture
@@ -67,13 +66,12 @@ function ProfilePage({ email, toDashFunction }) {
             setNewImgUrl(downloadURL);
             console.log("okay img url is now: ");
             console.log(newImageUrl);
-            handleUpdateUser(downloadURL);
+            handleUpdateUserPfP(downloadURL);
           });
         }
       );
-    } else {
-      // else, user doesn't want to change profile picture, ignore the if block statements to save it
-    }
+    } 
+      // if the user doesn't want to change profile picture, ignore the if block statements to save it
   }
 
   //get image when user uploads it
@@ -82,15 +80,14 @@ function ProfilePage({ email, toDashFunction }) {
     const selectedImage = e.target.files[0];
     console.log(selectedImage);
 
-    //validates a jpg used
-    if (!selectedImage.name.endsWith(".jpg")) {
-      alert("Error: Only JPG Files are allowed");
+    //validates a jpg/jpeg used
+    if (!(selectedImage.name.endsWith(".jpg") || selectedImage.name.endsWith(".jpeg"))) {
+      alert("Error: Only JPG/JPEG Files are allowed");
       return;
     }
 
     if (selectedImage) {
       setImage(selectedImage);
-      setIsNewImage(true);
     }
   };
 
@@ -122,7 +119,7 @@ function ProfilePage({ email, toDashFunction }) {
       return;
     }
 
-    //confirms new password is 6 characters
+    //confirms confirm password is 6 characters
     if (
       confirmPassword.length < 6 &&
       currentPassword != "" &&
@@ -131,7 +128,7 @@ function ProfilePage({ email, toDashFunction }) {
       alert("Error! Confirm password must be atleast six characters.");
       return;
     }
-
+    //confirms that current password isn't empty
     if (newPassword != "" && currentPassword == "" && confirmPassword != "") {
       alert("Error! You must enter your current password before updating.");
       return;
@@ -139,6 +136,15 @@ function ProfilePage({ email, toDashFunction }) {
 
     if (newPassword != "" && currentPassword != "" && confirmPassword != "") {
       handlePasswordChange();
+    }
+
+    // first and last name cannot be empty
+    if (firstName != "" && lastName != "") {
+      handleUpdateUserName();
+    }
+    else {
+      alert("Names cannot be empty.");
+      return;
     }
   }
 
@@ -163,8 +169,8 @@ function ProfilePage({ email, toDashFunction }) {
     }
   }
 
-  //updates the users information
-  function handleUpdateUser(x) {
+  //updates the users first name and last name information
+  function handleUpdateUserName() {
     console.log("handle update user called");
     const userQuery = query(
       collection(db, "users"),
@@ -184,6 +190,28 @@ function ProfilePage({ email, toDashFunction }) {
       updateDoc(userDocRef, {
         firstName: firstName,
         lastName: lastName,
+      });
+    });
+  }
+  //updates the users profile picture information
+  function handleUpdateUserPfP(x) {
+    console.log("handle update user called");
+    const userQuery = query(
+      collection(db, "users"),
+      where("email", "==", email)
+    );
+
+    /*Use query to get user object (contains first name, last name, etc.) */
+
+    getDocs(userQuery).then((response) => {
+      const user_from_response = response.docs.map((doc) => ({
+        data: doc.data(),
+        id: doc.id,
+      }));
+      /*We only want the first element. if the element size is greater than 1 then there is a big problem.*/
+      const user_id = user_from_response.at(0).id;
+      const userDocRef = doc(db, "users", user_id);
+      updateDoc(userDocRef, {
         pfpUrl: x,
       });
     });
