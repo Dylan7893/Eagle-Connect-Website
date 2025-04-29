@@ -74,20 +74,25 @@ function Resources({ classID, email }) {
   //assert that the URL is not malicious, more URLS can be added later if need be
   function isValidURL(link) {
     var goodURL = false;
+    var linktoedit = link;
+    linktoedit = linktoedit.replace("https://", "");
+    linktoedit = linktoedit.replace("www.", "");
+    console.log("link to edit", linktoedit);
     const validURLs = [
-      "https://quizlet.com/",
-      "https://www.chegg.com/",
-      "https://www.symbolab.com/",
-      "https://www.wolframalpha.com/",
-      "https://www.khanacademy.org//",
-      "https://www.youtube.com",
-      "https://www.youtu.be",
-      "https://scholar.google.com/",
-      "https://my.moreheadstate.edu",
+      "quizlet.com",
+      "chegg.com",
+      "symbolab.com",
+      "wolframalpha.com",
+      "khanacademy.org",
+      "youtube.com",
+      "youtu.be",
+      "scholar.google.com/",
+      "my.moreheadstate.edu",
+      "wikipedia.org",
     ];
 
     for (let link_in_list of validURLs) {
-      if (link.startsWith(link_in_list)) {
+      if (linktoedit.startsWith(link_in_list)) {
         goodURL = true;
       }
     }
