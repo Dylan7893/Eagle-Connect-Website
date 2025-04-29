@@ -9,7 +9,7 @@ import { useEffect, useState, useRef } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getNameAndPfp } from "../util/Util";
-import {Filter} from "bad-words";
+import { Filter } from "bad-words";
 
 const filter = new Filter();
 //Component where you can upload pdf documents for certain study resources or notes
@@ -33,22 +33,22 @@ function Notes({ classID, email }) {
 
   //function for handling the uploaded note files
   async function handleNotesFileUpload() {
-
-    
     //do not let users send bad messages!
-    if(filter.isProfane(title)){
+    if (filter.isProfane(title)) {
       alert("Do not put profanity in the title.");
       setTitle("");
-      return; 
+      return;
     }
 
     //assert char limit has not been reached
-    if(title.length > 250){
-      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
-        + (title.length - 250) + " characters");
-        return;
+    if (title.length > 250) {
+      alert(
+        "Error: Message cannot be more than 250 characters long, you need to delete the last " +
+          (title.length - 250) +
+          " characters"
+      );
+      return;
     }
-
 
     // prevents user from uploading same file and title
     if (!notesUrl || !notesUrl.name) {
@@ -56,7 +56,7 @@ function Notes({ classID, email }) {
       return;
     }
 
-    if(!notesUrl.name.endsWith(".pdf")){
+    if (!notesUrl.name.endsWith(".pdf")) {
       alert("Error: Only PDF Files are allowed");
       return;
     }
@@ -95,8 +95,9 @@ function Notes({ classID, email }) {
 
     setTitle(""); // resets the title field
     // this if statement is for resetting the notes url field
-    if (resetNotesURL.current) { // if the notes url is still the current notes that user uploaded
-      resetNotesURL.current.value = ""; // reset the notes url field 
+    if (resetNotesURL.current) {
+      // if the notes url is still the current notes that user uploaded
+      resetNotesURL.current.value = ""; // reset the notes url field
     }
   }
 
@@ -131,14 +132,19 @@ function Notes({ classID, email }) {
   const handleTitleChange = (e) => {
     setTitle(e.target.value); // sets the title name to whatever user enters
   };
+
+  const maxSize = 2 * 1024 * 1024;
   // function for handling a file upload change
   const handleURLChange = (e) => {
     console.log("Handle url change called."); // debugging statement (will take out later)
     const selectedNotesFile = e.target.files[0]; // whatever file the user selects
     console.log(selectedNotesFile); // debugging statement (will take out later)
-    if (selectedNotesFile) {
+    if (selectedNotesFile && selectedNotesFile.size < maxSize) {
       // ensures that user selected a file
       setNotesURL(selectedNotesFile); // set the url to the file that user selected
+    } else {
+      alert("File is too big. File must be less than 2MB");
+      e.target.value = "";
     }
   };
 
