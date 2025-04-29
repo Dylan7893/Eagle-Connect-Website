@@ -194,65 +194,95 @@ function RateClass({ classID, email }) {
     setStarRating(x);
   }
 
-  return (
-    <>
-      <div className="rate-info">
-        <div className="rate">
-          <label for="rating">Rating:</label>
-          <RatedStars avg={averageRating} />
-        </div>
-        <div className="resource-field">
-          <label for="reviews"> Reviews:</label>
-          <p>{numberOfRatings}</p>
-        </div>
-      </div>
-
-      <div className="rateClass-container">
-        {ratings.map((each_class) => (
-          <Rating
-            key={each_class.id}
-            name={each_class.name}
-            feedback={each_class.feedback}
-            pfpurl={each_class.pfpurl}
-            rating={each_class.rating}
-          />
-        ))}
-      </div>
-
-      <div class="add-resource-elements">
-        <div class="rate">
-          <label for="rating" className="resource-field-label">
-            Rating:
-          </label>
-          <Stars rateFunc={handleRatingChange} />
-        </div>
-        <form>
-          <div className="resource-field">
-            <label for="feedback" className="resource-field-label">
-              Feedback:
-            </label>
-
-            <input
-              type="text"
-              id="url"
-              value={feedBackToSend}
-              onChange={handleNewFeedbackChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleFeedBackSubmit();
-                }
-              }}
-              required
-            />
+  if(canRate){
+    return (
+      <>
+        <div className="rate-info">
+          <div className="rate">
+            <label for="rating">Rating:</label>
+            <RatedStars avg={averageRating} />
           </div>
-        </form>
-        <button className="blue-buttons" onClick={handleFeedBackSubmit}>
-          Submit
-        </button>
-      </div>
-    </>
-  );
+          <div className="resource-field">
+            <label for="reviews"> Reviews:</label>
+            <p>{numberOfRatings}</p>
+          </div>
+        </div>
+  
+        <div className="rateClass-container">
+          {ratings.map((each_class) => (
+            <Rating
+              key={each_class.id}
+              name={each_class.name}
+              feedback={each_class.feedback}
+              pfpurl={each_class.pfpurl}
+              rating={each_class.rating}
+            />
+          ))}
+        </div>
+  
+        <div class="add-resource-elements">
+          <div class="rate">
+            <label for="rating" className="resource-field-label">
+              Rating:
+            </label>
+            <Stars rateFunc={handleRatingChange} />
+          </div>
+          <form>
+            <div className="resource-field">
+              <label for="feedback" className="resource-field-label">
+                Feedback:
+              </label>
+  
+              <input
+                type="text"
+                id="url"
+                value={feedBackToSend}
+                onChange={handleNewFeedbackChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleFeedBackSubmit();
+                  }
+                }}
+                required
+              />
+            </div>
+          </form>
+          <button className="blue-buttons" onClick={handleFeedBackSubmit}>
+            Submit
+          </button>
+        </div>
+      </>
+    );
+  }else{
+    return (
+      <>
+        <div className="rate-info">
+          <div className="rate">
+            <label for="rating">Rating:</label>
+            <RatedStars avg={averageRating} />
+          </div>
+          <div className="resource-field">
+            <label for="reviews"> Reviews:</label>
+            <p>{numberOfRatings}</p>
+          </div>
+        </div>
+  
+        <div className="rateClass-container">
+          {ratings.map((each_class) => (
+            <Rating
+              key={each_class.id}
+              name={each_class.name}
+              feedback={each_class.feedback}
+              pfpurl={each_class.pfpurl}
+              rating={each_class.rating}
+            />
+          ))}
+        </div>
+      </>
+    );
+  }
+  
 }
 
 //component to handle each rating formating (number of stars, name, pfp, and comment)
