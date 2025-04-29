@@ -118,6 +118,11 @@ function ProfilePage({ email, toDashFunction }) {
       return;
     }
 
+    if (newPassword != "" && currentPassword == "" && confirmPassword != "") {
+      alert("Error! You must enter your current password before updating.");
+      return;
+    }
+
     if (newPassword != "" && currentPassword != "" && confirmPassword != "") {
       handlePasswordChange();
     }
