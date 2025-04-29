@@ -67,6 +67,7 @@ function ProfilePage({ email, toDashFunction }) {
             console.log("okay img url is now: ");
             console.log(newImageUrl);
             handleUpdateUserPfP(downloadURL);
+            toDashFunction();
           });
         }
       );
