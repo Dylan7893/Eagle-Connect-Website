@@ -83,6 +83,7 @@ const Register = () => {
           <input
             type="password"
             placeholder="Enter your password"
+            minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             class="input-spacing"
@@ -90,6 +91,7 @@ const Register = () => {
            <input
             type="password"
             placeholder="Confirm your password"
+            minLength={6}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             class="input-spacing"
