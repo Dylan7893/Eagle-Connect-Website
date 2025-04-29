@@ -150,6 +150,7 @@ function ProfilePage({ email, toDashFunction }) {
       await updatePassword(user, newPassword);
       userSignOut();
     } catch (err) {
+      alert("Error: invalid current password.");
       console.log(err.message);
     }
   }
