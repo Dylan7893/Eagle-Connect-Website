@@ -33,6 +33,7 @@ function Notes({ classID, email }) {
   //function for handling the uploaded note files
   async function handleNotesFileUpload() {
 
+    
     //do not let users send bad messages!
     if(filter.isProfane(title)){
       alert("Do not put profanity in the title.");
@@ -54,6 +55,12 @@ function Notes({ classID, email }) {
       return;
     }
 
+    if(!notesUrl.name.endsWith(".pdf")){
+      alert("Error: Only PDF Files are allowed");
+      return;
+    }
+
+    console.log("notesurl.name", notesUrl.name);
     const uniqueFileUrl = `${Date.now()}-${notesUrl.name}`; //timestamp will avoid overwritting file in storage
     //took a while to debug, only most recent would be shown, but this line solved the issue
     const storageRef = ref(storage, `notes/${email}/${uniqueFileUrl}`); //storage reference location
