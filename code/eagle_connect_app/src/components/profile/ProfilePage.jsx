@@ -40,10 +40,8 @@ function ProfilePage({ email, toDashFunction }) {
 
   //function to upload new profile picture
   async function handleImageUpload() {
-
     // if user changes their profile picture then continue with the saving process
     if (image) {
-
       //save the image as {their email address}.jpg
       const storageRef = ref(storage, `images/${email}`);
       const uploadTask = uploadBytesResumable(storageRef, image);
@@ -73,8 +71,7 @@ function ProfilePage({ email, toDashFunction }) {
           });
         }
       );
-    }
-    else {
+    } else {
       // else, user doesn't want to change profile picture, ignore the if block statements to save it
     }
   }
@@ -84,6 +81,13 @@ function ProfilePage({ email, toDashFunction }) {
     console.log("Handle image change called.");
     const selectedImage = e.target.files[0];
     console.log(selectedImage);
+
+    //validates a jpg used
+    if (!selectedImage.name.endsWith(".jpg")) {
+      alert("Error: Only JPG Files are allowed");
+      return;
+    }
+
     if (selectedImage) {
       setImage(selectedImage);
       setIsNewImage(true);
