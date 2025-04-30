@@ -70,6 +70,10 @@ function Reminders({ classID, email }) {
       day: 'numeric',
     });
 
+    if(prettyDate == "Invalid Date"){
+      alert("Please select a valid date before posting a reminder");
+      return;
+    }
     updateDoc(classDocRef, {
       reminders: arrayUnion({
         name: name,
