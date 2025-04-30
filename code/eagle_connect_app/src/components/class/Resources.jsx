@@ -106,7 +106,7 @@ function Resources({ classID, email }) {
       setTitle("");
       setURL("");
     } else {
-      alert("Bad url.");
+      alert("Bad url was detected");
     }
   }
 

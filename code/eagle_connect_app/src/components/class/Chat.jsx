@@ -52,13 +52,15 @@ function Chat({ classID, updateEvent, userName, email }) {
 
   //function to upload a new chat message based on what the user entered
   async function uploadNewMessage() {
+    console.log("Message To Send: ", message_to_send);
+
     getNameAndPfp(email, setName, setImageUrl);
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
 
     //do not let users send bad messages!
     if(filter.isProfane(message_to_send)){
-      alert("Youre bad that message is bad.");
+      alert("Please do not send profane messages.");
       handleClearMessage();
       return; 
     }
@@ -76,6 +78,7 @@ function Chat({ classID, updateEvent, userName, email }) {
           name: name,
           message: message_to_send,
           pfpUrl: imgageUrl,
+          createdAt: new Date(),
         }),
       });
       setMessages(messages);

@@ -90,7 +90,6 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
         });
 
         console.log("Class successfully created!"); // console log if successful
-        alert(`You have created the class: ${className}`); // alert user if successful
         setOpen(false);
       } catch (error) {
         // if any errors

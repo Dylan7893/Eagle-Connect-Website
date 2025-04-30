@@ -68,7 +68,7 @@ function ClassInfo({ classID, toClassPage }) {
 
       //only allows the user who created the class to edit it
       if (classData.createdBy !== userId) {
-        alert("You didnt create this class");
+        alert("Only users who created the class have access to edit it.");
         return;
       }
 
@@ -105,7 +105,6 @@ function ClassInfo({ classID, toClassPage }) {
           classLevelUp: clu,
           classExtension: clab,
         });
-        alert("Changes saved successfully!");
       } catch (error) {
         // catch any errors if any
         console.log("Error leaving class:", error);
