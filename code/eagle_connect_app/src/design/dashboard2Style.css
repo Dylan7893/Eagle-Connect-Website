@@ -101,7 +101,7 @@
 .list-of-classes {
   padding: 0; /*padding to remove bullets*/
   margin-top: 10px; /*distance from search field*/
-  max-height: 600px; /*height of list*/
+
   overflow-y: auto; /* allows vertical scrolling */
 }
 

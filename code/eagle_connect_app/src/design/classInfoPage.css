@@ -80,3 +80,7 @@ body {
 .info-input:hover {
   outline: 1px solid #0729af;
 }
+
+.classInfoSelect {
+  width: 70px;
+}

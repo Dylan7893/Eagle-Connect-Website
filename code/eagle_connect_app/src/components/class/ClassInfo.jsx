@@ -133,7 +133,7 @@ function ClassInfo({ classID, toClassPage }) {
           setClassInitials(thisclassData.classInitials);
           setClassNumber(thisclassData.classNumber);
           setClassSection(thisclassData.classSection);
-          setClassExtension(thisclassData.classExtension)
+          setClassExtension(thisclassData.classExtension);
           setShouldGetClassData(false);
 
           //logic for determining if class is for freshman, sophomore, junior, senior, or graduate
@@ -286,19 +286,21 @@ function ClassInfo({ classID, toClassPage }) {
   if (classData != null) {
     return (
       <>
-        <form onSubmit={(e) => {
-          e.preventDefault(); // this disables the automatic reload of the page
-          if (
-            classInitials === "" || // if any field is empty other than extension or levelUP then ...
-            classNumber === "" ||
-            classSection === "" ||
-            classNameEdit === "" ||
-            classDescription === ""
-          ) {
-            return; // this will prevent from creating a class with empty required fields
-          }
-          saveClassChanges(); // this will only execute if input is valid, that's why I moved it up here - Landon
-        }}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(); // this disables the automatic reload of the page
+            if (
+              classInitials === "" || // if any field is empty other than extension or levelUP then ...
+              classNumber === "" ||
+              classSection === "" ||
+              classNameEdit === "" ||
+              classDescription === ""
+            ) {
+              return; // this will prevent from creating a class with empty required fields
+            }
+            saveClassChanges(); // this will only execute if input is valid, that's why I moved it up here - Landon
+          }}
+        >
           <title>Class Information</title>
           <link rel="stylesheet" href={classInfoPageStyle} />
           <div className="class-info">
@@ -351,7 +353,8 @@ function ClassInfo({ classID, toClassPage }) {
                   minLength="2"
                   maxLength="4"
                   onChange={(e) =>
-                    setClassInitials(e.target.value.replace(/[^A-Za-z]/g, ""))}
+                    setClassInitials(e.target.value.replace(/[^A-Za-z]/g, ""))
+                  }
                   required
                 />
 
@@ -380,19 +383,29 @@ function ClassInfo({ classID, toClassPage }) {
                 <div>
                   <span className="title"> Level UP?: </span>
 
-                  <select onChange={(e) => setClassIsLevelUp(e.target.value)}>
+                  <select
+                    className="classInfoSelect"
+                    onChange={(e) => setClassIsLevelUp(e.target.value)}
+                  >
                     <option value={classIsLevelUp}>{classIsLevelUp}</option>
-                    <option value={classIsLevelUpOpposite}>{classIsLevelUpOpposite}</option>
+                    <option value={classIsLevelUpOpposite}>
+                      {classIsLevelUpOpposite}
+                    </option>
                   </select>
-
                 </div>
                 <div>
                   <span className="title"> Class Extension: </span>
                   <select onChange={(e) => setClassExtension(e.target.value)}>
                     <option value={classExtension}>{classExtension}</option>
-                    <option value={classExtensionOpp1}>{classExtensionOpp1}</option>
-                    <option value={classExtensionOpp2}>{classExtensionOpp2}</option>
-                    <option value={classExtensionOpp3}>{classExtensionOpp3}</option>
+                    <option value={classExtensionOpp1}>
+                      {classExtensionOpp1}
+                    </option>
+                    <option value={classExtensionOpp2}>
+                      {classExtensionOpp2}
+                    </option>
+                    <option value={classExtensionOpp3}>
+                      {classExtensionOpp3}
+                    </option>
                   </select>
                 </div>
               </div>

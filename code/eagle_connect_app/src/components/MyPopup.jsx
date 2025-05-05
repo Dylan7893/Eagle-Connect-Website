@@ -40,7 +40,7 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
     const userId = user.uid; // gets the current user unique id
 
     const userDocRef = doc(db, "users", userId); // reference to current user
-   
+
     // try this
     try {
       // query to search through the fields of available classes, searches to match by initials, number, extension, section, levelUp
@@ -50,13 +50,13 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
         where("classNumber", "==", classNumber),
         where("classExtension", "==", classExtension),
         where("classSection", "==", classSection),
-        where("classLevelUp", "==", classLevelUp),
+        where("classLevelUp", "==", classLevelUp)
       );
 
       // after the query searches through the avaiable classes
       const snapshot = await getDocs(classQuery);
-      if (!snapshot.empty) // if the fields match
-      {
+      if (!snapshot.empty) {
+        // if the fields match
         alert("This class has already been created."); // alearts user that the class already has been created
         setOpen(false); // closes the popup
         return; // returns and doesn't continue with rest of this code
@@ -82,20 +82,19 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
         description: classDescription, // created to hold class description
       });
 
-        // this will update the joined classes for the user immediately after the user creates the class
-        await updateDoc(userDocRef, {
-          joinedClasses: arrayUnion({
-            classID: createClassRef.id, // joined created class id
-          }),
-        });
+      // this will update the joined classes for the user immediately after the user creates the class
+      await updateDoc(userDocRef, {
+        joinedClasses: arrayUnion({
+          classID: createClassRef.id, // joined created class id
+        }),
+      });
 
-        console.log("Class successfully created!"); // console log if successful
-        setOpen(false);
-      } catch (error) {
-        // if any errors
-        console.error("Error creating class:", error); // console log if error
-        alert("Failed to create the class. Please try again."); // alert user if error
-      
+      console.log("Class successfully created!"); // console log if successful
+      setOpen(false);
+    } catch (error) {
+      // if any errors
+      console.error("Error creating class:", error); // console log if error
+      alert("Failed to create the class. Please try again."); // alert user if error
     }
   }
   // not sure how to comment in return function
@@ -104,7 +103,7 @@ const MyPopup = ({ isOpen, closePopup, setOpen }) => {
   // other than that, this is the same as what Dylan implemented
 
   return (
-    <Popup open={isOpen} close={isOpen}>
+    <Popup open={isOpen} closeOnDocumentClick={false}>
       <h2>Create A Class</h2>
       <form
         autoComplete="off"
