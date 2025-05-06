@@ -7,7 +7,7 @@ import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { getNameAndPfp } from "../util/Util";
-import {Filter} from 'bad-words';
+import { Filter } from "bad-words";
 
 const filter = new Filter();
 //component that handles displaying all reminders and sending reminders
@@ -49,28 +49,35 @@ function Reminders({ classID, email }) {
     const classDocRef = doc(db, "availableClasses", classID.classID);
 
     //do not let the users say profane things on the reminders
-    if(filter.isProfane(reminder_to_send)){
-      alert("Inappropriate language was detected. Please do not send profane messages");
+    if (filter.isProfane(reminder_to_send)) {
+      alert(
+        "Inappropriate language was detected. Please do not send profane messages"
+      );
       return;
     }
 
     //assert reminder is not too long
-    if(reminder_to_send.length > 250){
-      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
-        + (reminder_to_send.length - 250) + " characters");
-        return;
+    if (reminder_to_send.length > 250) {
+      alert(
+        "Error: Message cannot be more than 250 characters long, you need to delete the last " +
+          (reminder_to_send.length - 250) +
+          " characters"
+      );
+      return;
     }
 
+    const [year, month, day] = date.split("-");
+    const prettyDate = new Date(year, month - 1, day).toLocaleDateString(
+      "en-US",
+      {
+        weekday: "short",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }
+    );
 
-    const [year, month, day] = date.split('-');
-    const prettyDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    if(prettyDate == "Invalid Date"){
+    if (prettyDate == "Invalid Date") {
       alert("Please select a valid date before posting a reminder");
       return;
     }
@@ -80,6 +87,7 @@ function Reminders({ classID, email }) {
         pfpurl: imgageUrl,
         text: reminder_to_send,
         date: prettyDate,
+        createdAt: new Date(),
       }),
     });
     console.log("PFP URL: ");
@@ -89,7 +97,6 @@ function Reminders({ classID, email }) {
 
   //validate message
   function handleReminderSubmit() {
-    
     uploadNewReminder();
   }
 

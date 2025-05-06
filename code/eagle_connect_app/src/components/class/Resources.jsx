@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 
 import { getNameAndPfp } from "../util/Util";
-import {Filter} from "bad-words";
+import { Filter } from "bad-words";
 
 const filter = new Filter();
 //handles displaying all resources and sending new resources
@@ -46,18 +46,21 @@ function Resources({ classID, email }) {
   async function uploadNewLink() {
     getNameAndPfp(email, setName, setImageUrl);
     //do not let users send bad messages!
-    if(filter.isProfane(title)){
+    if (filter.isProfane(title)) {
       alert("Do not put profanity in the title.");
       setTitle("");
       setURL("");
-      return; 
+      return;
     }
 
     //assert title is not too long
-    if(title.length > 250){
-      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
-        + (title.length - 250) + " characters");
-        return;
+    if (title.length > 250) {
+      alert(
+        "Error: Message cannot be more than 250 characters long, you need to delete the last " +
+          (title.length - 250) +
+          " characters"
+      );
+      return;
     }
 
     const classDocRef = doc(db, "availableClasses", classID.classID);
@@ -67,6 +70,7 @@ function Resources({ classID, email }) {
         title: title,
         url: url,
         pfpUrl: imgageUrl,
+        createdAt: new Date(),
       }),
     });
   }
@@ -150,6 +154,7 @@ function Resources({ classID, email }) {
               required
             />
           </div>
+
           <div class="resource-field">
             <label for="url">URL:</label>
             <input

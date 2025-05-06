@@ -52,7 +52,7 @@ function Notes({ classID, email }) {
 
     // prevents user from uploading same file and title
     if (!notesUrl || !notesUrl.name) {
-      alert("You have already uploaded this document or the file is missing.");
+      alert("File is missing.");
       return;
     }
 

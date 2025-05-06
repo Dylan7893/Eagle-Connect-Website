@@ -6,7 +6,7 @@ import { db } from "../../firebase";
 import { useEffect, useState, useRef } from "react";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { getNameAndPfp } from "../util/Util";
-import {Filter} from 'bad-words';
+import { Filter } from "bad-words";
 
 const filter = new Filter();
 /*Component where you can send chat messages */
@@ -59,20 +59,23 @@ function Chat({ classID, updateEvent, userName, email }) {
     const classDocRef = doc(db, "availableClasses", classID.classID);
 
     //do not let users send bad messages!
-    if(filter.isProfane(message_to_send)){
+    if (filter.isProfane(message_to_send)) {
       alert("Please do not send profane messages.");
       handleClearMessage();
-      return; 
+      return;
     }
 
-    if(message_to_send.length > 250){
-      alert("Error: Message cannot be more than 250 characters long, you need to delete the last " 
-        + (message_to_send.length - 250) + " characters");
-        return;
+    if (message_to_send.length > 250) {
+      alert(
+        "Error: Message cannot be more than 250 characters long, you need to delete the last " +
+          (message_to_send.length - 250) +
+          " characters"
+      );
+      return;
     }
 
     //SRS document states we must alert the user if chat message fails to send
-    try{
+    try {
       updateDoc(classDocRef, {
         messages: arrayUnion({
           name: name,
@@ -82,20 +85,19 @@ function Chat({ classID, updateEvent, userName, email }) {
         }),
       });
       setMessages(messages);
-    updateEvent();
-    scrollDownLocal();
-    handleClearMessage();
-    }catch(error){
-      alert("An Error occured while sending the chat message. Please try again.");
+      updateEvent();
+      scrollDownLocal();
+      handleClearMessage();
+    } catch (error) {
+      alert(
+        "An Error occured while sending the chat message. Please try again."
+      );
     }
-    
-    
   }
 
   //validate message
   function handleMessageSubmit() {
-    if (message_to_send === "")
-    {
+    if (message_to_send === "") {
       alert("Must enter a message to send.");
       return;
     }
@@ -107,8 +109,8 @@ function Chat({ classID, updateEvent, userName, email }) {
   };
 
   return (
-    <div className="contain">
-      <div className="messages-container" ref={messageContainerRef}>
+    <>
+      <div className="notes-resource-reminder-container2">
         {messages.map((each_class) => (
           <Message
             key={each_class.id}
@@ -120,9 +122,9 @@ function Chat({ classID, updateEvent, userName, email }) {
         ))}
       </div>
 
-      <div class="bar">
-        <div class="message-field">
-          <form autoComplete="off">
+      <div class="add-resource-elements2">
+        <form autoComplete="off">
+          <div className="input-button-row">
             <input
               type="text"
               id="message"
@@ -137,16 +139,13 @@ function Chat({ classID, updateEvent, userName, email }) {
               placeholder="Enter Message"
               required
             />
-
-          </form>
-
-
-          <button className="blue-buttons" onClick={handleMessageSubmit}>
-            Send
-          </button>
-        </div>
+            <button className="blue-buttons" onClick={handleMessageSubmit}>
+              Send
+            </button>
+          </div>
+        </form>
       </div>
-    </div>
+    </>
   );
 }
 
